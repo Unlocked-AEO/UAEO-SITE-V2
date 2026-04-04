@@ -12,3 +12,4 @@ Track of all pages in this design repo and their spec files.
 | What Is AEO | /what-is-aeo | src/pages/landing/WhatIsAEO.tsx | [what-is-aeo.spec.md](what-is-aeo.spec.md) | Done |
 | Teams | /teams | src/pages/landing/Teams.tsx | [teams.spec.md](teams.spec.md) | Done |
 | Blog | /blog | src/pages/landing/Blog.tsx | [blog.spec.md](blog.spec.md) | Done |
+| Pricing | /pricing | src/pages/landing/Pricing.tsx | [pricing.spec.md](pricing.spec.md) | Done |

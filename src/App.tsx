@@ -5,6 +5,9 @@ import About from "@/pages/landing/About";
 import WhatIsAEO from "@/pages/landing/WhatIsAEO";
 import Blog from "@/pages/landing/Blog";
 import Teams from "@/pages/landing/Teams";
+import Pricing from "@/pages/landing/Pricing";
+import FAQ from "@/pages/landing/FAQ";
+import Help from "@/pages/landing/Help";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/what-is-aeo" element={<WhatIsAEO />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/teams" element={<Teams />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/help" element={<Help />} />
       </Routes>
     </BrowserRouter>
   );
