@@ -1,35 +1,37 @@
 # Unlocked AEO — Frontend Design Repo
 
-This repo is for designing the frontend pages of Unlocked AEO. The pages you build here will be handed off to another developer who will wire them into the real app with real data and real functionality. Your job is to make everything **look and feel right** using fake/placeholder data.
+This is a **design-only** repo. There is no backend, no auth, no API calls. You are building the visual frontend for Unlocked AEO so that an integration developer can take these pages and wire them into the real app later.
 
-## What You're Building With
+Your job: make every page **look and feel exactly like the design**. Use fake data. Make buttons clickable but not functional. That's it.
 
-These are the tools and libraries you should use. Stick to these so the pages transfer smoothly into the main app:
+## The Non-Negotiables
 
-- **React** with **TypeScript** — the core framework
-- **Vite** — the build tool (runs the dev server, bundles the app)
-- **Tailwind CSS** — for styling (use utility classes like `bg-blue-500`, `p-4`, `rounded-lg`)
-- **lucide-react** — for icons (search "lucide icons" to browse them)
-- **recharts** — for any charts or graphs
-- **framer-motion** — for animations and transitions
-- **React Router** — for page navigation
-- Use the `@/` shortcut to import from the `src/` folder (e.g., `import { Button } from "@/components/ui/button"`)
+These are the only hard requirements. Everything else is your call.
+
+- **React** with **TypeScript** — the main app uses React, so this must too
+- **Vite** — the build tool
+- **Tailwind CSS** — all styling must use Tailwind utility classes, not custom CSS files. This is critical for migration.
+- **`@/` import alias** — use `@/` to import from `src/` (e.g., `import { Button } from "@/components/ui/button"`)
+
+Beyond these, use whatever libraries or components make the design look best. Need a specific animation library? Use it. Want a particular chart library? Go for it. Need a component library for dropdowns or modals? Your choice. Just `npm install` it and use it.
+
+The integration developer will adapt to whatever you pick — don't hold back on the design because of library constraints.
 
 ## Where to Put Things
 
-Follow this folder structure so the other developer knows exactly where everything is:
+This structure is important — the integration developer navigates by it.
 
 ```
 src/
 ├── components/
 │   ├── ui/           # Reusable building blocks (buttons, cards, inputs, dropdowns, etc.)
-│   ├── dashboard/    # Pieces that are specific to the dashboard
-│   ├── home/         # Pieces that are specific to the landing/marketing pages
-│   └── layout/       # Things that appear on every page (header, footer, sidebar)
+│   ├── dashboard/    # Pieces specific to the dashboard
+│   ├── home/         # Pieces specific to the landing/marketing pages
+│   └── layout/       # Things on every page (header, footer, sidebar)
 ├── pages/
 │   ├── landing/      # Public-facing pages (homepage, pricing, etc.)
 │   ├── dashboard/    # Pages inside the dashboard (overview, scans, settings, etc.)
-│   └── authenticated/# Pages for logged-in users that aren't part of the dashboard
+│   └── authenticated/# Logged-in pages that aren't part of the dashboard
 ├── hooks/            # Reusable behaviors (like detecting mobile screens)
 ├── lib/              # Small helper functions
 ├── data/             # Fake/placeholder data files
@@ -43,11 +45,17 @@ src/
 - Prefer **WebP** or **PNG** for photos and complex images
 - Keep all assets in `src/assets/` — don't scatter them across component folders
 
+### Naming
+
+- **Pages and components**: PascalCase — `Overview.tsx`, `ScanResults.tsx`, `KPICard.tsx`
+- **Data files**: kebab-case — `mock-dashboard.ts`, `mock-scans.ts`
+- **Hooks**: Start with `use` — `useMobile.tsx`, `useTheme.tsx`
+
 ### The `@/` Import Alias
 
-This repo uses `@/` as a shortcut for `src/`. Make sure both `tsconfig.json` and `vite.config.ts` are configured for this:
+Both `tsconfig.app.json` and `vite.config.ts` must be configured for this:
 
-**tsconfig.json** (inside `compilerOptions`):
+**tsconfig.app.json** (inside `compilerOptions`):
 ```json
 "baseUrl": ".",
 "paths": {
@@ -69,42 +77,52 @@ export default defineConfig({
 });
 ```
 
-### Naming
-
-- **Pages and components**: Use PascalCase — `Overview.tsx`, `ScanResults.tsx`, `KPICard.tsx`
-- **Data files**: Use kebab-case — `mock-dashboard.ts`, `mock-scans.ts`
-- **Hooks**: Start with `use` — `useMobile.tsx`, `useTheme.tsx`
-
 ## How to Handle Fake Data
 
-Since there's no real backend, you'll use placeholder data for everything:
+There's no backend, so everything uses placeholder data.
 
-- **Create data files** in `src/data/` with made-up but realistic values. For example, a mock scan might have a score of 78, a status of "Complete", and a date of "March 15, 2026".
-- **Keep the data in separate files** — don't hardcode fake numbers directly in your page components. This makes it easy for the other developer to swap in real data later.
-- **Make the data realistic** — use real-looking URLs, reasonable scores, actual AI engine names (ChatGPT, Perplexity, Google AI Overview, etc.)
+- **Put mock data in `src/data/`** in its own file — don't hardcode fake numbers in your components. This is the #1 thing that makes migration easy: the integration developer just swaps the import.
+- **Make it realistic** — real-looking URLs, reasonable scores, actual AI engine names (ChatGPT, Perplexity, Google AI Overview, etc.)
+- **Type your data** — define a TypeScript interface for each data shape. This tells the integration developer exactly what the component expects.
+
+```tsx
+// src/data/mock-scans.ts
+export interface Scan {
+  id: string;
+  url: string;
+  score: number;
+  status: "pending" | "running" | "complete" | "failed";
+  date: string;
+}
+
+export const mockScans: Scan[] = [
+  { id: "1", url: "https://example.com/pricing", score: 78, status: "complete", date: "2026-03-15" },
+  // ...
+];
+```
 
 ## How to Handle Buttons and Actions
 
-You can't actually make buttons do real things (like starting a scan or saving settings), but you should still make them clickable. When a button is clicked, log what it *should* do:
+Make everything clickable. Log what it *should* do:
 
 ```tsx
-<Button onClick={() => console.log("ACTION: start_scan", { url: inputValue })}>
+<button onClick={() => console.log("ACTION: start_scan", { url: inputValue })}>
   Start Scan
-</Button>
+</button>
 ```
 
-This tells the integration developer exactly what each button needs to do.
+This tells the integration developer exactly what each interaction needs to trigger.
 
 ## Design All Versions of Each Page
 
-Every page should handle these scenarios — think of them as "what if" situations:
+Every page needs these states:
 
-1. **Loading** — What does the page look like while data is being fetched? (usually a skeleton/shimmer effect or a spinner)
-2. **With data** — The normal, happy path. Everything loaded and there's data to show.
-3. **Empty** — The user is new or hasn't done anything yet. No scans, no results. Maybe show a friendly message encouraging them to get started.
-4. **Something went wrong** — The data failed to load. Show a helpful error message, maybe a retry button.
+1. **Loading** — skeleton/shimmer or spinner while data loads
+2. **With data** — the normal happy path
+3. **Empty** — brand new user, nothing to show yet. Friendly message + call to action.
+4. **Error** — data failed to load. Helpful message + retry button.
 
-You can use a simple toggle at the top of your page file to switch between these:
+Use a toggle at the top of the page file to switch between them:
 
 ```tsx
 // Change this to see different versions: "loading" | "success" | "empty" | "error"
@@ -113,15 +131,16 @@ const DEMO_STATE = "success";
 
 ## After You Finish a Page
 
-Run the **`/page-complete`** command. It will walk you through a few simple questions about what's on the page, what buttons do, and what changes dynamically. This creates a spec file that the integration developer needs.
+Run **`/page-complete`**. It walks you through documenting what's on the page, what buttons do, and what data it needs. This creates a spec file in `specs/` that the integration developer relies on.
 
 ## After You Update a Page
 
-Run the **`/page-updated`** command. It will ask what you changed and update the spec file.
+Run **`/page-updated`**. It asks what changed and updates the spec file.
 
 ## Quick Tips
 
-- Keep things responsive — pages should look good on both desktop and mobile
-- Use the same fonts, colors, spacing consistently across pages
-- If you're not sure about a design decision, leave a comment in the code explaining what you were thinking
-- Commit your work often so nothing gets lost
+- Pages should be responsive — desktop and mobile
+- Keep fonts, colors, and spacing consistent across pages
+- If you're unsure about a design decision, leave a code comment explaining your thinking
+- Commit after every completed page (page + spec file together)
+- When you install a new library, make sure it's saved to `package.json` (it will be by default with `npm install`)

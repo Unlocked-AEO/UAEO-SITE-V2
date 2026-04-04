@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-navy: #0A2540;
+  --color-teal: #4ECDC4;
+  --color-iris: #635BFF;
+  --color-slate-text: #3C4257;
+  --color-slate-body: #425466;
+  --color-slate-muted: #8792A2;
+  --color-border-light: #E6EBF1;
+  --color-border-input: #E3E8EF;
+  --color-surface: #F6F9FC;
+  --color-success: #27AE60;
+  --color-warning: #FF9F43;
+  --color-danger: #E74C3C;
+}
+
+body {
+  margin: 0;
+}
