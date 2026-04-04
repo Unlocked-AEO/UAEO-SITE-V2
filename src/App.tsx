@@ -8,6 +8,8 @@ import Teams from "@/pages/landing/Teams";
 import Pricing from "@/pages/landing/Pricing";
 import FAQ from "@/pages/landing/FAQ";
 import Help from "@/pages/landing/Help";
+import Terms from "@/pages/landing/Terms";
+import Privacy from "@/pages/landing/Privacy";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
     </BrowserRouter>
   );
