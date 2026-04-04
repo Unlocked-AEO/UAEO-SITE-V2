@@ -14,3 +14,4 @@ Track of all pages in this design repo and their spec files.
 | Blog | /blog | src/pages/landing/Blog.tsx | [blog.spec.md](blog.spec.md) | Done |
 | Pricing | /pricing | src/pages/landing/Pricing.tsx | [pricing.spec.md](pricing.spec.md) | Done |
 | Help | /help | src/pages/landing/Help.tsx | [help.spec.md](help.spec.md) | Done |
+| FAQ | /faq | src/pages/landing/FAQ.tsx | [faq.spec.md](faq.spec.md) | Done |
