@@ -10,3 +10,5 @@ Track of all pages in this design repo and their spec files.
 | How It Works | /how-it-works | src/pages/landing/HowItWorks.tsx | [how-it-works.spec.md](how-it-works.spec.md) | Done |
 | About | /about | src/pages/landing/About.tsx | [about.spec.md](about.spec.md) | Done |
 | What Is AEO | /what-is-aeo | src/pages/landing/WhatIsAEO.tsx | [what-is-aeo.spec.md](what-is-aeo.spec.md) | Done |
+| Teams | /teams | src/pages/landing/Teams.tsx | [teams.spec.md](teams.spec.md) | Done |
+| Blog | /blog | src/pages/landing/Blog.tsx | [blog.spec.md](blog.spec.md) | Done |
