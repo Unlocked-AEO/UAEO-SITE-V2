@@ -7,3 +7,4 @@ Track of all pages in this design repo and their spec files.
 | Page Name | Route | Page File | Spec File | Status |
 |-----------|-------|-----------|-----------|--------|
 | Landing | /home | src/pages/landing/Landing.tsx | [landing.spec.md](landing.spec.md) | Done |
+| How It Works | /how-it-works | src/pages/landing/HowItWorks.tsx | [how-it-works.spec.md](how-it-works.spec.md) | Done |
