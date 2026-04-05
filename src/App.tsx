@@ -17,6 +17,7 @@ import Security from "@/pages/dashboard/Security";
 import Preferences from "@/pages/dashboard/Preferences";
 import Billing from "@/pages/dashboard/Billing";
 import Support from "@/pages/dashboard/Support";
+import Scans from "@/pages/dashboard/Scans";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
+        <Route path="/dashboard/scans" element={<Scans />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
         <Route path="/dashboard/preferences" element={<Preferences />} />
