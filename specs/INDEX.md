@@ -18,3 +18,4 @@ Track of all pages in this design repo and their spec files.
 | Terms of Service | /terms | src/pages/landing/Terms.tsx | [terms.spec.md](terms.spec.md) | Done |
 | Privacy Policy | /privacy | src/pages/landing/Privacy.tsx | [privacy.spec.md](privacy.spec.md) | Done |
 | Dashboard Overview | /dashboard | src/pages/dashboard/Overview.tsx | [overview.spec.md](overview.spec.md) | Done |
+| Brand Guidelines | /brand-guidelines | src/pages/landing/BrandGuidelines.tsx | [brand-guidelines.spec.md](brand-guidelines.spec.md) | Done |

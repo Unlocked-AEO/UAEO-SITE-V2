@@ -10,7 +10,9 @@ import FAQ from "@/pages/landing/FAQ";
 import Help from "@/pages/landing/Help";
 import Terms from "@/pages/landing/Terms";
 import Privacy from "@/pages/landing/Privacy";
+import BrandGuidelines from "@/pages/landing/BrandGuidelines";
 import DashboardOverview from "@/pages/dashboard/Overview";
+import Profile from "@/pages/dashboard/Profile";
 
 function App() {
   return (
@@ -27,7 +29,9 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
+        <Route path="/dashboard/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
