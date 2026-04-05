@@ -27,3 +27,4 @@ Track of all pages in this design repo and their spec files.
 | Scans | /dashboard/scans | src/pages/dashboard/Scans.tsx | [scans.spec.md](scans.spec.md) | Done |
 | Run Scan | /dashboard/scans/new | src/pages/dashboard/RunScan.tsx | [run-scan.spec.md](run-scan.spec.md) | Done |
 | Advanced Scan Settings | /dashboard/scans/settings | src/pages/dashboard/AdvancedScanSettings.tsx | [advanced-scan-settings.spec.md](advanced-scan-settings.spec.md) | Done |
+| Improvement Plan | /dashboard/improvement-plan | src/pages/dashboard/ImprovementPlan.tsx | [improvement-plan.spec.md](improvement-plan.spec.md) | Done |
