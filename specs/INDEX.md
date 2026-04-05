@@ -22,3 +22,4 @@ Track of all pages in this design repo and their spec files.
 | Profile | /dashboard/profile | src/pages/dashboard/Profile.tsx | [profile.spec.md](profile.spec.md) | Done |
 | Preferences | /dashboard/preferences | src/pages/dashboard/Preferences.tsx | [preferences.spec.md](preferences.spec.md) | Done |
 | Security | /dashboard/security | src/pages/dashboard/Security.tsx | [security.spec.md](security.spec.md) | Done |
+| Billing | /dashboard/billing | src/pages/dashboard/Billing.tsx | [billing.spec.md](billing.spec.md) | Done |

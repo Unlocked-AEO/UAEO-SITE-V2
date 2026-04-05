@@ -15,6 +15,8 @@ import DashboardOverview from "@/pages/dashboard/Overview";
 import Profile from "@/pages/dashboard/Profile";
 import Security from "@/pages/dashboard/Security";
 import Preferences from "@/pages/dashboard/Preferences";
+import Billing from "@/pages/dashboard/Billing";
+import Support from "@/pages/dashboard/Support";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
         <Route path="/dashboard/preferences" element={<Preferences />} />
+        <Route path="/dashboard/billing" element={<Billing />} />
+        <Route path="/dashboard/support" element={<Support />} />
       </Routes>
     </BrowserRouter>
   );
