@@ -34,3 +34,4 @@ Track of all pages in this design repo and their spec files.
 | Scan Brand Accuracy | /dashboard/scans/:scanId/brand-accuracy | src/pages/dashboard/ScanBrandAccuracy.tsx | [scan-brand-accuracy.spec.md](scan-brand-accuracy.spec.md) | Done |
 | Scan Content Freshness | /dashboard/scans/:scanId/content-freshness | src/pages/dashboard/ScanContentFreshness.tsx | [scan-content-freshness.spec.md](scan-content-freshness.spec.md) | Done |
 | Signup | /signup | src/pages/authenticated/Signup.tsx | [signup.spec.md](signup.spec.md) | Done |
+| Sign In | /signin | src/pages/authenticated/Signin.tsx | [signin.spec.md](signin.spec.md) | Done |
