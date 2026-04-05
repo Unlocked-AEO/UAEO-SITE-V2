@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { ScansCard } from "@/components/dashboard/ScansCard";
 
@@ -70,7 +71,7 @@ function EmptyState() {
         </p>
         <button
           className="mt-6 flex items-center rounded-lg py-2.5 px-5 gap-2 bg-teal border-none cursor-pointer hover:opacity-90 transition-opacity"
-          onClick={() => console.log("ACTION: run_scan")}
+          onClick={() => navigate("/dashboard/scans/new")}
         >
           <span className="text-white font-sans font-semibold text-[13px]/4">
             Run Your First Scan
@@ -111,6 +112,7 @@ function ErrorState() {
 }
 
 export default function Scans() {
+  const navigate = useNavigate();
   return (
     <DashboardShell activeTab="scans">
       {DEMO_STATE === "loading" && <LoadingSkeleton />}

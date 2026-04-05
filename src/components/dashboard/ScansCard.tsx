@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { mockScans, scansPageHeader } from "@/data/mock-scans";
 import { ScanRow } from "@/components/dashboard/ScanRow";
 
@@ -50,6 +51,7 @@ function RefreshIcon() {
 }
 
 export function ScansCard() {
+  const navigate = useNavigate();
   return (
     <div className="h-full flex flex-col rounded-xl overflow-clip bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
       {/* Header */}
@@ -60,7 +62,7 @@ export function ScansCard() {
         <div className="flex items-center gap-2.5">
           <button
             className="flex items-center rounded-lg py-2 px-4 gap-2 bg-teal border-none cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => console.log("ACTION: run_scan")}
+            onClick={() => navigate("/dashboard/scans/new")}
           >
             <span className="text-white font-sans font-semibold text-[13px]/4">
               Run Scan

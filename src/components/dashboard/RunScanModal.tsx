@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { runScanModal } from "@/data/mock-run-scan";
 
 function GlobeIcon() {
@@ -91,20 +92,21 @@ function ChevronRightIcon() {
 }
 
 export function RunScanModal() {
+  const navigate = useNavigate();
   return (
     <>
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-[#0A254073] backdrop-blur-[4px] z-40"
-        onClick={() => console.log("ACTION: close_run_scan_modal")}
+        onClick={() => navigate("/dashboard/scans")}
       />
 
       {/* Modal */}
-      <div className="fixed top-[212px] left-1/2 -translate-x-1/2 w-[520px] flex flex-col rounded-2xl gap-8 bg-white shadow-[0px_24px_64px_#0A25402E] p-9 z-50">
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] flex flex-col rounded-2xl gap-8 bg-white shadow-[0px_24px_64px_#0A25402E] p-9 z-50">
         {/* Back button */}
         <button
           className="flex items-center gap-2 bg-transparent border-none cursor-pointer p-0 w-fit"
-          onClick={() => console.log("ACTION: close_run_scan_modal")}
+          onClick={() => navigate("/dashboard/scans")}
         >
           <div className="flex items-center justify-center size-[30px] shrink-0 rounded-[7px] bg-white border-[1.5px] border-border-light">
             <ChevronLeftIcon />
@@ -143,7 +145,7 @@ export function RunScanModal() {
         {/* Advanced Settings */}
         <button
           className="flex items-center rounded-xl py-4.5 px-4.5 gap-3.5 bg-[#FAFBFC] border border-border-light cursor-pointer text-left hover:bg-[#F0F4F8] transition-colors"
-          onClick={() => console.log("ACTION: open_advanced_settings")}
+          onClick={() => navigate("/dashboard/scans/settings")}
         >
           <div className="flex items-center justify-center shrink-0 rounded-[10px] bg-[#F0F4F8] size-10">
             <AdvancedSettingsIcon />

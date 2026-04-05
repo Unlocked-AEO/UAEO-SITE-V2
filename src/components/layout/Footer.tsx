@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   footerColumns,
   footerTagline,
@@ -6,6 +7,8 @@ import {
 } from "@/data/mock-landing";
 
 export function Footer() {
+  const navigate = useNavigate();
+
   return (
     <footer className="flex flex-col pt-16 pb-12 gap-12 bg-navy px-20">
       <div className="flex gap-15">
@@ -18,7 +21,6 @@ export function Footer() {
             {footerTagline}
           </p>
           <div className="flex mt-1 gap-3">
-            {/* Social icons */}
             {["threads", "x", "linkedin"].map((platform) => (
               <button
                 key={platform}
@@ -44,13 +46,17 @@ export function Footer() {
             </span>
             {col.links.map((link) => (
               <button
-                key={link}
+                key={link.label}
                 className="text-left text-white/65 text-[13px]/4 bg-transparent border-none cursor-pointer p-0 hover:text-white/90 transition-colors"
-                onClick={() =>
-                  console.log("ACTION: navigate_footer", { link })
-                }
+                onClick={() => {
+                  if (link.href) {
+                    navigate(link.href);
+                  } else {
+                    console.log("ACTION: navigate_footer", { link: link.label });
+                  }
+                }}
               >
-                {link}
+                {link.label}
               </button>
             ))}
           </div>
@@ -64,13 +70,17 @@ export function Footer() {
         <div className="flex gap-6">
           {footerLegalLinks.map((link) => (
             <button
-              key={link}
+              key={link.label}
               className="text-white/30 text-xs/4 bg-transparent border-none cursor-pointer p-0 hover:text-white/60 transition-colors"
-              onClick={() =>
-                console.log("ACTION: navigate_legal", { page: link })
-              }
+              onClick={() => {
+                if (link.href) {
+                  navigate(link.href);
+                } else {
+                  console.log("ACTION: navigate_legal", { page: link.label });
+                }
+              }}
             >
-              {link}
+              {link.label}
             </button>
           ))}
         </div>

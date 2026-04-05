@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Scan } from "@/data/mock-scans";
 
 function ScanLogo() {
@@ -104,6 +105,7 @@ function ArrowRightIcon() {
 }
 
 export function ScanRow({ scan }: { scan: Scan }) {
+  const navigate = useNavigate();
   return (
     <div className="flex items-center rounded-[10px] py-4 px-5 gap-5 bg-[#FAFBFC] border border-border-light">
       {/* Logo */}
@@ -148,7 +150,7 @@ export function ScanRow({ scan }: { scan: Scan }) {
         <button
           className="flex items-center rounded-lg py-2.25 px-4.5 gap-1.5 shrink-0 min-w-[130px] bg-white border-[1.5px] border-teal cursor-pointer hover:bg-[#F7FEFE] transition-colors"
           onClick={() =>
-            console.log("ACTION: view_scan", { id: scan.id })
+            navigate(`/dashboard/scans/${scan.id}`)
           }
         >
           <span className="text-teal font-sans font-semibold text-[13px]/4">

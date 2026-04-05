@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { scanMeta } from "@/data/mock-scan-overview";
 import { brandAccuracyScore } from "@/data/mock-scan-brand-accuracy";
 import { ScanTabs } from "@/components/dashboard/ScanTabs";
@@ -9,6 +10,8 @@ import { EngineAccuracyTable } from "@/components/dashboard/EngineAccuracyTable"
 const DEMO_STATE = "success";
 
 export default function ScanBrandAccuracy() {
+  const navigate = useNavigate();
+
   if (DEMO_STATE === "loading") {
     return (
       <Shell>
@@ -36,7 +39,7 @@ export default function ScanBrandAccuracy() {
           </p>
           <button
             className="rounded-[10px] py-3 px-6 bg-[#4ECDC4] text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => console.log("ACTION: navigate_to_scans")}
+            onClick={() => navigate("/dashboard/scans")}
           >
             Back to Scans
           </button>
@@ -114,12 +117,13 @@ export default function ScanBrandAccuracy() {
 // ─── Shell layout ──────────────────────────────────────────
 
 function Shell({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate();
   return (
     <div className="font-['Inter',system-ui,sans-serif] antialiased flex overflow-clip flex-col min-h-screen bg-[#F0F4F8] text-xs/4">
       <header className="h-15 flex items-center shrink-0 px-7 gap-2 bg-white border-b border-b-solid border-b-[#E6EBF1]">
         <button
           className="flex items-center rounded-md py-1.75 px-3.5 gap-1.5 bg-white [border-width:1.5px] border-solid border-[#D6DCE3] cursor-pointer hover:bg-[#F8FAFC] transition-colors"
-          onClick={() => console.log("ACTION: navigate_back")}
+          onClick={() => navigate("/dashboard/scans")}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: '0' }}>
             <path d="M9 11L5 7L9 3" stroke="#425466" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -152,7 +156,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
         <button
           className="flex items-center gap-2.5 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => console.log("ACTION: navigate_profile")}
+          onClick={() => navigate("/dashboard/profile")}
         >
           <div
             className="w-8.5 h-8.5 flex items-center justify-center rounded-[50%] shrink-0"

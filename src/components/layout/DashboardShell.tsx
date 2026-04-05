@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { dashboardUser, dashboardTabs } from "@/data/mock-dashboard";
 
 interface DashboardShellProps {
@@ -6,13 +7,15 @@ interface DashboardShellProps {
 }
 
 export function DashboardShell({ activeTab, children }: DashboardShellProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="font-sans antialiased flex flex-col min-h-screen bg-[#F0F4F8]">
       {/* Top bar */}
       <header className="flex items-center shrink-0 h-14 px-7 gap-3 bg-white border-b border-border-light">
         <button
           className="flex items-center gap-2.5 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => console.log("ACTION: navigate_home")}
+          onClick={() => navigate("/")}
         >
           <svg
             width="28"
@@ -34,7 +37,10 @@ export function DashboardShell({ activeTab, children }: DashboardShellProps) {
 
         <div className="grow" />
 
-        <div className="flex items-center gap-4">
+        <button
+          className="flex items-center gap-4 bg-transparent border-none cursor-pointer p-0"
+          onClick={() => navigate("/dashboard/profile")}
+        >
           <div className="flex flex-col items-end gap-px">
             <span className="text-navy font-semibold text-[13px]/4">
               {dashboardUser.company}
@@ -48,7 +54,7 @@ export function DashboardShell({ activeTab, children }: DashboardShellProps) {
               {dashboardUser.initials}
             </span>
           </div>
-        </div>
+        </button>
       </header>
 
       {/* Tab nav */}
@@ -61,9 +67,13 @@ export function DashboardShell({ activeTab, children }: DashboardShellProps) {
                 ? "border-b-teal"
                 : "border-b-transparent"
             }`}
-            onClick={() =>
-              console.log("ACTION: navigate_dashboard_tab", { tab: tab.slug })
-            }
+            onClick={() => {
+              if (tab.href) {
+                navigate(tab.href);
+              } else {
+                console.log("ACTION: navigate_dashboard_tab", { tab: tab.slug });
+              }
+            }}
           >
             <span
               className={`text-[13px]/4 whitespace-nowrap ${

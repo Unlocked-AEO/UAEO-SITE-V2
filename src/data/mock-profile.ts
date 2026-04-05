@@ -3,14 +3,15 @@
 export interface SettingsTab {
   label: string;
   slug: string;
+  href: string;
 }
 
 export const settingsTabs: SettingsTab[] = [
-  { label: "Profile", slug: "profile" },
-  { label: "Security", slug: "security" },
-  { label: "Preferences", slug: "preferences" },
-  { label: "Billing", slug: "billing" },
-  { label: "Support", slug: "support" },
+  { label: "Profile", slug: "profile", href: "/dashboard/profile" },
+  { label: "Security", slug: "security", href: "/dashboard/security" },
+  { label: "Preferences", slug: "preferences", href: "/dashboard/preferences" },
+  { label: "Billing", slug: "billing", href: "/dashboard/billing" },
+  { label: "Support", slug: "support", href: "/dashboard/support" },
 ];
 
 // ─── Company Profile Form ──────────────────────────────────

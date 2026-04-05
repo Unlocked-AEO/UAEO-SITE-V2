@@ -9,14 +9,15 @@ export const dashboardUser = {
 export interface DashboardTab {
   label: string;
   slug: string;
+  href: string | null;
 }
 
 export const dashboardTabs: DashboardTab[] = [
-  { label: "Overview", slug: "overview" },
-  { label: "Scans", slug: "scans" },
-  { label: "Implementation Plan", slug: "implementation-plan" },
-  { label: "Competitors", slug: "competitors" },
-  { label: "Risk Insights", slug: "risk-insights" },
+  { label: "Overview", slug: "overview", href: "/dashboard" },
+  { label: "Scans", slug: "scans", href: "/dashboard/scans" },
+  { label: "Implementation Plan", slug: "implementation-plan", href: "/dashboard/improvement-plan" },
+  { label: "Competitors", slug: "competitors", href: null },       // NOTE: No Competitors page exists
+  { label: "Risk Insights", slug: "risk-insights", href: null },   // NOTE: No Risk Insights page exists
 ];
 
 // ─── KPI Cards ──────────────────────────────────────────────

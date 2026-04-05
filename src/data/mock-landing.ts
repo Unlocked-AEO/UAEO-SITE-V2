@@ -2,15 +2,16 @@
 
 export interface NavItem {
   label: string;
+  href: string | null;
   hasDropdown?: boolean;
 }
 
 export const navItems: NavItem[] = [
-  { label: "Solutions", hasDropdown: true },
-  { label: "How It Works", hasDropdown: true },
-  { label: "Pricing" },
-  { label: "Case Studies" },
-  { label: "Blog" },
+  { label: "Solutions", href: null, hasDropdown: true }, // NOTE: No page exists — needs a Solutions page or dropdown
+  { label: "How It Works", href: "/how-it-works", hasDropdown: true },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Case Studies", href: null }, // NOTE: No Case Studies page exists yet
+  { label: "Blog", href: "/blog" },
 ];
 
 // ─── Hero ───────────────────────────────────────────────────
@@ -432,28 +433,56 @@ export const ctaSection = {
 
 // ─── Footer ─────────────────────────────────────────────────
 
+export interface FooterLink {
+  label: string;
+  href: string | null;
+}
+
 export interface FooterColumn {
   title: string;
-  links: string[];
+  links: FooterLink[];
 }
 
 export const footerColumns: FooterColumn[] = [
   {
     title: "Solutions",
-    links: ["For Brands", "For Agencies", "For Enterprise", "For Startups"],
+    links: [
+      { label: "For Brands", href: null },    // NOTE: No page exists
+      { label: "For Agencies", href: null },   // NOTE: No page exists
+      { label: "For Enterprise", href: null }, // NOTE: No page exists
+      { label: "For Startups", href: null },   // NOTE: No page exists
+    ],
   },
   {
     title: "Resources",
-    links: ["Blog", "Case Studies", "AEO Glossary"],
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Case Studies", href: null },   // NOTE: No page exists
+      { label: "AEO Glossary", href: null },   // NOTE: No page exists
+    ],
   },
   {
     title: "Company",
-    links: ["About", "Pricing", "Contact"],
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Contact", href: null },        // NOTE: No Contact page exists
+    ],
   },
 ];
 
 export const footerTagline =
   "AI visibility infrastructure for businesses that want to be found, cited, and recommended.";
 
-export const footerLegalLinks = ["Privacy", "Terms", "Cookies", "Sitemap"];
+export interface FooterLegalLink {
+  label: string;
+  href: string | null;
+}
+
+export const footerLegalLinks: FooterLegalLink[] = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+  { label: "Cookies", href: null },   // NOTE: No Cookies page exists
+  { label: "Sitemap", href: null },   // NOTE: No Sitemap page exists
+];
 export const footerCopyright = "© 2025 Unlocked AEO Inc. All rights reserved.";

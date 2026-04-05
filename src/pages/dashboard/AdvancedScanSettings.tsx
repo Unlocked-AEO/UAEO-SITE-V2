@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { dashboardUser } from "@/data/mock-dashboard";
 import { advancedScanHeader } from "@/data/mock-advanced-scan";
 import { IndustryContextCard } from "@/components/dashboard/IndustryContextCard";
@@ -81,13 +82,14 @@ function ErrorState() {
 }
 
 export default function AdvancedScanSettings() {
+  const navigate = useNavigate();
   return (
     <div className="font-sans antialiased flex flex-col min-h-screen bg-surface">
       {/* Header bar */}
       <header className="flex items-center h-14 shrink-0 px-7 bg-white border-b border-border-light">
         <button
           className="flex items-center gap-2 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => console.log("ACTION: navigate_home")}
+          onClick={() => navigate("/")}
         >
           <div className="flex items-center justify-center shrink-0 rounded-md bg-teal size-7">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
@@ -116,7 +118,7 @@ export default function AdvancedScanSettings() {
       <div className="flex items-center pt-7 pb-5 gap-3.5 px-10">
         <button
           className="flex items-center justify-center shrink-0 rounded-lg bg-white border-[1.5px] border-border-light size-8 cursor-pointer hover:bg-surface transition-colors"
-          onClick={() => console.log("ACTION: navigate_back_to_run_scan")}
+          onClick={() => navigate("/dashboard/scans/new")}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
             <path d="M9 11L5 7L9 3" stroke="#425466" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -150,7 +152,7 @@ export default function AdvancedScanSettings() {
       <div className="sticky bottom-0 flex items-center justify-end py-4 px-10 gap-3 bg-white border-t border-border-light">
         <button
           className="rounded-[9px] py-2.75 px-5.5 bg-white border-[1.5px] border-border-light cursor-pointer hover:bg-surface transition-colors"
-          onClick={() => console.log("ACTION: cancel_advanced_settings")}
+          onClick={() => navigate("/dashboard/scans/new")}
         >
           <span className="text-navy font-sans text-[13px]/4">Cancel</span>
         </button>

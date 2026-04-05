@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { TasksInProgressCard } from "@/components/dashboard/TasksInProgressCard";
 import { ScoreImprovementChart } from "@/components/dashboard/ScoreImprovementChart";
@@ -51,7 +52,7 @@ function EmptyState() {
       </p>
       <button
         className="mt-6 flex items-center rounded-lg py-2.5 px-5 bg-teal border-none cursor-pointer hover:opacity-90 transition-opacity"
-        onClick={() => console.log("ACTION: run_scan")}
+        onClick={() => navigate("/dashboard/scans/new")}
       >
         <span className="text-white font-sans font-semibold text-[13px]/4">
           Run a Scan
@@ -83,6 +84,7 @@ function ErrorState() {
 }
 
 export default function ImprovementPlan() {
+  const navigate = useNavigate();
   return (
     <DashboardShell activeTab="implementation-plan">
       {/* Wrapper to override shell gap — export uses gap-4 */}

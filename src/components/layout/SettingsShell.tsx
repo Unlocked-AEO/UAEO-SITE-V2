@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { dashboardUser } from "@/data/mock-dashboard";
 import { settingsTabs, profilePageHeader } from "@/data/mock-profile";
 import type { SettingsTab } from "@/data/mock-profile";
@@ -8,13 +9,15 @@ interface SettingsShellProps {
 }
 
 export function SettingsShell({ activeTab, children }: SettingsShellProps) {
+  const navigate = useNavigate();
+
   return (
     <div className="font-sans antialiased flex flex-col min-h-screen bg-surface">
       {/* Top bar */}
       <header className="flex items-center h-14 shrink-0 px-7 bg-white border-b border-border-light">
         <button
           className="flex items-center gap-2 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => console.log("ACTION: navigate_home")}
+          onClick={() => navigate("/")}
         >
           <div className="flex items-center justify-center shrink-0 rounded-md bg-teal size-7">
             <svg
@@ -41,7 +44,10 @@ export function SettingsShell({ activeTab, children }: SettingsShellProps) {
 
         <div className="grow" />
 
-        <div className="flex items-center gap-2">
+        <button
+          className="flex items-center gap-2 bg-transparent border-none cursor-pointer p-0"
+          onClick={() => navigate("/dashboard/profile")}
+        >
           <span className="text-slate-body font-sans text-sm/[18px]">
             {dashboardUser.company}
           </span>
@@ -50,7 +56,7 @@ export function SettingsShell({ activeTab, children }: SettingsShellProps) {
               {dashboardUser.initials}
             </span>
           </div>
-        </div>
+        </button>
       </header>
 
       {/* Page header + tabs */}
@@ -60,7 +66,7 @@ export function SettingsShell({ activeTab, children }: SettingsShellProps) {
           <div className="flex items-center pt-6 pb-5 gap-3.5">
             <button
               className="flex items-center justify-center shrink-0 rounded-lg bg-white border-[1.5px] border-border-light size-8 cursor-pointer hover:bg-surface transition-colors"
-              onClick={() => console.log("ACTION: navigate_back")}
+              onClick={() => navigate("/dashboard")}
             >
               <svg
                 width="14"
@@ -99,11 +105,7 @@ export function SettingsShell({ activeTab, children }: SettingsShellProps) {
                     ? "border-b-teal"
                     : "border-b-transparent"
                 }`}
-                onClick={() =>
-                  console.log("ACTION: navigate_settings_tab", {
-                    tab: tab.slug,
-                  })
-                }
+                onClick={() => navigate(tab.href)}
               >
                 <span
                   className={`font-sans text-[13px]/4 ${

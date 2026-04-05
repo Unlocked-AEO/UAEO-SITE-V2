@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { KPICards } from "@/components/dashboard/KPICards";
 import { ScoreAverages } from "@/components/dashboard/ScoreAverages";
@@ -11,6 +12,7 @@ import { RiskInsightsCards } from "@/components/dashboard/RiskInsights";
 const DEMO_STATE = "success";
 
 export default function Overview() {
+  const navigate = useNavigate();
   if (DEMO_STATE === "loading") {
     return (
       <DashboardShell activeTab="overview">
@@ -37,7 +39,7 @@ export default function Overview() {
           </p>
           <button
             className="rounded-[10px] py-3 px-6 bg-teal text-navy font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => console.log("ACTION: start_first_scan")}
+            onClick={() => navigate("/dashboard/scans/new")}
           >
             Run your first scan
           </button>
