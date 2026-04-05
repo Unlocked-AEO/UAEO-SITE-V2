@@ -19,6 +19,7 @@ import Billing from "@/pages/dashboard/Billing";
 import Support from "@/pages/dashboard/Support";
 import Scans from "@/pages/dashboard/Scans";
 import RunScan from "@/pages/dashboard/RunScan";
+import AdvancedScanSettings from "@/pages/dashboard/AdvancedScanSettings";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardOverview />} />
         <Route path="/dashboard/scans" element={<Scans />} />
         <Route path="/dashboard/scans/new" element={<RunScan />} />
+        <Route path="/dashboard/scans/settings" element={<AdvancedScanSettings />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
         <Route path="/dashboard/preferences" element={<Preferences />} />
