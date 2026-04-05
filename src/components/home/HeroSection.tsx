@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { heroContent } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
 
 export function HeroSection() {
+  const navigate = useNavigate();
   return (
     <section className="relative w-full min-h-[660px] flex items-center overflow-clip bg-white">
       {/* Background gradients */}
@@ -49,7 +51,7 @@ export function HeroSection() {
             variant="primary"
             size="md"
             className="py-[13px] px-6"
-            onClick={() => console.log("ACTION: get_started")}
+            onClick={() => navigate("/signup")}
           >
             {heroContent.primaryCTA}
           </Button>

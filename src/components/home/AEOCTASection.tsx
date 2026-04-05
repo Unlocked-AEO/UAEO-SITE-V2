@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { aeoCTA } from "@/data/mock-what-is-aeo";
 import { Button } from "@/components/ui/Button";
 
 export function AEOCTASection() {
+  const navigate = useNavigate();
   return (
     <section
       className="flex flex-col items-center relative py-20 px-10 lg:px-[120px] overflow-clip"
@@ -41,7 +43,7 @@ export function AEOCTASection() {
         <Button
           variant="primary"
           size="lg"
-          onClick={() => console.log("ACTION: get_free_aeo_score")}
+          onClick={() => navigate("/signup")}
         >
           {aeoCTA.primaryCTA}
         </Button>

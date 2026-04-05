@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { navItems } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
+import { IS_LOGGED_IN } from "@/lib/mock-auth";
 
 export function Header() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export function Header() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate(IS_LOGGED_IN ? "/dashboard" : "/signup")}
         >
           Dashboard
         </Button>

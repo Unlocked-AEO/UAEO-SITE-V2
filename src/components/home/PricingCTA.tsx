@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { pricingCTA } from "@/data/mock-pricing";
 
 export function PricingCTA() {
+  const navigate = useNavigate();
   return (
     <section className="flex flex-col items-center py-25 px-10 lg:px-[120px] gap-8 bg-navy">
       <div className="flex flex-col items-center max-w-[640px] gap-4">
@@ -20,7 +22,7 @@ export function PricingCTA() {
       <div className="flex items-center gap-4">
         <button
           className="rounded-lg py-4 px-8 bg-teal text-navy font-bold text-base/5 border-none cursor-pointer hover:opacity-90 transition-opacity"
-          onClick={() => console.log("ACTION: get_free_aeo_score")}
+          onClick={() => navigate("/signup")}
         >
           {pricingCTA.primaryCTA}
         </button>

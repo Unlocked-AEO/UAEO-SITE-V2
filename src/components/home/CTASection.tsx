@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { ctaSection } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
 
 export function CTASection() {
+  const navigate = useNavigate();
   return (
     <section className="flex flex-col items-center relative py-24 px-20 overflow-clip bg-surface">
       <span className="tracking-[0.06em] uppercase mb-5 text-center text-teal font-semibold text-[13px]/4">
@@ -18,7 +20,7 @@ export function CTASection() {
           variant="primary"
           size="lg"
           className="shadow-[0_4px_16px_#635BFF59]"
-          onClick={() => console.log("ACTION: get_started_free")}
+          onClick={() => navigate("/signup")}
         >
           {ctaSection.primaryCTA}
         </Button>

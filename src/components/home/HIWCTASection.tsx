@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { hiwCTA } from "@/data/mock-how-it-works";
 
 export function HIWCTASection() {
+  const navigate = useNavigate();
   return (
     <section className="relative w-full shrink-0 py-24 px-20 overflow-clip min-h-90 bg-navy">
       {/* Decorative glow */}
@@ -26,7 +28,7 @@ export function HIWCTASection() {
         <div className="flex items-center justify-center gap-3">
           <button
             className="rounded-lg py-3.75 px-9 bg-teal border-none cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => console.log("ACTION: get_started_free")}
+            onClick={() => navigate("/signup")}
           >
             <span className="text-center text-black font-sans font-semibold text-base/5">
               {hiwCTA.primaryCTA}

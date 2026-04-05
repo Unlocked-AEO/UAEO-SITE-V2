@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { teamsCTA } from "@/data/mock-teams";
 
 export function TeamsCTA() {
+  const navigate = useNavigate();
   return (
     <section
       className="w-full flex flex-col items-center shrink-0 relative py-20 px-30 overflow-clip min-h-80"
@@ -36,7 +38,7 @@ export function TeamsCTA() {
       <div className="flex relative gap-3.5">
         <button
           className="rounded-[10px] py-3.5 px-8 bg-teal border-none cursor-pointer hover:opacity-90 transition-opacity"
-          onClick={() => console.log("ACTION: get_free_scan")}
+          onClick={() => navigate("/signup")}
         >
           <span className="text-center text-navy font-sans text-[15px]/4.5">
             {teamsCTA.primaryCTA}
