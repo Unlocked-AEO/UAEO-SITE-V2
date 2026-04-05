@@ -1,15 +1,14 @@
 import { scanMeta } from "@/data/mock-scan-overview";
-import { ScanScoreHero } from "@/components/dashboard/ScanScoreHero";
+import { brandAccuracyScore } from "@/data/mock-scan-brand-accuracy";
 import { ScanTabs } from "@/components/dashboard/ScanTabs";
-import { ScanScoreGauges } from "@/components/dashboard/ScanScoreGauges";
-import { ScanStrengthsWeaknesses } from "@/components/dashboard/ScanStrengthsWeaknesses";
-import { ScanEngineScores } from "@/components/dashboard/ScanEngineScores";
+import { BrandAccuracyStats } from "@/components/dashboard/BrandAccuracyStats";
+import { HallucinationLog } from "@/components/dashboard/HallucinationLog";
+import { EngineAccuracyTable } from "@/components/dashboard/EngineAccuracyTable";
 
 // Change this to see different versions: "loading" | "success" | "empty" | "error"
 const DEMO_STATE = "success";
 
-export default function ScanOverview() {
-
+export default function ScanBrandAccuracy() {
   if (DEMO_STATE === "loading") {
     return (
       <Shell>
@@ -30,10 +29,10 @@ export default function ScanOverview() {
       <Shell>
         <div className="grow shrink basis-[0%] flex flex-col items-center justify-center gap-4">
           <span className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold text-xl">
-            Scan not found
+            No accuracy data
           </span>
           <p className="text-[#8792A2] font-['Inter',system-ui,sans-serif] text-sm max-w-[400px] text-center">
-            This scan may have been deleted or the URL is incorrect.
+            Brand accuracy data is not available for this scan yet.
           </p>
           <button
             className="rounded-[10px] py-3 px-6 bg-[#4ECDC4] text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
@@ -54,7 +53,7 @@ export default function ScanOverview() {
             Something went wrong
           </span>
           <p className="text-[#8792A2] font-['Inter',system-ui,sans-serif] text-sm max-w-[400px] text-center">
-            We couldn't load this scan's results. Please try again.
+            We couldn't load the brand accuracy data. Please try again.
           </p>
           <button
             className="rounded-[10px] py-3 px-6 bg-[#0A2540] text-white font-['Inter',system-ui,sans-serif] font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
@@ -69,39 +68,54 @@ export default function ScanOverview() {
 
   return (
     <Shell>
-      <div className="grow shrink basis-[0%] flex flex-col py-6 px-7 gap-4">
-        {/* Score hero — full width across both columns */}
-        <ScanScoreHero />
-
-        {/* Tabs — full width across both columns */}
-        <ScanTabs activeTab="summary" />
-
-        {/* Two-column content below tabs */}
-        <div className="flex gap-5">
-          <div className="grow shrink basis-[0%] flex flex-col min-w-0 gap-4">
-            <ScanScoreGauges />
-            <ScanStrengthsWeaknesses />
+      <div className="grow shrink basis-[0%] flex flex-col py-6 px-7 gap-3">
+        {/* Score Hero — Brand Accuracy */}
+        <div className="flex items-center rounded-xl py-6 px-7 gap-7 bg-white border border-solid border-[#E6EBF1] [box-shadow:#0A25400F_0px_1px_4px]">
+          <div className="relative w-31 h-31 shrink-0">
+            <svg width="124" height="124" viewBox="0 0 124 124" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: '0' }}>
+              <circle cx="62" cy="62" r="52" fill="none" stroke="#F0F4F8" strokeWidth="11" />
+              <circle cx="62" cy="62" r="52" fill="none" stroke="#FF9F43" strokeWidth="11" strokeDasharray="266 62" strokeLinecap="round" transform="rotate(-90 62 62)" />
+            </svg>
+            <div className="absolute flex flex-col items-center justify-center inset-0">
+              <div className="text-[28px] leading-[round(up,100%,1px)] inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-extrabold">
+                {brandAccuracyScore.score}
+              </div>
+              <div className="inline-block text-[#8792A2] font-['Inter',system-ui,sans-serif] font-medium text-[10px]/3.5">
+                /{brandAccuracyScore.max}
+              </div>
+            </div>
           </div>
-          <div className="grow-0 shrink-0 basis-68 flex flex-col gap-4">
-            <ScanEngineScores />
+          <div className="grow shrink basis-[0%] flex flex-col items-center gap-2">
+            <div className="text-center inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold text-[17px]/5.5">
+              {brandAccuracyScore.title}
+            </div>
+            <div className="text-[14px] leading-[round(up,165%,1px)] text-center max-w-215 text-[#64748B] font-['Inter',system-ui,sans-serif] m-0">
+              {brandAccuracyScore.summary}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="flex items-center shrink-0 py-4 px-7 gap-3 bg-white border-t border-t-solid border-t-[#E6EBF1]">
-        <div className="grow shrink basis-[0%]" />
+        {/* Category Tabs */}
+        <ScanTabs activeTab="brand-accuracy" />
+
+        {/* Stat Cards */}
+        <BrandAccuracyStats />
+
+        {/* Hallucination Log */}
+        <HallucinationLog />
+
+        {/* Engine Accuracy Table */}
+        <EngineAccuracyTable />
       </div>
     </Shell>
   );
 }
 
-// ─── Shell layout for this page ────────────────────────────
+// ─── Shell layout ──────────────────────────────────────────
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="font-['Inter',system-ui,sans-serif] antialiased flex overflow-clip flex-col min-h-screen bg-[#F0F4F8] text-xs/4">
-      {/* Top bar */}
       <header className="h-15 flex items-center shrink-0 px-7 gap-2 bg-white border-b border-b-solid border-b-[#E6EBF1]">
         <button
           className="flex items-center rounded-md py-1.75 px-3.5 gap-1.5 bg-white [border-width:1.5px] border-solid border-[#D6DCE3] cursor-pointer hover:bg-[#F8FAFC] transition-colors"

@@ -31,3 +31,4 @@ Track of all pages in this design repo and their spec files.
 | Improvement Plan (Expanded Fix) | /dashboard/improvement-plan/fix | src/pages/dashboard/ImprovementPlanExpanded.tsx | [improvement-plan-expanded.spec.md](improvement-plan-expanded.spec.md) | Done |
 | Scan Overview | /dashboard/scans/:scanId | src/pages/dashboard/ScanOverview.tsx | [scan-overview.spec.md](scan-overview.spec.md) | Done |
 | Scan AI Visibility | /dashboard/scans/:scanId/ai-visibility | src/pages/dashboard/ScanAIVisibility.tsx | [scan-ai-visibility.spec.md](scan-ai-visibility.spec.md) | Done |
+| Scan Brand Accuracy | /dashboard/scans/:scanId/brand-accuracy | src/pages/dashboard/ScanBrandAccuracy.tsx | [scan-brand-accuracy.spec.md](scan-brand-accuracy.spec.md) | Done |

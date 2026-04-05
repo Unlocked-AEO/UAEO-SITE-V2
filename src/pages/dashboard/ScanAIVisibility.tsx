@@ -1,5 +1,6 @@
 import { scanMeta } from "@/data/mock-scan-overview";
 import { aiVisibilityScore } from "@/data/mock-scan-ai-visibility";
+import { ScanTabs } from "@/components/dashboard/ScanTabs";
 import { ScanVisibilityStats } from "@/components/dashboard/ScanVisibilityStats";
 import { ScanPromptTable } from "@/components/dashboard/ScanPromptTable";
 
@@ -92,44 +93,7 @@ export default function ScanAIVisibility() {
         </div>
 
         {/* Category Tabs — AI Visibility active */}
-        <div className="flex items-center rounded-[10px] overflow-clip bg-white border border-solid border-[#E6EBF1] [box-shadow:#0A25400F_0px_1px_4px]">
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "summary" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">Summary</div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#4ECDC4] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "ai-visibility" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#0A2540] font-sans shrink-0 text-[13px]/4">AI Visibility</div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "brand-accuracy" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">Brand Accuracy</div>
-            <div className="[white-space-collapse:collapse] inline-block rounded-[99px] py-0.5 px-1.75 bg-[#E8F5E9]">
-              <div className="inline-block w-max text-[#27AE60] font-sans text-[11px]/3.5">81</div>
-            </div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "sentiment" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">Sentiment</div>
-            <div className="[white-space-collapse:collapse] inline-block rounded-[99px] py-0.5 px-1.75 bg-[#E8F5E9]">
-              <div className="inline-block w-max text-[#27AE60] font-sans text-[11px]/3.5">74</div>
-            </div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "schema-coverage" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">Schema Coverage</div>
-            <div className="[white-space-collapse:collapse] inline-block rounded-[99px] py-0.5 px-1.75 bg-[#FFF3E0]">
-              <div className="inline-block w-max text-[#E67E22] font-sans text-[11px]/3.5">45</div>
-            </div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "content-freshness" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">Content Freshness</div>
-            <div className="[white-space-collapse:collapse] inline-block rounded-[99px] py-0.5 px-1.75 bg-[#E8F5E9]">
-              <div className="inline-block w-max text-[#27AE60] font-sans text-[11px]/3.5">77</div>
-            </div>
-          </button>
-          <button className="grow shrink basis-[0%] flex items-center justify-center py-3.5 px-2.5 gap-1.5 border-b-2 border-b-solid border-b-[#00000000] bg-transparent border-t-0 border-l-0 border-r-0 cursor-pointer" onClick={() => console.log("ACTION: switch_scan_tab", { tab: "eeat" })}>
-            <div className="[white-space-collapse:collapse] inline-block w-max text-[#8792A2] font-sans shrink-0 text-[13px]/4">EEAT</div>
-            <div className="[white-space-collapse:collapse] inline-block rounded-[99px] py-0.5 px-1.75 bg-[#FFF3E0]">
-              <div className="inline-block w-max text-[#E67E22] font-sans text-[11px]/3.5">61</div>
-            </div>
-          </button>
-        </div>
+        <ScanTabs activeTab="ai-visibility" />
 
         {/* Stats Bar — Mentions, Citations, Recommendations + Engine Mini Scores */}
         <ScanVisibilityStats />
