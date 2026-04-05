@@ -15,7 +15,7 @@ export interface DashboardTab {
 export const dashboardTabs: DashboardTab[] = [
   { label: "Overview", slug: "overview", href: "/dashboard" },
   { label: "Scans", slug: "scans", href: "/dashboard/scans" },
-  { label: "Implementation Plan", slug: "implementation-plan", href: "/dashboard/improvement-plan" },
+  { label: "Improvement Plan", slug: "implementation-plan", href: "/dashboard/improvement-plan" },
   { label: "Competitors", slug: "competitors", href: null },       // NOTE: No Competitors page exists
   { label: "Risk Insights", slug: "risk-insights", href: null },   // NOTE: No Risk Insights page exists
 ];
@@ -54,6 +54,13 @@ export const mentionsCard: KPICard = {
   changeDirection: "up",
   comparison: "vs last month",
 };
+
+export const carouselCards: KPICard[] = [
+  { label: "Monthly Mentions", value: "247", change: "+18%", changeDirection: "up", comparison: "vs last month" },
+  { label: "Monthly Citations", value: "89", change: "+12%", changeDirection: "up", comparison: "vs last month" },
+  { label: "Monthly Recommendations", value: "34", change: "+8%", changeDirection: "up", comparison: "vs last month" },
+  { label: "Hallucinations Detected", value: "7", change: "-3", changeDirection: "down", comparison: "vs last month" },
+];
 
 // ─── Share of Voice ─────────────────────────────────────────
 
@@ -128,20 +135,41 @@ export const leaderboard: LeaderboardEntry[] = [
 
 export interface TrendLine {
   label: string;
+  dataKey: string;
   color: string;
   active: boolean;
 }
 
 export const trendLines: TrendLine[] = [
-  { label: "AI Visibility", color: "#FF9F43", active: true },
-  { label: "Brand Accuracy", color: "#27AE60", active: true },
-  { label: "Sentiment", color: "#4ECDC4", active: true },
-  { label: "Schema", color: "#E6EBF1", active: false },
-  { label: "Freshness", color: "#E6EBF1", active: false },
-  { label: "EEAT", color: "#E6EBF1", active: false },
+  { label: "AI Visibility", dataKey: "aiVisibility", color: "#FF9F43", active: true },
+  { label: "Brand Accuracy", dataKey: "brandAccuracy", color: "#27AE60", active: true },
+  { label: "Sentiment", dataKey: "sentiment", color: "#4ECDC4", active: true },
+  { label: "Schema", dataKey: "schema", color: "#E6EBF1", active: false },
+  { label: "Freshness", dataKey: "freshness", color: "#E6EBF1", active: false },
+  { label: "EEAT", dataKey: "eeat", color: "#E6EBF1", active: false },
 ];
 
 export const trendMonths = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];
+
+export interface TrendDataPoint {
+  month: string;
+  aiVisibility: number;
+  brandAccuracy: number;
+  sentiment: number;
+  schema: number;
+  freshness: number;
+  eeat: number;
+}
+
+export const trendData: TrendDataPoint[] = [
+  { month: "Oct", aiVisibility: 52, brandAccuracy: 72, sentiment: 68, schema: 30, freshness: 60, eeat: 45 },
+  { month: "Nov", aiVisibility: 55, brandAccuracy: 74, sentiment: 65, schema: 33, freshness: 62, eeat: 48 },
+  { month: "Dec", aiVisibility: 58, brandAccuracy: 75, sentiment: 70, schema: 35, freshness: 65, eeat: 50 },
+  { month: "Jan", aiVisibility: 60, brandAccuracy: 76, sentiment: 69, schema: 38, freshness: 68, eeat: 53 },
+  { month: "Feb", aiVisibility: 63, brandAccuracy: 78, sentiment: 66, schema: 40, freshness: 72, eeat: 56 },
+  { month: "Mar", aiVisibility: 65, brandAccuracy: 80, sentiment: 72, schema: 42, freshness: 75, eeat: 58 },
+  { month: "Apr", aiVisibility: 68, brandAccuracy: 81, sentiment: 74, schema: 45, freshness: 77, eeat: 61 },
+];
 
 // ─── Top Recommendations ────────────────────────────────────
 

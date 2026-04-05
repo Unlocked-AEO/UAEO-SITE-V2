@@ -1,4 +1,5 @@
 import { engineScores } from "@/data/mock-dashboard";
+import { useCountUp } from "@/hooks/useCountUp";
 
 function scoreColor(score: number): string {
   if (score >= 70) return "#27AE60";
@@ -6,58 +7,64 @@ function scoreColor(score: number): string {
   return "#E74C3C";
 }
 
+function EngineRow({ engine }: { engine: typeof engineScores[number] }) {
+  const animatedScore = useCountUp(engine.score, 1400);
+  const color = scoreColor(engine.score);
+  const isPositive = engine.change >= 0;
+
+  return (
+    <div className="flex flex-col gap-[5px]">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-[7px]">
+          <div
+            className="flex items-center justify-center shrink-0 rounded-[5px] size-5"
+            style={{
+              backgroundColor: engine.iconBg,
+              border:
+                engine.iconSlug === "gemini"
+                  ? "1px solid #E8EAED"
+                  : "none",
+            }}
+          >
+            <EngineIcon slug={engine.iconSlug} />
+          </div>
+          <span className="text-slate-body text-xs/4">
+            {engine.name}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span
+            className={`text-[10px]/3 ${isPositive ? "text-success" : "text-danger"}`}
+          >
+            {isPositive ? "▲" : "▼"} {isPositive ? "+" : ""}
+            {engine.change}
+          </span>
+          <span className="text-[13px]/4" style={{ color }}>
+            {animatedScore}
+          </span>
+        </div>
+      </div>
+      <div className="h-1.5 rounded-[3px] bg-[#F0F4F8]">
+        <div
+          className="h-full rounded-[3px] transition-[width] duration-1000 ease-out"
+          style={{
+            width: `${animatedScore}%`,
+            backgroundColor: color,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function EngineScores() {
   return (
     <div className="grow shrink basis-0 rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
       <div className="mb-4 text-navy text-[13px]/4">Score by AI Engine</div>
       <div className="flex flex-col gap-4">
-        {engineScores.map((engine) => {
-          const color = scoreColor(engine.score);
-          const isPositive = engine.change >= 0;
-          return (
-            <div key={engine.name} className="flex flex-col gap-[5px]">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-[7px]">
-                  <div
-                    className="flex items-center justify-center shrink-0 rounded-[5px] size-5"
-                    style={{
-                      backgroundColor: engine.iconBg,
-                      border:
-                        engine.iconSlug === "gemini"
-                          ? "1px solid #E8EAED"
-                          : "none",
-                    }}
-                  >
-                    <EngineIcon slug={engine.iconSlug} />
-                  </div>
-                  <span className="text-slate-body text-xs/4">
-                    {engine.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`text-[10px]/3 ${isPositive ? "text-success" : "text-danger"}`}
-                  >
-                    {isPositive ? "▲" : "▼"} {isPositive ? "+" : ""}
-                    {engine.change}
-                  </span>
-                  <span className="text-[13px]/4" style={{ color }}>
-                    {engine.score}
-                  </span>
-                </div>
-              </div>
-              <div className="h-1.5 rounded-[3px] bg-[#F0F4F8]">
-                <div
-                  className="h-full rounded-[3px]"
-                  style={{
-                    width: `${engine.score}%`,
-                    backgroundColor: color,
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
+        {engineScores.map((engine) => (
+          <EngineRow key={engine.name} engine={engine} />
+        ))}
       </div>
     </div>
   );

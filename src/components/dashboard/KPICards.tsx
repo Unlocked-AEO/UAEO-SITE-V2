@@ -1,5 +1,7 @@
-import { kpiCards, mentionsCard, shareOfVoice } from "@/data/mock-dashboard";
+import { useState, useEffect } from "react";
+import { kpiCards, carouselCards, shareOfVoice } from "@/data/mock-dashboard";
 import type { KPICard as KPICardType } from "@/data/mock-dashboard";
+import { useCountUp } from "@/hooks/useCountUp";
 
 function ChangeIndicator({
   change,
@@ -24,6 +26,12 @@ function ChangeIndicator({
 }
 
 function StatCard({ card }: { card: KPICardType }) {
+  const numericValue = parseInt(card.value.replace(/,/g, ""), 10);
+  const animatedValue = useCountUp(numericValue);
+  const displayValue = card.value.includes(",")
+    ? animatedValue.toLocaleString()
+    : String(animatedValue);
+
   return (
     <div className="grow shrink basis-0 flex flex-col justify-between rounded-xl py-6 px-7 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
       <span className="uppercase tracking-[0.6px] text-slate-muted font-bold text-[11px]/3.5">
@@ -31,7 +39,7 @@ function StatCard({ card }: { card: KPICardType }) {
       </span>
       <div className="flex flex-col gap-1.5 mt-4">
         <span className="text-[52px] tracking-[-2px] leading-none text-navy">
-          {card.value}
+          {displayValue}
         </span>
         <div className="flex items-center gap-1">
           <ChangeIndicator change={card.change} direction={card.changeDirection} />
@@ -106,30 +114,54 @@ function ShareOfVoiceCard() {
 }
 
 function MentionsCard() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Count up only on initial mount for all carousel values
+  const animatedValues = carouselCards.map((card) => {
+    const numericValue = parseInt(card.value.replace(/,/g, ""), 10);
+    return useCountUp(numericValue);
+  });
+
+  // Auto-cycle every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % carouselCards.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const card = carouselCards[activeIndex];
+  const displayValue = animatedValues[activeIndex];
+
   return (
     <div className="grow-[1.2] shrink basis-0 flex flex-col justify-between rounded-xl py-6 px-7 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
-      <span className="uppercase tracking-[0.6px] text-slate-muted text-[11px]/3.5">
-        {mentionsCard.label}
-      </span>
-      <div className="flex flex-col gap-1.5 mt-4">
-        <span className="text-[52px] tracking-[-2px] leading-none text-navy">
-          {mentionsCard.value}
+      <div>
+        <span className="uppercase tracking-[0.6px] text-slate-muted text-[11px]/3.5">
+          {card.label}
         </span>
-        <div className="flex items-center gap-1">
-          <ChangeIndicator
-            change={mentionsCard.change}
-            direction={mentionsCard.changeDirection}
-          />
-          <span className="text-slate-muted text-xs/4">
-            {mentionsCard.comparison}
+        <div className="flex flex-col gap-1.5 mt-4">
+          <span className="text-[52px] tracking-[-2px] leading-none text-navy">
+            {displayValue}
           </span>
+          <div className="flex items-center gap-1">
+            <ChangeIndicator change={card.change} direction={card.changeDirection} />
+            <span className="text-slate-muted text-xs/4">{card.comparison}</span>
+          </div>
         </div>
       </div>
       {/* Pagination dots */}
       <div className="flex items-center justify-center gap-1.5 mt-3">
-        <div className="w-5 h-1.5 rounded-[3px] bg-teal shrink-0" />
-        <div className="rounded-[3px] bg-border-light shrink-0 size-1.5" />
-        <div className="rounded-[3px] bg-border-light shrink-0 size-1.5" />
+        {carouselCards.map((_, i) => (
+          <button
+            key={i}
+            className={`rounded-[3px] shrink-0 border-none cursor-pointer p-0 transition-all duration-300 ${
+              i === activeIndex
+                ? "w-5 h-1.5 bg-teal"
+                : "size-1.5 bg-border-light hover:bg-slate-muted"
+            }`}
+            onClick={() => setActiveIndex(i)}
+          />
+        ))}
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
 import { scoreAverages } from "@/data/mock-dashboard";
 import type { ScoreAverage } from "@/data/mock-dashboard";
+import { useCountUp } from "@/hooks/useCountUp";
 
 function ScoreGauge({ item }: { item: ScoreAverage }) {
   const radius = 30;
   const circumference = 2 * Math.PI * radius;
-  const filled = (item.score / 100) * circumference;
+  const animatedScore = useCountUp(item.score, 1400);
+  const filled = (animatedScore / 100) * circumference;
 
   const strokeColor =
     item.color === "green"
@@ -39,14 +41,15 @@ function ScoreGauge({ item }: { item: ScoreAverage }) {
         />
         <text
           x="38"
-          y="43"
+          y="38"
           textAnchor="middle"
+          dominantBaseline="central"
           fontFamily="Inter"
           fontSize="14"
           fontWeight="800"
           fill="#0A2540"
         >
-          {item.score}
+          {animatedScore}
         </text>
       </svg>
       <div>
