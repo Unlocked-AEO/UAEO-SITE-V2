@@ -29,3 +29,4 @@ Track of all pages in this design repo and their spec files.
 | Advanced Scan Settings | /dashboard/scans/settings | src/pages/dashboard/AdvancedScanSettings.tsx | [advanced-scan-settings.spec.md](advanced-scan-settings.spec.md) | Done |
 | Improvement Plan | /dashboard/improvement-plan | src/pages/dashboard/ImprovementPlan.tsx | [improvement-plan.spec.md](improvement-plan.spec.md) | Done |
 | Improvement Plan (Expanded Fix) | /dashboard/improvement-plan/fix | src/pages/dashboard/ImprovementPlanExpanded.tsx | [improvement-plan-expanded.spec.md](improvement-plan-expanded.spec.md) | Done |
+| Scan Overview | /dashboard/scans/:scanId | src/pages/dashboard/ScanOverview.tsx | [scan-overview.spec.md](scan-overview.spec.md) | Done |

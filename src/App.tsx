@@ -22,6 +22,7 @@ import RunScan from "@/pages/dashboard/RunScan";
 import AdvancedScanSettings from "@/pages/dashboard/AdvancedScanSettings";
 import ImprovementPlan from "@/pages/dashboard/ImprovementPlan";
 import ImprovementPlanExpanded from "@/pages/dashboard/ImprovementPlanExpanded";
+import ScanOverview from "@/pages/dashboard/ScanOverview";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
         <Route path="/dashboard/scans" element={<Scans />} />
+        <Route path="/dashboard/scans/:scanId" element={<ScanOverview />} />
         <Route path="/dashboard/scans/new" element={<RunScan />} />
         <Route path="/dashboard/scans/settings" element={<AdvancedScanSettings />} />
         <Route path="/dashboard/improvement-plan" element={<ImprovementPlan />} />
