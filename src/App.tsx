@@ -10,6 +10,7 @@ import FAQ from "@/pages/landing/FAQ";
 import Help from "@/pages/landing/Help";
 import Terms from "@/pages/landing/Terms";
 import Privacy from "@/pages/landing/Privacy";
+import DashboardOverview from "@/pages/dashboard/Overview";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/dashboard" element={<DashboardOverview />} />
       </Routes>
     </BrowserRouter>
   );

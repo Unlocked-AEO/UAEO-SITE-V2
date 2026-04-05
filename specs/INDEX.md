@@ -16,3 +16,5 @@ Track of all pages in this design repo and their spec files.
 | Help | /help | src/pages/landing/Help.tsx | [help.spec.md](help.spec.md) | Done |
 | FAQ | /faq | src/pages/landing/FAQ.tsx | [faq.spec.md](faq.spec.md) | Done |
 | Terms of Service | /terms | src/pages/landing/Terms.tsx | [terms.spec.md](terms.spec.md) | Done |
+| Privacy Policy | /privacy | src/pages/landing/Privacy.tsx | [privacy.spec.md](privacy.spec.md) | Done |
+| Dashboard Overview | /dashboard | src/pages/dashboard/Overview.tsx | [overview.spec.md](overview.spec.md) | Done |
