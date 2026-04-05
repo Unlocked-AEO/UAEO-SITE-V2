@@ -25,3 +25,4 @@ Track of all pages in this design repo and their spec files.
 | Billing | /dashboard/billing | src/pages/dashboard/Billing.tsx | [billing.spec.md](billing.spec.md) | Done |
 | Support | /dashboard/support | src/pages/dashboard/Support.tsx | [support.spec.md](support.spec.md) | Done |
 | Scans | /dashboard/scans | src/pages/dashboard/Scans.tsx | [scans.spec.md](scans.spec.md) | Done |
+| Run Scan | /dashboard/scans/new | src/pages/dashboard/RunScan.tsx | [run-scan.spec.md](run-scan.spec.md) | Done |

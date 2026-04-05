@@ -18,6 +18,7 @@ import Preferences from "@/pages/dashboard/Preferences";
 import Billing from "@/pages/dashboard/Billing";
 import Support from "@/pages/dashboard/Support";
 import Scans from "@/pages/dashboard/Scans";
+import RunScan from "@/pages/dashboard/RunScan";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
         <Route path="/dashboard/scans" element={<Scans />} />
+        <Route path="/dashboard/scans/new" element={<RunScan />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
         <Route path="/dashboard/preferences" element={<Preferences />} />
