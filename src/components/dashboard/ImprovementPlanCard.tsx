@@ -1,5 +1,6 @@
 import { fixItems, planTabs } from "@/data/mock-improvement-plan";
 import type { FixItem, FixStatus } from "@/data/mock-improvement-plan";
+import { ExpandedFixDetail } from "@/components/dashboard/ExpandedFixDetail";
 
 // ─── Status Icon ───────────────────────────────────────────
 
@@ -29,7 +30,6 @@ function StatusIcon({ status }: { status: FixStatus }) {
       </div>
     );
   }
-  // not-started
   return (
     <div className="flex items-center justify-center shrink-0 rounded-full bg-[#F0F4F8] size-5">
       <div className="rounded-full bg-[#C4CAD4] size-1.75" />
@@ -46,7 +46,7 @@ const statusBadge: Record<FixStatus, { label: string; bg: string; border: string
   dismissed: { label: "Dismissed", bg: "bg-[#F0F4F8]", border: "border-[#D6DCE3]", text: "text-[#8792A2]" },
 };
 
-// ─── Fix Row ───────────────────────────────────────────────
+// ─── Collapsed Fix Row ─────────────────────────────────────
 
 function FixRow({ fix }: { fix: FixItem }) {
   const badge = statusBadge[fix.status];
@@ -59,31 +59,21 @@ function FixRow({ fix }: { fix: FixItem }) {
       }`}
     >
       <StatusIcon status={fix.status} />
-
       <div className="grow shrink basis-0 min-w-0">
-        <div
-          className={`text-[13px]/[140%] font-sans ${
-            isDismissed ? "text-[#8792A2] line-through decoration-1" : "text-[#0A2540]"
-          }`}
-        >
+        <div className={`text-[13px]/[140%] font-sans font-bold ${isDismissed ? "text-[#8792A2] line-through decoration-1" : "text-[#0A2540]"}`}>
           {fix.title}
         </div>
-        <div
-          className={`mt-0.75 text-[12px]/[150%] font-sans ${
-            isDismissed ? "text-[#8792A2]" : "text-[#425466]"
-          }`}
-        >
+        <div className={`mt-0.75 text-xs/4 font-sans ${isDismissed ? "text-[#8792A2]" : "text-[#425466]"}`}>
           {fix.description}
         </div>
       </div>
-
       <div className="flex items-center shrink-0 gap-2">
         {fix.impact && (
           <div className="flex items-center rounded-md py-0.75 px-2 gap-1 bg-[#EEF9F4] border border-[#BDECD3]">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
               <path d="M5 8V2M2 5l3-3 3 3" stroke="#27AE60" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <div className="text-[#27AE60] font-sans text-[11px]/3.5 whitespace-nowrap">
+            <div className="text-[#27AE60] font-sans font-semibold text-[11px]/3.5 whitespace-nowrap">
               {fix.impact.label}
             </div>
           </div>
@@ -106,13 +96,68 @@ function FixRow({ fix }: { fix: FixItem }) {
   );
 }
 
+// ─── Expanded Fix Row ──────────────────────────────────────
+
+function ExpandedFixRow({ fix }: { fix: FixItem }) {
+  const badge = statusBadge[fix.status];
+
+  return (
+    <div className="rounded-[10px] overflow-clip bg-white border-[1.5px] border-teal">
+      {/* Header — teal bg */}
+      <div className="flex items-center py-3.5 px-4 gap-4 bg-[#F7FEFE]">
+        <StatusIcon status={fix.status} />
+        <div className="grow shrink basis-0 min-w-0">
+          <div className="text-[13px]/[140%] font-sans font-bold text-[#0A2540]">
+            {fix.title}
+          </div>
+          <div className="mt-0.75 text-xs/4 font-sans text-[#425466]">
+            {fix.description}
+          </div>
+        </div>
+        <div className="flex items-center shrink-0 gap-2">
+          {fix.impact && (
+            <div className="flex items-center rounded-md py-0.75 px-2 gap-1 bg-[#EEF9F4] border border-[#BDECD3]">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+                <path d="M5 8V2M2 5l3-3 3 3" stroke="#27AE60" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <div className="text-[#27AE60] font-sans font-semibold text-[11px]/3.5 whitespace-nowrap">
+                {fix.impact.label}
+              </div>
+            </div>
+          )}
+          <div className={`rounded-md py-1 px-2.5 ${badge.bg} border ${badge.border}`}>
+            <div className={`${badge.text} font-sans font-semibold text-[11px]/3.5 whitespace-nowrap`}>
+              {badge.label}
+            </div>
+          </div>
+          <button
+            className="flex items-center justify-center shrink-0 rounded-md bg-[#E8F7F7] size-7 border-none cursor-pointer hover:bg-[#D0F0EF] transition-colors"
+            onClick={() => console.log("ACTION: collapse_fix_details", { id: fix.id })}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+              <path d="M10.5 8.75L7 5.25L3.5 8.75" stroke="#4ECDC4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Expanded detail */}
+      <ExpandedFixDetail />
+    </div>
+  );
+}
+
 // ─── Main Card ─────────────────────────────────────────────
 
-export function ImprovementPlanCard() {
+interface ImprovementPlanCardProps {
+  expandedFixId?: string;
+}
+
+export function ImprovementPlanCard({ expandedFixId }: ImprovementPlanCardProps) {
   return (
-    <div className="grow shrink basis-0 flex flex-col min-h-0 rounded-xl overflow-clip bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
+    <div className="flex flex-col rounded-xl overflow-clip bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
       {/* Title */}
-      <div className="pt-5 shrink-0 font-sans px-6 text-base/5 text-navy">
+      <div className="pt-5 shrink-0 font-sans font-bold px-6 text-[15px]/[18px] text-navy">
         Improvement Plan
       </div>
 
@@ -126,18 +171,22 @@ export function ImprovementPlanCard() {
             }`}
             onClick={() => console.log("ACTION: switch_plan_tab", { tab: tab.slug })}
           >
-            <div className={`font-sans text-base/5 ${tab.slug === "fixes" ? "text-navy" : "text-slate-muted"}`}>
+            <div className={`font-sans text-[13px]/4 ${tab.slug === "fixes" ? "text-navy font-semibold" : "text-slate-muted"}`}>
               {tab.label}
             </div>
           </button>
         ))}
       </div>
 
-      {/* Fix items — scrollable */}
+      {/* Fix items */}
       <div className="flex flex-col py-4 px-6 gap-2.5 overflow-auto">
-        {fixItems.map((fix) => (
-          <FixRow key={fix.id} fix={fix} />
-        ))}
+        {fixItems.map((fix) =>
+          fix.id === expandedFixId ? (
+            <ExpandedFixRow key={fix.id} fix={fix} />
+          ) : (
+            <FixRow key={fix.id} fix={fix} />
+          )
+        )}
       </div>
     </div>
   );
