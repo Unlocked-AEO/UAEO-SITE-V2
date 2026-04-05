@@ -26,6 +26,7 @@ import ScanOverview from "@/pages/dashboard/ScanOverview";
 import ScanAIVisibility from "@/pages/dashboard/ScanAIVisibility";
 import ScanBrandAccuracy from "@/pages/dashboard/ScanBrandAccuracy";
 import ScanContentFreshness from "@/pages/dashboard/ScanContentFreshness";
+import Signup from "@/pages/authenticated/Signup";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/brand-guidelines" element={<BrandGuidelines />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<DashboardOverview />} />
         <Route path="/dashboard/scans" element={<Scans />} />
         <Route path="/dashboard/scans/:scanId" element={<ScanOverview />} />

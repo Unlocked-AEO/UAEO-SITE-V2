@@ -33,3 +33,4 @@ Track of all pages in this design repo and their spec files.
 | Scan AI Visibility | /dashboard/scans/:scanId/ai-visibility | src/pages/dashboard/ScanAIVisibility.tsx | [scan-ai-visibility.spec.md](scan-ai-visibility.spec.md) | Done |
 | Scan Brand Accuracy | /dashboard/scans/:scanId/brand-accuracy | src/pages/dashboard/ScanBrandAccuracy.tsx | [scan-brand-accuracy.spec.md](scan-brand-accuracy.spec.md) | Done |
 | Scan Content Freshness | /dashboard/scans/:scanId/content-freshness | src/pages/dashboard/ScanContentFreshness.tsx | [scan-content-freshness.spec.md](scan-content-freshness.spec.md) | Done |
+| Signup | /signup | src/pages/authenticated/Signup.tsx | [signup.spec.md](signup.spec.md) | Done |
