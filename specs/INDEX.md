@@ -21,3 +21,4 @@ Track of all pages in this design repo and their spec files.
 | Brand Guidelines | /brand-guidelines | src/pages/landing/BrandGuidelines.tsx | [brand-guidelines.spec.md](brand-guidelines.spec.md) | Done |
 | Profile | /dashboard/profile | src/pages/dashboard/Profile.tsx | [profile.spec.md](profile.spec.md) | Done |
 | Preferences | /dashboard/preferences | src/pages/dashboard/Preferences.tsx | [preferences.spec.md](preferences.spec.md) | Done |
+| Security | /dashboard/security | src/pages/dashboard/Security.tsx | [security.spec.md](security.spec.md) | Done |
