@@ -114,7 +114,7 @@ export function Header() {
         <Button
           variant="dark"
           size="sm"
-          onClick={() => console.log("ACTION: contact_sales")}
+          onClick={() => navigate("/contact")}
         >
           Contact sales ›
         </Button>

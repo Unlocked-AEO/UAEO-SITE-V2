@@ -35,3 +35,5 @@ Track of all pages in this design repo and their spec files.
 | Scan Content Freshness | /dashboard/scans/:scanId/content-freshness | src/pages/dashboard/ScanContentFreshness.tsx | [scan-content-freshness.spec.md](scan-content-freshness.spec.md) | Done |
 | Signup | /signup | src/pages/authenticated/Signup.tsx | [signup.spec.md](signup.spec.md) | Done |
 | Sign In | /signin | src/pages/authenticated/Signin.tsx | [signin.spec.md](signin.spec.md) | Done |
+| Contact | /contact | src/pages/landing/Contact.tsx | [contact.spec.md](contact.spec.md) | Done |
+| Schedule a Call | /schedule | src/pages/landing/ScheduleCall.tsx | [schedule-call.spec.md](schedule-call.spec.md) | Done |

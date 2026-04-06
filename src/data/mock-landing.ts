@@ -490,7 +490,7 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { label: "About", href: "/about" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Contact", href: null },        // NOTE: No Contact page exists
+      { label: "Contact", href: "/contact" },
     ],
   },
 ];
