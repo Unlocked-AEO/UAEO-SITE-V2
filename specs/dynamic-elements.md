@@ -91,19 +91,22 @@ Used for complex, choreographed animations on landing pages. Installed via `npm 
 | CTA buttons | GSAP slide up 30px + fade in (0.9s delay) | Page load |
 
 ### Hero Network Visualization (`HeroOrbs.tsx`) — GSAP powered
+7 nodes total: center Unlocked AEO + 6 AI engines in hexagonal layout. Each node shows its actual brand logo SVG clipped inside a circle. All connections run directly between logos.
+
 | Element | Animation | Trigger |
 |---------|-----------|---------|
-| 20 network nodes (center + 5 AI engines + 14 signal nodes) | Scale in from 0 with `back.out(2)` bounce, staggered from center | Page load |
-| ~45 connection lines | Draw in from 0 length with random stagger delays | Page load |
-| 5 AI engine pulse rings | Continuous expanding/fading rings (`repeat: -1`) | Continuous |
-| All nodes | Float on independent sine-wave paths (3.5–7.5s cycles) | Continuous |
+| 7 logo nodes (Unlocked AEO center + ChatGPT, Perplexity, Gemini, Grok, Claude, Copilot) | Scale in from 0 with `back.out(2)` bounce, staggered from center | Page load |
+| 21 connection lines (6 hub spokes, 6 hexagon ring, 3 cross-diagonals, 6 skip connections) | Draw in from 0 length with random stagger delays | Page load |
+| 6 AI engine pulse rings | Continuous expanding/fading rings (`repeat: -1`) | Continuous |
+| All 7 nodes | Float on independent sine-wave paths (5–7.5s cycles) | Continuous |
 | Connection lines | Opacity breathes independently per line | Continuous |
 | Random connections | Flash bright (opacity 0.7, width 2.5px) every 1.5s, 1–2 at once | Continuous |
-| Engine nodes | Attract toward mouse cursor on hover | Mouse move |
-| Signal nodes | Repel away from mouse cursor on hover | Mouse move |
+| All engine nodes | Attract toward mouse cursor on hover | Mouse move |
 | Nearby connections | Brighten + thicken when mouse is within 150px | Mouse move |
 | All nodes on mouse leave | Spring back to float position with `elastic.out` | Mouse leave |
 | Labels | Fade in + slide up after network forms | Page load |
+
+**Logo assets used**: `logo.svg` (center), `openai-logo.svg`, `perplexity-logo.svg`, `gemini-logo.svg`, `grok-logo.svg`, `claude-logo.svg`, `copilot-logo.svg`
 
 ### Solution Cards — AI Visibility (`SolutionCards.tsx`) — GSAP powered
 | Element | Animation | Trigger |

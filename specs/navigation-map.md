@@ -149,7 +149,7 @@ These are referenced in navigation but have no route or page file:
 |---------------|-----------------|-------|
 | Solutions | Header nav, Footer | Dropdown or landing page needed |
 | Case Studies | Header nav, Footer | Landing page needed |
-| Contact | Footer, "Contact sales" CTA | Landing page or modal needed |
+| ~~Contact~~ | ~~Footer, "Contact sales" CTA~~ | **Now exists at `/contact`** |
 | AEO Glossary | Footer | Landing page needed |
 | Cookies | Footer legal links | Cookie settings page/modal needed |
 | Sitemap | Footer legal links | Sitemap page needed |

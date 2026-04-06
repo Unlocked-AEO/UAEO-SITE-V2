@@ -48,13 +48,13 @@ const nodes: Node[] = [
 ];
 
 const connections: [number, number][] = [
-  // Center (Unlocked AEO) to every engine — the hub
+  // Center to every engine
   [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
-  // Hexagon ring — each engine to its neighbors
+  // Hexagon ring
   [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1],
-  // Cross-diagonals — opposite engines connected through center
+  // Cross-diagonals
   [1, 4], [2, 5], [3, 6],
-  // Skip connections — every other engine
+  // Skip connections
   [1, 3], [2, 4], [3, 5], [4, 6], [5, 1], [6, 2],
 ];
 
