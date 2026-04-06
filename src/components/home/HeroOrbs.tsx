@@ -30,55 +30,70 @@ interface Node {
   floatDuration: number;
 }
 
+// Center at (420, 380). Engines evenly spaced in a hexagon at radius ~210
+const CX = 420;
+const CY = 380;
+const ER = 210; // engine orbit radius
+
 const nodes: Node[] = [
-  // Main central node
-  { x: 380, y: 340, r: 32, color: "#4ECDC4", bg: "#4ECDC4", label: "Unlocked AEO", floatX: 8, floatY: -10, floatDuration: 5 },
-  // AI Engine nodes
-  { x: 180, y: 180, r: 18, color: "#10A37F", bg: "#EAF5F0", label: "ChatGPT", slug: "chatgpt", floatX: -12, floatY: 8, floatDuration: 6 },
-  { x: 560, y: 160, r: 16, color: "#20808D", bg: "#E8F4F5", label: "Perplexity", slug: "perplexity", floatX: 10, floatY: -12, floatDuration: 7 },
-  { x: 620, y: 380, r: 17, color: "#4285F4", bg: "#FFFFFF", label: "Gemini", slug: "gemini", floatX: -8, floatY: 10, floatDuration: 5.5 },
-  { x: 520, y: 540, r: 15, color: "#0A2540", bg: "#F5F5F5", label: "Grok", slug: "grok", floatX: 12, floatY: -8, floatDuration: 6.5 },
-  { x: 200, y: 500, r: 18, color: "#D97757", bg: "#FDF0EB", label: "Claude", slug: "claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
-  { x: 400, y: 140, r: 16, color: "#2870EA", bg: "#EEF3FF", label: "Copilot", slug: "copilot", floatX: -6, floatY: 10, floatDuration: 6.8 },
-  // Signal/data nodes
-  { x: 300, y: 220, r: 6, color: "#4ECDC4", bg: "", floatX: 6, floatY: -8, floatDuration: 4 },
-  { x: 480, y: 260, r: 5, color: "#635BFF", bg: "", floatX: -8, floatY: 6, floatDuration: 4.5 },
-  { x: 450, y: 450, r: 7, color: "#4ECDC4", bg: "", floatX: 10, floatY: 5, floatDuration: 5 },
-  { x: 260, y: 400, r: 5, color: "#635BFF", bg: "", floatX: -6, floatY: -10, floatDuration: 3.5 },
-  { x: 350, y: 150, r: 4, color: "#8792A2", bg: "", floatX: 5, floatY: 8, floatDuration: 4.2 },
-  { x: 550, y: 470, r: 4, color: "#8792A2", bg: "", floatX: -7, floatY: -5, floatDuration: 3.8 },
-  { x: 150, y: 350, r: 5, color: "#4ECDC4", bg: "", floatX: 8, floatY: -6, floatDuration: 5.2 },
-  { x: 650, y: 270, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 10, floatDuration: 4.8 },
-  // Extra signal nodes
-  { x: 320, y: 480, r: 4, color: "#4ECDC4", bg: "", floatX: -7, floatY: 6, floatDuration: 4.6 },
-  { x: 500, y: 340, r: 5, color: "#635BFF", bg: "", floatX: 6, floatY: -9, floatDuration: 3.9 },
-  { x: 420, y: 200, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 7, floatDuration: 5.1 },
-  { x: 280, y: 300, r: 5, color: "#4ECDC4", bg: "", floatX: 9, floatY: -4, floatDuration: 4.3 },
-  { x: 580, y: 300, r: 4, color: "#635BFF", bg: "", floatX: -6, floatY: -8, floatDuration: 4.7 },
-  { x: 340, y: 560, r: 3, color: "#8792A2", bg: "", floatX: 4, floatY: 7, floatDuration: 3.6 },
+  // 0: Center
+  { x: CX, y: CY, r: 38, color: "#4ECDC4", bg: "#4ECDC4", label: "Unlocked AEO", floatX: 6, floatY: -8, floatDuration: 5 },
+  // 1-6: AI Engines — hexagonal placement (60° apart, starting top)
+  { x: CX, y: CY - ER, r: 22, color: "#10A37F", bg: "#EAF5F0", label: "ChatGPT", slug: "chatgpt", floatX: -8, floatY: 10, floatDuration: 6 },
+  { x: CX + ER * 0.87, y: CY - ER * 0.5, r: 20, color: "#20808D", bg: "#E8F4F5", label: "Perplexity", slug: "perplexity", floatX: 10, floatY: -8, floatDuration: 7 },
+  { x: CX + ER * 0.87, y: CY + ER * 0.5, r: 20, color: "#4285F4", bg: "#FFFFFF", label: "Gemini", slug: "gemini", floatX: -10, floatY: 8, floatDuration: 5.5 },
+  { x: CX, y: CY + ER, r: 20, color: "#0A2540", bg: "#F5F5F5", label: "Grok", slug: "grok", floatX: 8, floatY: -10, floatDuration: 6.5 },
+  { x: CX - ER * 0.87, y: CY + ER * 0.5, r: 22, color: "#D97757", bg: "#FDF0EB", label: "Claude", slug: "claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
+  { x: CX - ER * 0.87, y: CY - ER * 0.5, r: 20, color: "#2870EA", bg: "#EEF3FF", label: "Copilot", slug: "copilot", floatX: 8, floatY: 10, floatDuration: 6.8 },
+  // 7-22: Signal/data nodes — scattered between and around engines
+  { x: CX - 60, y: CY - 130, r: 6, color: "#4ECDC4", bg: "", floatX: 6, floatY: -8, floatDuration: 4 },
+  { x: CX + 80, y: CY - 100, r: 5, color: "#635BFF", bg: "", floatX: -8, floatY: 6, floatDuration: 4.5 },
+  { x: CX + 130, y: CY + 20, r: 6, color: "#4ECDC4", bg: "", floatX: 10, floatY: 5, floatDuration: 5 },
+  { x: CX + 70, y: CY + 120, r: 5, color: "#635BFF", bg: "", floatX: -6, floatY: -10, floatDuration: 3.5 },
+  { x: CX - 80, y: CY - 50, r: 5, color: "#8792A2", bg: "", floatX: 5, floatY: 8, floatDuration: 4.2 },
+  { x: CX + 50, y: CY + 50, r: 4, color: "#8792A2", bg: "", floatX: -7, floatY: -5, floatDuration: 3.8 },
+  { x: CX - 130, y: CY + 20, r: 5, color: "#4ECDC4", bg: "", floatX: 8, floatY: -6, floatDuration: 5.2 },
+  { x: CX + 140, y: CY - 50, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 10, floatDuration: 4.8 },
+  { x: CX - 50, y: CY + 130, r: 5, color: "#4ECDC4", bg: "", floatX: -7, floatY: 6, floatDuration: 4.6 },
+  { x: CX + 20, y: CY - 50, r: 5, color: "#635BFF", bg: "", floatX: 6, floatY: -9, floatDuration: 3.9 },
+  { x: CX + 40, y: CY - 170, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 7, floatDuration: 5.1 },
+  { x: CX - 100, y: CY + 100, r: 5, color: "#4ECDC4", bg: "", floatX: 9, floatY: -4, floatDuration: 4.3 },
+  { x: CX + 160, y: CY + 100, r: 4, color: "#635BFF", bg: "", floatX: -6, floatY: -8, floatDuration: 4.7 },
+  { x: CX - 40, y: CY + 170, r: 4, color: "#8792A2", bg: "", floatX: 4, floatY: 7, floatDuration: 3.6 },
+  { x: CX - 150, y: CY - 100, r: 4, color: "#635BFF", bg: "", floatX: -5, floatY: -6, floatDuration: 4.1 },
+  { x: CX + 100, y: CY - 160, r: 5, color: "#4ECDC4", bg: "", floatX: 7, floatY: -5, floatDuration: 4.4 },
 ];
 
 const connections: [number, number][] = [
-  // Center to engines
+  // Center to all engines
   [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
   // Center to signal nodes
-  [0, 7], [0, 8], [0, 9], [0, 10], [0, 16], [0, 18],
+  [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 16],
   // Engine to nearby signals
-  [1, 7], [1, 11], [1, 13], [1, 18],
-  [2, 8], [2, 14], [2, 17], [2, 19],
-  [3, 9], [3, 14], [3, 16], [3, 19],
-  [4, 9], [4, 12], [4, 15], [4, 20],
-  [5, 10], [5, 13], [5, 15], [5, 20],
-  [6, 7], [6, 11], [6, 17], [6, 8],
-  // Signal to signal (cross-connections)
-  [7, 11], [7, 17], [7, 18],
-  [8, 14], [8, 17], [8, 19],
-  [9, 12], [9, 16],
-  [10, 13], [10, 15], [10, 18],
-  [11, 17], [12, 20], [13, 15],
-  [14, 19], [16, 9], [18, 7],
-  // Engine cross-links
-  [1, 2], [2, 3], [3, 4], [4, 5], [5, 1], [6, 1], [6, 2],
+  [1, 7], [1, 8], [1, 17], [1, 22], [1, 16],
+  [2, 8], [2, 9], [2, 14], [2, 22],
+  [3, 9], [3, 10], [3, 12], [3, 19],
+  [4, 10], [4, 15], [4, 18], [4, 20],
+  [5, 13], [5, 15], [5, 18], [5, 20],
+  [6, 7], [6, 11], [6, 13], [6, 21],
+  // Engine hexagon ring
+  [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1],
+  // Engine cross-diagonals
+  [1, 4], [2, 5], [3, 6],
+  // Signal to signal mesh
+  [7, 11], [7, 16], [7, 21],
+  [8, 14], [8, 16], [8, 22],
+  [9, 14], [9, 19], [9, 12],
+  [10, 19], [10, 15], [10, 12],
+  [11, 13], [11, 21],
+  [12, 16],
+  [13, 21], [13, 18],
+  [14, 22],
+  [15, 20], [15, 18],
+  [17, 7], [17, 22],
+  [18, 20],
+  [19, 10],
+  [21, 6],
 ];
 
 export function HeroOrbs() {
@@ -291,9 +306,9 @@ export function HeroOrbs() {
   return (
     <svg
       ref={svgRef}
-      viewBox="0 0 760 680"
-      className="absolute right-0 top-[-20px] w-[50%] h-[700px] overflow-visible pointer-events-auto"
-      style={{ minWidth: "700px" }}
+      viewBox="0 0 840 760"
+      className="absolute right-[-40px] top-[-40px] w-[55%] h-[780px] overflow-visible pointer-events-auto"
+      style={{ minWidth: "780px" }}
       fill="none"
     >
       {/* Ambient background glow */}
@@ -308,8 +323,8 @@ export function HeroOrbs() {
         </radialGradient>
       </defs>
 
-      <circle cx="380" cy="340" r="220" fill="url(#hero-glow-1)" />
-      <circle cx="500" cy="250" r="180" fill="url(#hero-glow-2)" />
+      <circle cx="420" cy="380" r="260" fill="url(#hero-glow-1)" />
+      <circle cx="540" cy="280" r="200" fill="url(#hero-glow-2)" />
 
       {/* Connection lines */}
       {connections.map(([from, to], i) => (
