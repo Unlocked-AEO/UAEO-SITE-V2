@@ -1,6 +1,7 @@
 import { promptResults } from "@/data/mock-scan-ai-visibility";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
+import openaiLogo from "@/assets/openai-logo.svg";
 import type { PromptEngineResult, EngineSlug } from "@/data/mock-scan-ai-visibility";
 
 function EngineChip({ result }: { result: PromptEngineResult }) {
@@ -10,11 +11,9 @@ function EngineChip({ result }: { result: PromptEngineResult }) {
 
   const config: Record<EngineSlug, { bg: string; border?: string; icon: React.ReactNode }> = {
     chatgpt: {
-      bg: "#10A37F",
+      bg: "#EAF5F0",
       icon: (
-        <svg width="10" height="10" viewBox="0 0 41 41" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M20.5 2C10.3 2 2 10.3 2 20.5S10.3 39 20.5 39 39 30.7 39 20.5 30.7 2 20.5 2z" />
-        </svg>
+        <img src={openaiLogo} alt="ChatGPT" width="10" height="10" className="shrink-0" style={{ flexShrink: '0' }} />
       ),
     },
     perplexity: {

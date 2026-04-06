@@ -40,7 +40,7 @@ export interface EngineMinScore {
 }
 
 export const engineMiniScores: EngineMinScore[] = [
-  { name: "ChatGPT", score: 78, scoreColor: "#0A2540", iconBg: "#10A37F", iconSlug: "chatgpt" },
+  { name: "ChatGPT", score: 78, scoreColor: "#0A2540", iconBg: "#EAF5F0", iconSlug: "chatgpt" },
   { name: "Perplexity", score: 71, scoreColor: "#0A2540", iconBg: "#1C1C1C", iconSlug: "perplexity" },
   { name: "Gemini", score: 65, scoreColor: "#FF9F43", iconBg: "#FFFFFF", iconSlug: "gemini", hasBorder: true },
   { name: "Grok", score: 38, scoreColor: "#FF4D4D", iconBg: "#000000", iconSlug: "grok" },

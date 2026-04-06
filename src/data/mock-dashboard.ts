@@ -106,7 +106,7 @@ export interface EngineScore {
 }
 
 export const engineScores: EngineScore[] = [
-  { name: "ChatGPT", score: 78, change: 5, iconBg: "#10A37F", iconSlug: "chatgpt" },
+  { name: "ChatGPT", score: 78, change: 5, iconBg: "#EAF5F0", iconSlug: "chatgpt" },
   { name: "Perplexity", score: 71, change: 3, iconBg: "#1C1C1C", iconSlug: "perplexity" },
   { name: "Gemini", score: 65, change: 2, iconBg: "#FFFFFF", iconSlug: "gemini" },
   { name: "Grok", score: 38, change: -8, iconBg: "#000000", iconSlug: "grok" },

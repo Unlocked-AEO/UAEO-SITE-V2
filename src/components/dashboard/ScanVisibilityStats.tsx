@@ -1,14 +1,13 @@
 import { visibilityStats, engineMiniScores } from "@/data/mock-scan-ai-visibility";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
+import openaiLogo from "@/assets/openai-logo.svg";
 
 function EngineIcon({ slug }: { slug: string }) {
   switch (slug) {
     case "chatgpt":
       return (
-        <svg width="12" height="12" viewBox="0 0 41 41" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835 9.964 9.964 0 0 0-6.239-3.507 10.079 10.079 0 0 0-10.63 4.908 9.962 9.962 0 0 0-6.675 3.305 10.079 10.079 0 0 0-2.489 11.032 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 6.239 3.507 10.079 10.079 0 0 0 10.63-4.908 9.966 9.966 0 0 0 6.675-3.305 10.079 10.079 0 0 0 2.489-11.032z" />
-        </svg>
+        <img src={openaiLogo} alt="ChatGPT" width="12" height="12" className="shrink-0" style={{ flexShrink: '0' }} />
       );
     case "perplexity":
       return (

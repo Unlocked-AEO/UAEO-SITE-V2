@@ -1,3 +1,4 @@
+import openaiLogo from "@/assets/openai-logo.svg";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
 
@@ -15,16 +16,7 @@ export function EngineIcon({ slug, size = 20, variant = "logo" }: EngineIconProp
   switch (slug) {
     case "chatgpt":
       return (
-        <svg width={size} height={size} viewBox="0 0 22 22" fill="none" className="shrink-0">
-          <path
-            d="M11 0C8.07 0 5.42 1.37 3.67 3.52A5.5 5.5 0 0 0 1.1 8.25a5.5 5.5 0 0 0 .73 9.17A5.5 5.5 0 0 0 7.7 21.9 5.5 5.5 0 0 0 11 22a5.5 5.5 0 0 0 4.3-2.09 5.5 5.5 0 0 0 5.87-3.48 5.5 5.5 0 0 0 .73-9.17A5.5 5.5 0 0 0 18.33 3.52 5.5 5.5 0 0 0 11 0z"
-            fill="#74AA9C"
-          />
-          <path
-            d="M11 4.4a6.6 6.6 0 1 1 0 13.2A6.6 6.6 0 0 1 11 4.4zm0 1.6a5 5 0 1 0 0 10A5 5 0 0 0 11 6zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"
-            fill="#FFFFFF"
-          />
-        </svg>
+        <img src={openaiLogo} alt="ChatGPT" width={size} height={size} className="shrink-0" />
       );
     case "perplexity":
       return (
@@ -79,11 +71,9 @@ export function EngineIcon({ slug, size = 20, variant = "logo" }: EngineIconProp
 function EngineIconBadge({ slug }: { slug: string }) {
   const configs: Record<string, { bg: string; icon: JSX.Element }> = {
     chatgpt: {
-      bg: "bg-[#10A37F]",
+      bg: "bg-[#EAF5F0]",
       icon: (
-        <svg width="12" height="12" viewBox="0 0 41 41" fill="#FFFFFF" className="shrink-0">
-          <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835 9.964 9.964 0 0 0-6.239-3.507 10.079 10.079 0 0 0-10.63 4.908 9.962 9.962 0 0 0-6.675 3.305 10.079 10.079 0 0 0-2.489 11.032 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 6.239 3.507 10.079 10.079 0 0 0 10.63-4.908 9.966 9.966 0 0 0 6.675-3.305 10.079 10.079 0 0 0 2.489-11.032z" />
-        </svg>
+        <img src={openaiLogo} alt="ChatGPT" width="14" height="14" className="shrink-0" />
       ),
     },
     perplexity: {
