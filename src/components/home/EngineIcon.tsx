@@ -1,4 +1,5 @@
 import geminiLogo from "@/assets/gemini-logo.svg";
+import claudeLogo from "@/assets/claude-logo.svg";
 
 interface EngineIconProps {
   slug: string;
@@ -55,12 +56,7 @@ export function EngineIcon({ slug, size = 20, variant = "logo" }: EngineIconProp
       );
     case "claude":
       return (
-        <svg width={size} height={size} viewBox="0 0 20 20" fill="none" className="shrink-0">
-          <path
-            d="M10 2L13.5 8.5H18L14 12.5L15.5 18L10 14.5L4.5 18L6 12.5L2 8.5H6.5L10 2Z"
-            fill="#CC785C"
-          />
-        </svg>
+        <img src={claudeLogo} alt="Claude" width={size} height={size} className="shrink-0" />
       );
     case "copilot":
       return (
@@ -115,9 +111,7 @@ function EngineIconBadge({ slug }: { slug: string }) {
     claude: {
       bg: "bg-[#D97757]",
       icon: (
-        <svg width="11" height="11" viewBox="0 0 32 32" fill="#FFFFFF" className="shrink-0">
-          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 4c2.21 0 4.26.65 5.98 1.76L7.76 21.98A9.96 9.96 0 0 1 6 16c0-5.514 4.486-10 10-10zm0 20c-2.21 0-4.26-.65-5.98-1.76l14.22-14.22A9.96 9.96 0 0 1 26 16c0 5.514-4.486 10-10 10z" />
-        </svg>
+        <img src={claudeLogo} alt="Claude" width="14" height="14" className="shrink-0" />
       ),
     },
     copilot: {

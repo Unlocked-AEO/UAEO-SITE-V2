@@ -1,5 +1,6 @@
 import { promptResults } from "@/data/mock-scan-ai-visibility";
 import geminiLogo from "@/assets/gemini-logo.svg";
+import claudeLogo from "@/assets/claude-logo.svg";
 import type { PromptEngineResult, EngineSlug } from "@/data/mock-scan-ai-visibility";
 
 function EngineChip({ result }: { result: PromptEngineResult }) {
@@ -42,9 +43,7 @@ function EngineChip({ result }: { result: PromptEngineResult }) {
     claude: {
       bg: "#D97757",
       icon: (
-        <svg width="9" height="9" viewBox="0 0 32 32" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M16 2C8.3 2 2 8.3 2 16s6.3 14 14 14 14-6.3 14-14S23.7 2 16 2z" />
-        </svg>
+        <img src={claudeLogo} alt="Claude" width="9" height="9" className="shrink-0" style={{ flexShrink: '0' }} />
       ),
     },
   };

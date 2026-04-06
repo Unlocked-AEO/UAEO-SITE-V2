@@ -1,5 +1,6 @@
 import { visibilityStats, engineMiniScores } from "@/data/mock-scan-ai-visibility";
 import geminiLogo from "@/assets/gemini-logo.svg";
+import claudeLogo from "@/assets/claude-logo.svg";
 
 function EngineIcon({ slug }: { slug: string }) {
   switch (slug) {
@@ -27,9 +28,7 @@ function EngineIcon({ slug }: { slug: string }) {
       );
     case "claude":
       return (
-        <svg width="11" height="11" viewBox="0 0 32 32" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 4c2.21 0 4.26.65 5.98 1.76L7.76 21.98A9.96 9.96 0 0 1 6 16c0-5.514 4.486-10 10-10zm0 20c-2.21 0-4.26-.65-5.98-1.76l14.22-14.22A9.96 9.96 0 0 1 26 16c0 5.514-4.486 10-10 10z" />
-        </svg>
+        <img src={claudeLogo} alt="Claude" width="11" height="11" className="shrink-0" style={{ flexShrink: '0' }} />
       );
     default:
       return null;
