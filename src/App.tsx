@@ -13,6 +13,7 @@ import Privacy from "@/pages/landing/Privacy";
 import BrandGuidelines from "@/pages/landing/BrandGuidelines";
 import Contact from "@/pages/landing/Contact";
 import ScheduleCall from "@/pages/landing/ScheduleCall";
+import Product from "@/pages/landing/Product";
 import DashboardOverview from "@/pages/dashboard/Overview";
 import Profile from "@/pages/dashboard/Profile";
 import Security from "@/pages/dashboard/Security";
@@ -49,6 +50,7 @@ function App() {
         <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/schedule" element={<ScheduleCall />} />
+        <Route path="/product" element={<Product />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/dashboard" element={<DashboardOverview />} />

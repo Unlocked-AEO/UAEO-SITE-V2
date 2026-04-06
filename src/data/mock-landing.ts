@@ -13,7 +13,7 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { label: "Product", href: "/how-it-works", hasDropdown: true },
+  { label: "Product", href: "/product", hasDropdown: true },
   { label: "What is AEO", href: "/what-is-aeo" },
   {
     label: "Solutions",
