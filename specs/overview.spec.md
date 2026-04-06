@@ -43,11 +43,16 @@ Wrapped in `DashboardShell` which provides a top bar (logo, company name, last s
 
 | What | How it changes |
 |------|---------------|
-| Score gauge circles | Should animate in on page load (fill from 0 to final score) |
-| KPI numbers | Should count up from 0 to final value on page load |
-| Score Trends chart lines | Should animate in from the left on page load |
-| Mentions card | Should carousel through 4 metrics: Monthly Mentions, Monthly Citations, Monthly Recommendations, Hallucinations Detected |
-| Score Trends filter pills | Toggle between active (colored) and inactive (grey) states, showing/hiding the corresponding line |
+| 4 dashboard rows | GSAP stagger slide up 40px, 120ms apart on page load |
+| Score gauge circles | Animate fill from 0 to final score on page load |
+| KPI numbers (14, 8,420) | Count up from 0 on page load |
+| Share of Voice donut | GSAP ring segments animate from 0 arc to target arc, staggered |
+| Mentions carousel | Auto-cycles every 8s through: Monthly Mentions (247), Monthly Citations (89), Monthly Recommendations (34), Hallucinations Detected (7) |
+| Engine score bars + numbers | Count up from 0, bars grow from 0% |
+| Leaderboard bars + scores | Count up from 0, bars grow from 0% |
+| Score Trends chart | Recharts with interactive tooltip, filter pills toggle lines on/off |
+| Recommendation items | GSAP slide in from left, stagger 80ms |
+| Risk insight cards | GSAP scale from 96% + fade, severity dots pop in with bounce |
 
 ## Different Page States
 

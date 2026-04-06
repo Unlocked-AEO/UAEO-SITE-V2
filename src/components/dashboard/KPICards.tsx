@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 import { kpiCards, carouselCards, shareOfVoice } from "@/data/mock-dashboard";
 import type { KPICard as KPICardType } from "@/data/mock-dashboard";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -51,7 +52,7 @@ function StatCard({ card }: { card: KPICardType }) {
 }
 
 function ShareOfVoiceCard() {
-  // SVG donut params
+  const svgRef = useRef<SVGSVGElement>(null);
   const radius = 46;
   const circumference = 2 * Math.PI * radius;
 
@@ -63,20 +64,36 @@ function ShareOfVoiceCard() {
     return { ...item, dashArray, gapArray: circumference - dashArray, rotation };
   });
 
+  useEffect(() => {
+    if (!svgRef.current) return;
+    const rings = svgRef.current.querySelectorAll(".donut-seg");
+    const ctx = gsap.context(() => {
+      rings.forEach((ring, i) => {
+        const target = segments[i].dashArray;
+        gsap.fromTo(ring,
+          { strokeDasharray: `0 ${circumference}` },
+          { strokeDasharray: `${target} ${segments[i].gapArray}`, duration: 1.0, ease: "power2.out", delay: 0.3 + i * 0.15 }
+        );
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="grow-[1.5] shrink basis-0 flex items-center rounded-xl py-6 px-7 gap-7 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
-      <svg width="120" height="120" viewBox="0 0 120 120" className="shrink-0">
+      <svg ref={svgRef} width="120" height="120" viewBox="0 0 120 120" className="shrink-0">
         <circle cx="60" cy="60" r={radius} fill="none" stroke="#F0F4F8" strokeWidth="16" />
         {segments.map((seg) => (
           <circle
             key={seg.name}
+            className="donut-seg"
             cx="60"
             cy="60"
             r={radius}
             fill="none"
             stroke={seg.color}
             strokeWidth="16"
-            strokeDasharray={`${seg.dashArray} ${seg.gapArray}`}
+            strokeDasharray={`0 ${circumference}`}
             transform={`rotate(${seg.rotation} 60 60)`}
           />
         ))}

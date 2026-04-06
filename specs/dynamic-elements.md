@@ -28,13 +28,19 @@ Used for complex, choreographed animations on landing pages. Installed via `npm 
 
 ---
 
-## Dashboard (`/dashboard`)
+## Dashboard (`/dashboard`) — GSAP powered
+
+### Page-Level (`Overview.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| 4 dashboard rows (KPI, scores, trends, risk) | GSAP stagger slide up 40px, 120ms apart (`power3.out`) | Page load |
 
 ### KPI Cards (`KPICards.tsx`)
 | Element | Animation | Trigger |
 |---------|-----------|---------|
 | "Scans This Month" (14) | Count up from 0 | Page load |
 | "Total Visits" (8,420) | Count up from 0 (with comma formatting) | Page load |
+| Share of Voice donut segments | GSAP strokeDasharray animate from 0 arc to target arc, staggered per segment | Page load |
 | Mentions carousel value | Count up from 0 (all 4 values animate once on mount) | Page load |
 | Mentions carousel tab | Auto-cycles every 8 seconds through: Monthly Mentions (247), Monthly Citations (89), Monthly Recommendations (34), Hallucinations Detected (7) | Auto |
 | Carousel pagination dots | Active dot = wide teal pill, inactive = small grey circle. Clickable. | Click / auto-cycle |
@@ -55,6 +61,17 @@ Used for complex, choreographed animations on landing pages. Installed via `npm 
 |---------|-----------|---------|
 | 6 leaderboard scores (91, 84, 74, 68, 61, 53) | Count up from 0 | Page load |
 | 6 leaderboard bars | Width grows from 0% to score % | Page load |
+
+### Top Recommendations (`TopRecommendations.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| 5 recommendation items | GSAP slide in from left 25px, stagger 80ms | Page load |
+
+### Risk Insights (`RiskInsights.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| 4 risk cards | GSAP scale from 96% + fade in, stagger 100ms | Page load |
+| Severity dots | GSAP pop in from scale 0 with `back.out(3)` bounce | Page load (delayed 0.9s) |
 
 ### Score Trends (`ScoreTrends.tsx`)
 | Element | Animation | Trigger |
@@ -131,6 +148,59 @@ Used for complex, choreographed animations on landing pages. Installed via `npm 
 | Element | Animation | Trigger |
 |---------|-----------|---------|
 | Label, headline, description, buttons | GSAP timeline cascade with overlapping timing (-0.3s offsets) | Scroll into view |
+
+---
+
+## How It Works Page (`/how-it-works`) — GSAP powered
+
+### Hero (`HIWHero.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Badge, headline, subtext | GSAP timeline cascade with overlapping timing | Page load |
+| Step indicator bar | GSAP scale in from 95% | Page load |
+| 4 step circles (1, 2, 3, 4) | GSAP pop in from scale 0 with `back.out(2.5)` bounce, staggered | Page load |
+| Connecting lines between steps | GSAP scaleX from 0 (draw in left to right), sequential | Page load |
+| Step labels | GSAP fade in + slide up after circles | Page load |
+
+### Step 1: Crawl (`HIWStepCrawl.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Text block | GSAP slide in from left 60px | Scroll into view |
+| Browser mockup card | GSAP slide in from right 60px (0.2s delay) | Scroll into view |
+| Checklist items | GSAP slide in from left 20px, stagger 100ms | Scroll into view |
+| Progress bar | GSAP scaleX from 0, left origin, 1.5s duration | Scroll into view |
+| Crawl result items | GSAP cascade down, stagger 80ms | Scroll into view |
+
+### Step 2: Extract (`HIWStepExtract.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| E-E-A-T card (left) | GSAP slide in from left 60px | Scroll into view |
+| Text block (right) | GSAP slide in from right 60px | Scroll into view |
+| Score bars | GSAP scaleX from 0 with `elastic.out(1, 0.6)` bounce, stagger | Scroll into view |
+| Tags/pills | GSAP scale from 0 with `back.out(2)` pop, stagger 50ms | Scroll into view |
+
+### Step 3: Simulate (`HIWStepSimulate.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Text block (left) | GSAP slide in from left 60px | Scroll into view |
+| Engine scores card (right) | GSAP slide in from right 60px | Scroll into view |
+| Engine rows | GSAP slide in from right, stagger | Scroll into view |
+| Score bars | GSAP scaleX from 0 with elastic bounce | Scroll into view |
+| Change indicators (▲/▼) | GSAP scale from 0 with `back.out` pop | Scroll into view |
+
+### Step 4: Report (`HIWStepReport.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Report card (left) | GSAP slide in from left 60px | Scroll into view |
+| Text block (right) | GSAP slide in from right 60px | Scroll into view |
+| Visibility score number | GSAP count up from 0 via textContent tween | Scroll into view |
+| Leaderboard bars | GSAP scaleX from 0 with elastic ease, stagger | Scroll into view |
+| Action roadmap items | GSAP fade up, stagger | Scroll into view |
+
+### CTA (`HIWCTASection.tsx`)
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Label, headline, description, buttons | GSAP timeline cascade with overlapping timing | Scroll into view |
 
 ---
 

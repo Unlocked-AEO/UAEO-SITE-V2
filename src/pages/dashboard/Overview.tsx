@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { KPICards } from "@/components/dashboard/KPICards";
 import { ScoreAverages } from "@/components/dashboard/ScoreAverages";
@@ -13,6 +15,30 @@ const DEMO_STATE = "success";
 
 export default function Overview() {
   const navigate = useNavigate();
+  const row1 = useRef<HTMLDivElement>(null);
+  const row2 = useRef<HTMLDivElement>(null);
+  const row3 = useRef<HTMLDivElement>(null);
+  const row4 = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (DEMO_STATE !== "success") return;
+
+    const ctx = gsap.context(() => {
+      const rows = [row1.current, row2.current, row3.current, row4.current];
+
+      gsap.from(rows, {
+        y: 40,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+        stagger: 0.12,
+        delay: 0.1,
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   if (DEMO_STATE === "loading") {
     return (
       <DashboardShell activeTab="overview">
@@ -72,23 +98,27 @@ export default function Overview() {
   return (
     <DashboardShell activeTab="overview">
       {/* Row 1: KPI cards */}
-      <KPICards />
+      <div ref={row1}>
+        <KPICards />
+      </div>
 
       {/* Row 2: Score averages + Engine scores + Leaderboard */}
-      <div className="flex gap-4">
+      <div ref={row2} className="flex gap-4">
         <ScoreAverages />
         <EngineScores />
         <IndustryLeaderboard />
       </div>
 
       {/* Row 3: Score trends + Recommendations */}
-      <div className="flex gap-4">
+      <div ref={row3} className="flex gap-4">
         <ScoreTrends />
         <TopRecommendations />
       </div>
 
       {/* Row 4: Risk insights */}
-      <RiskInsightsCards />
+      <div ref={row4}>
+        <RiskInsightsCards />
+      </div>
     </DashboardShell>
   );
 }

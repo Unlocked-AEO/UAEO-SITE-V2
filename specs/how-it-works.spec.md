@@ -25,13 +25,30 @@ This is a public marketing page that explains the Unlocked AEO platform's 4-step
 | What | What it should do |
 |------|------------------|
 | Header buttons | Same as landing page — see landing.spec.md |
-| "Get started free" (CTA) | Start signup/onboarding (`ACTION: get_started_free`) |
-| "Contact sales" (CTA) | Open contact sales flow (`ACTION: contact_sales`) |
+| "Get started free" (CTA) | Navigate to `/signup` |
+| "Contact sales" (CTA) | Navigate to `/contact` |
 | Footer links | Same as landing page — see landing.spec.md |
 
 ## Things That Change Dynamically
 
-Nothing. The entire page is static with no interactive state.
+All sections use GSAP ScrollTrigger animations (see `specs/dynamic-elements.md` for full details):
+
+| What | How it changes |
+|------|---------------|
+| Hero badge, headline, subtext | GSAP timeline cascade on page load |
+| Step indicator circles (1–4) | Pop in with bounce stagger, connecting lines draw in |
+| Step sections (Crawl, Extract, Simulate, Report) | Text slides from one side, card from the other on scroll |
+| Crawl progress bar | Fills from 0% to 100% on scroll |
+| Crawl result items | Cascade down one by one |
+| Extract score bars | Fill with elastic bounce on scroll |
+| Extract tags | Pop in with scale bounce |
+| Simulate engine rows | Slide in from right with stagger |
+| Simulate score bars | Fill with elastic bounce |
+| Simulate change indicators | Pop in with bounce after bars |
+| Report visibility score | Counts up from 0 |
+| Report leaderboard bars | Fill with elastic ease |
+| Report action items | Stagger fade in |
+| CTA section | Timeline cascade on scroll |
 
 ## Different Page States
 

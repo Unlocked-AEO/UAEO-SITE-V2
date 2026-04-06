@@ -1,5 +1,10 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { stepReport, reportCard } from "@/data/mock-how-it-works";
 import { ChecklistItem } from "@/components/home/HIWChecklist";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const severityStyles = {
   HIGH: {
@@ -23,11 +28,42 @@ const severityStyles = {
 };
 
 export function HIWStepReport() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const trigger = { trigger: sectionRef.current, start: "top 75%", once: true };
+
+      gsap.from(cardRef.current, { x: -60, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: trigger });
+      gsap.from(textRef.current, { x: 60, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.2, scrollTrigger: { ...trigger } });
+
+      // Count up the visibility score
+      const scoreEl = sectionRef.current?.querySelector(".report-score");
+      if (scoreEl) {
+        gsap.from(scoreEl, {
+          textContent: 0,
+          duration: 1.5,
+          ease: "power2.out",
+          delay: 0.5,
+          snap: { textContent: 1 },
+          scrollTrigger: { ...trigger },
+        });
+      }
+
+      gsap.from(".report-bar", { scaleX: 0, transformOrigin: "left center", duration: 0.8, ease: "elastic.out(1, 0.6)", stagger: 0.1, delay: 0.6, scrollTrigger: { ...trigger } });
+      gsap.from(".report-action", { y: 20, opacity: 0, duration: 0.4, ease: "power2.out", stagger: 0.1, delay: 0.5, scrollTrigger: { ...trigger } });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="w-full shrink-0 py-24 min-h-140 bg-surface border-b border-border-light">
+    <section ref={sectionRef} className="w-full shrink-0 py-24 min-h-140 bg-surface border-b border-border-light">
       <div className="max-w-7xl flex items-center px-20 gap-20 mx-auto">
         {/* Card — Report */}
-        <div className="grow shrink basis-0 rounded-[20px] overflow-clip bg-white border border-border-light shadow-[0_12px_48px_#0A254014]">
+        <div ref={cardRef} className="grow shrink basis-0 rounded-[20px] overflow-clip bg-white border border-border-light shadow-[0_12px_48px_#0A254014]">
           {/* Score header */}
           <div className="relative flex items-center py-6 px-7 overflow-clip gap-6 bg-white border-b border-border-light">
             {/* Decorative circle */}
@@ -38,7 +74,7 @@ export function HIWStepReport() {
               <div className="uppercase tracking-widest mb-1.5 text-center text-slate-muted font-bold text-[10px]/3">
                 Visibility Score
               </div>
-              <div className="text-[60px] tracking-[-2px] leading-none text-center text-navy font-black">
+              <div className="report-score text-[60px] tracking-[-2px] leading-none text-center text-navy font-black">
                 {reportCard.visibilityScore}
               </div>
               <div className="inline-flex items-center mt-2 rounded-[20px] py-1 px-2.5 gap-1 bg-[#F0FDFA] border border-teal/35">
@@ -118,7 +154,7 @@ export function HIWStepReport() {
                 return (
                   <div
                     key={action.text}
-                    className={`flex items-center rounded-lg py-2.25 px-3 gap-2.5 border ${style.row}`}
+                    className={`report-action flex items-center rounded-lg py-2.25 px-3 gap-2.5 border ${style.row}`}
                   >
                     <div
                       className={`shrink-0 rounded-full size-2 ${style.dot}`}
@@ -159,7 +195,7 @@ export function HIWStepReport() {
                   </span>
                   <div className="grow shrink basis-0 h-1.25 rounded-[3px] bg-[#F0F4F8]">
                     <div
-                      className={`h-full rounded-[3px] ${
+                      className={`report-bar h-full rounded-[3px] ${
                         entry.isYou ? "bg-teal" : "bg-[#CBD5E1]"
                       }`}
                       style={{ width: `${entry.score}%` }}
@@ -179,7 +215,7 @@ export function HIWStepReport() {
         </div>
 
         {/* Text */}
-        <div className="grow-0 shrink-0 basis-[460px]">
+        <div ref={textRef} className="grow-0 shrink-0 basis-[460px]">
           <div className="tracking-widest uppercase mb-4 text-teal font-bold text-[11px]/3.5">
             {stepReport.label}
           </div>
