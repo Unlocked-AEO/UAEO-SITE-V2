@@ -109,7 +109,7 @@ function EngineIconBadge({ slug }: { slug: string }) {
       ),
     },
     claude: {
-      bg: "bg-[#D97757]",
+      bg: "bg-[#FDF0EB]",
       icon: (
         <img src={claudeLogo} alt="Claude" width="14" height="14" className="shrink-0" />
       ),

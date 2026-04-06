@@ -44,7 +44,7 @@ export const engineMiniScores: EngineMinScore[] = [
   { name: "Perplexity", score: 71, scoreColor: "#0A2540", iconBg: "#1C1C1C", iconSlug: "perplexity" },
   { name: "Gemini", score: 65, scoreColor: "#FF9F43", iconBg: "#FFFFFF", iconSlug: "gemini", hasBorder: true },
   { name: "Grok", score: 38, scoreColor: "#FF4D4D", iconBg: "#000000", iconSlug: "grok" },
-  { name: "Claude", score: 82, scoreColor: "#4ECDC4", iconBg: "#D97757", iconSlug: "claude" },
+  { name: "Claude", score: 82, scoreColor: "#4ECDC4", iconBg: "#FDF0EB", iconSlug: "claude" },
 ];
 
 // ─── Prompt Results Table ──────────────────────────────────

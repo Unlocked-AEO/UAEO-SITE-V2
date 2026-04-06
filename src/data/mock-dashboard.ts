@@ -110,7 +110,7 @@ export const engineScores: EngineScore[] = [
   { name: "Perplexity", score: 71, change: 3, iconBg: "#1C1C1C", iconSlug: "perplexity" },
   { name: "Gemini", score: 65, change: 2, iconBg: "#FFFFFF", iconSlug: "gemini" },
   { name: "Grok", score: 38, change: -8, iconBg: "#000000", iconSlug: "grok" },
-  { name: "Claude", score: 82, change: 6, iconBg: "#D97757", iconSlug: "claude" },
+  { name: "Claude", score: 82, change: 6, iconBg: "#FDF0EB", iconSlug: "claude" },
 ];
 
 // ─── Industry Leaderboard ───────────────────────────────────

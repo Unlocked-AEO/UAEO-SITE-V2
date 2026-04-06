@@ -41,7 +41,7 @@ function EngineChip({ result }: { result: PromptEngineResult }) {
       ),
     },
     claude: {
-      bg: "#D97757",
+      bg: "#FDF0EB",
       icon: (
         <img src={claudeLogo} alt="Claude" width="9" height="9" className="shrink-0" style={{ flexShrink: '0' }} />
       ),
