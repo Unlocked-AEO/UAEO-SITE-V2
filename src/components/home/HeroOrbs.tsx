@@ -1,13 +1,28 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import logoSvg from "@/assets/logo.svg";
+import openaiLogo from "@/assets/openai-logo.svg";
+import perplexityLogo from "@/assets/perplexity-logo.svg";
+import geminiLogo from "@/assets/gemini-logo.svg";
+import grokLogo from "@/assets/grok-logo.svg";
+import claudeLogo from "@/assets/claude-logo.svg";
+
+const engineLogos: Record<string, string> = {
+  chatgpt: openaiLogo,
+  perplexity: perplexityLogo,
+  gemini: geminiLogo,
+  grok: grokLogo,
+  claude: claudeLogo,
+};
 
 interface Node {
   x: number;
   y: number;
   r: number;
   color: string;
+  bg: string;
   label?: string;
+  slug?: string;
   floatX: number;
   floatY: number;
   floatDuration: number;
@@ -15,29 +30,29 @@ interface Node {
 
 const nodes: Node[] = [
   // Main central node
-  { x: 380, y: 340, r: 32, color: "#4ECDC4", label: "Unlocked AEO", floatX: 8, floatY: -10, floatDuration: 5 },
+  { x: 380, y: 340, r: 32, color: "#4ECDC4", bg: "#4ECDC4", label: "Unlocked AEO", floatX: 8, floatY: -10, floatDuration: 5 },
   // AI Engine nodes
-  { x: 180, y: 180, r: 18, color: "#10A37F", label: "ChatGPT", floatX: -12, floatY: 8, floatDuration: 6 },
-  { x: 560, y: 160, r: 16, color: "#1C1C1C", label: "Perplexity", floatX: 10, floatY: -12, floatDuration: 7 },
-  { x: 620, y: 380, r: 17, color: "#8B5CF6", label: "Gemini", floatX: -8, floatY: 10, floatDuration: 5.5 },
-  { x: 520, y: 540, r: 15, color: "#0A2540", label: "Grok", floatX: 12, floatY: -8, floatDuration: 6.5 },
-  { x: 200, y: 500, r: 18, color: "#D97757", label: "Claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
+  { x: 180, y: 180, r: 18, color: "#10A37F", bg: "#EAF5F0", label: "ChatGPT", slug: "chatgpt", floatX: -12, floatY: 8, floatDuration: 6 },
+  { x: 560, y: 160, r: 16, color: "#20808D", bg: "#E8F4F5", label: "Perplexity", slug: "perplexity", floatX: 10, floatY: -12, floatDuration: 7 },
+  { x: 620, y: 380, r: 17, color: "#4285F4", bg: "#FFFFFF", label: "Gemini", slug: "gemini", floatX: -8, floatY: 10, floatDuration: 5.5 },
+  { x: 520, y: 540, r: 15, color: "#0A2540", bg: "#F5F5F5", label: "Grok", slug: "grok", floatX: 12, floatY: -8, floatDuration: 6.5 },
+  { x: 200, y: 500, r: 18, color: "#D97757", bg: "#FDF0EB", label: "Claude", slug: "claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
   // Signal/data nodes
-  { x: 300, y: 220, r: 6, color: "#4ECDC4", floatX: 6, floatY: -8, floatDuration: 4 },
-  { x: 480, y: 260, r: 5, color: "#635BFF", floatX: -8, floatY: 6, floatDuration: 4.5 },
-  { x: 450, y: 450, r: 7, color: "#4ECDC4", floatX: 10, floatY: 5, floatDuration: 5 },
-  { x: 260, y: 400, r: 5, color: "#635BFF", floatX: -6, floatY: -10, floatDuration: 3.5 },
-  { x: 350, y: 150, r: 4, color: "#8792A2", floatX: 5, floatY: 8, floatDuration: 4.2 },
-  { x: 550, y: 470, r: 4, color: "#8792A2", floatX: -7, floatY: -5, floatDuration: 3.8 },
-  { x: 150, y: 350, r: 5, color: "#4ECDC4", floatX: 8, floatY: -6, floatDuration: 5.2 },
-  { x: 650, y: 270, r: 4, color: "#8792A2", floatX: -5, floatY: 10, floatDuration: 4.8 },
-  // Extra signal nodes for denser network
-  { x: 320, y: 480, r: 4, color: "#4ECDC4", floatX: -7, floatY: 6, floatDuration: 4.6 },
-  { x: 500, y: 340, r: 5, color: "#635BFF", floatX: 6, floatY: -9, floatDuration: 3.9 },
-  { x: 420, y: 200, r: 4, color: "#8792A2", floatX: -5, floatY: 7, floatDuration: 5.1 },
-  { x: 280, y: 300, r: 5, color: "#4ECDC4", floatX: 9, floatY: -4, floatDuration: 4.3 },
-  { x: 580, y: 300, r: 4, color: "#635BFF", floatX: -6, floatY: -8, floatDuration: 4.7 },
-  { x: 340, y: 560, r: 3, color: "#8792A2", floatX: 4, floatY: 7, floatDuration: 3.6 },
+  { x: 300, y: 220, r: 6, color: "#4ECDC4", bg: "", floatX: 6, floatY: -8, floatDuration: 4 },
+  { x: 480, y: 260, r: 5, color: "#635BFF", bg: "", floatX: -8, floatY: 6, floatDuration: 4.5 },
+  { x: 450, y: 450, r: 7, color: "#4ECDC4", bg: "", floatX: 10, floatY: 5, floatDuration: 5 },
+  { x: 260, y: 400, r: 5, color: "#635BFF", bg: "", floatX: -6, floatY: -10, floatDuration: 3.5 },
+  { x: 350, y: 150, r: 4, color: "#8792A2", bg: "", floatX: 5, floatY: 8, floatDuration: 4.2 },
+  { x: 550, y: 470, r: 4, color: "#8792A2", bg: "", floatX: -7, floatY: -5, floatDuration: 3.8 },
+  { x: 150, y: 350, r: 5, color: "#4ECDC4", bg: "", floatX: 8, floatY: -6, floatDuration: 5.2 },
+  { x: 650, y: 270, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 10, floatDuration: 4.8 },
+  // Extra signal nodes
+  { x: 320, y: 480, r: 4, color: "#4ECDC4", bg: "", floatX: -7, floatY: 6, floatDuration: 4.6 },
+  { x: 500, y: 340, r: 5, color: "#635BFF", bg: "", floatX: 6, floatY: -9, floatDuration: 3.9 },
+  { x: 420, y: 200, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 7, floatDuration: 5.1 },
+  { x: 280, y: 300, r: 5, color: "#4ECDC4", bg: "", floatX: 9, floatY: -4, floatDuration: 4.3 },
+  { x: 580, y: 300, r: 4, color: "#635BFF", bg: "", floatX: -6, floatY: -8, floatDuration: 4.7 },
+  { x: 340, y: 560, r: 3, color: "#8792A2", bg: "", floatX: 4, floatY: 7, floatDuration: 3.6 },
 ];
 
 const connections: [number, number][] = [
@@ -329,9 +344,9 @@ export function HeroOrbs() {
             cx={node.x}
             cy={node.y}
             r={node.r}
-            fill={i === 0 ? node.color : "transparent"}
+            fill={i <= 5 ? node.bg : "transparent"}
             stroke={node.color}
-            strokeWidth={i === 0 ? 0 : i <= 5 ? 2 : 1}
+            strokeWidth={i === 0 ? 0 : i <= 5 ? 1.5 : 1}
             opacity={i <= 5 ? 1 : 0.5}
           />
 
@@ -353,6 +368,23 @@ export function HeroOrbs() {
                 width={node.r * 2}
                 height={node.r * 2}
                 clipPath="url(#center-clip)"
+              />
+            </>
+          )}
+
+          {/* AI Engine logos inside their circles */}
+          {i >= 1 && i <= 5 && node.slug && (
+            <>
+              <clipPath id={`engine-clip-${i}`}>
+                <circle cx={node.x} cy={node.y} r={node.r - 2} />
+              </clipPath>
+              <image
+                href={engineLogos[node.slug]}
+                x={node.x - (node.r - 4)}
+                y={node.y - (node.r - 4)}
+                width={(node.r - 4) * 2}
+                height={(node.r - 4) * 2}
+                clipPath={`url(#engine-clip-${i})`}
               />
             </>
           )}
