@@ -2,6 +2,7 @@ import { engineScores } from "@/data/mock-dashboard";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
 import openaiLogo from "@/assets/openai-logo.svg";
+import perplexityLogo from "@/assets/perplexity-logo.svg";
 import { useCountUp } from "@/hooks/useCountUp";
 
 function scoreColor(score: number): string {
@@ -81,9 +82,7 @@ function EngineIcon({ slug }: { slug: string }) {
       );
     case "perplexity":
       return (
-        <svg width="10" height="10" viewBox="0 0 14 14" fill="#FFFFFF">
-          <path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z" />
-        </svg>
+        <img src={perplexityLogo} alt="Perplexity" width="10" height="10" className="shrink-0" style={{ flexShrink: '0' }} />
       );
     case "gemini":
       return (

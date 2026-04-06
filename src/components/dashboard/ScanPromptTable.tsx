@@ -2,6 +2,7 @@ import { promptResults } from "@/data/mock-scan-ai-visibility";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
 import openaiLogo from "@/assets/openai-logo.svg";
+import perplexityLogo from "@/assets/perplexity-logo.svg";
 import type { PromptEngineResult, EngineSlug } from "@/data/mock-scan-ai-visibility";
 
 function EngineChip({ result }: { result: PromptEngineResult }) {
@@ -17,11 +18,9 @@ function EngineChip({ result }: { result: PromptEngineResult }) {
       ),
     },
     perplexity: {
-      bg: "#1C1C1C",
+      bg: "#E8F4F5",
       icon: (
-        <svg width="8" height="8" viewBox="0 0 14 14" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z" />
-        </svg>
+        <img src={perplexityLogo} alt="Perplexity" width="8" height="8" className="shrink-0" style={{ flexShrink: '0' }} />
       ),
     },
     gemini: {

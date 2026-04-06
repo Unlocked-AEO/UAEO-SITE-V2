@@ -117,7 +117,7 @@ export interface EngineScoreDetail {
 
 export const engineScoreDetails: EngineScoreDetail[] = [
   { name: "ChatGPT", model: "GPT-4o", score: 78, iconBg: "#EAF5F0", iconSlug: "chatgpt" },
-  { name: "Perplexity", model: "Perplexity Pro", score: 71, iconBg: "#1C1C1C", iconSlug: "perplexity" },
+  { name: "Perplexity", model: "Perplexity Pro", score: 71, iconBg: "#E8F4F5", iconSlug: "perplexity" },
   { name: "Gemini", model: "Gemini 1.5 Pro", score: 65, iconBg: "#FFFFFF", iconSlug: "gemini", hasBorder: true },
   { name: "Grok", model: "Grok 2", score: 38, iconBg: "#000000", iconSlug: "grok" },
   { name: "Claude", model: "Claude 3.5 Sonnet", score: 82, iconBg: "#FDF0EB", iconSlug: "claude" },

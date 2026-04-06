@@ -1,4 +1,5 @@
 import openaiLogo from "@/assets/openai-logo.svg";
+import perplexityLogo from "@/assets/perplexity-logo.svg";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
 
@@ -20,15 +21,7 @@ export function EngineIcon({ slug, size = 20, variant = "logo" }: EngineIconProp
       );
     case "perplexity":
       return (
-        <svg width={size} height={size} viewBox="0 0 20 20" fill="none" className="shrink-0">
-          <rect width="20" height="20" rx="4" fill="#20808D" />
-          <path
-            d="M5 10h10M10 5v10M6.5 6.5l7 7M13.5 6.5l-7 7"
-            stroke="#FFFFFF"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
+        <img src={perplexityLogo} alt="Perplexity" width={size} height={size} className="shrink-0" />
       );
     case "gemini":
       return (
@@ -77,11 +70,9 @@ function EngineIconBadge({ slug }: { slug: string }) {
       ),
     },
     perplexity: {
-      bg: "bg-[#1C1C1C]",
+      bg: "bg-[#E8F4F5]",
       icon: (
-        <svg width="10" height="10" viewBox="0 0 14 14" fill="#FFFFFF" className="shrink-0">
-          <path d="M7 0L9.5 5H14L10.5 8.5L12 14L7 11L2 14L3.5 8.5L0 5H4.5L7 0Z" />
-        </svg>
+        <img src={perplexityLogo} alt="Perplexity" width="14" height="14" className="shrink-0" />
       ),
     },
     gemini: {
