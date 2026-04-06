@@ -1,5 +1,6 @@
 import { definitionSection, howAEOSteps } from "@/data/mock-what-is-aeo";
 import type { HowAEOStep } from "@/data/mock-what-is-aeo";
+import { useInView } from "@/hooks/useInView";
 
 function StepCircle({ step }: { step: HowAEOStep }) {
   const baseClasses =
@@ -33,8 +34,10 @@ function StepCircle({ step }: { step: HowAEOStep }) {
 }
 
 export function AEODefinition() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="flex items-center py-20 px-10 lg:px-[120px] gap-20 bg-surface">
+    <section ref={ref} className={`flex items-center py-20 px-10 lg:px-[120px] gap-20 bg-surface transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       {/* Left — text */}
       <div className="grow shrink basis-0 min-w-0">
         <span className="uppercase tracking-[0.8px] mb-4 block text-teal text-[13px]/4">

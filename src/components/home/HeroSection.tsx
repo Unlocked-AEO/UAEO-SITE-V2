@@ -1,9 +1,16 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { heroContent } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
 
 export function HeroSection() {
   const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setLoaded(true));
+  }, []);
+
   return (
     <section className="relative w-full min-h-[660px] flex items-center overflow-clip bg-white">
       {/* Background gradients */}
@@ -40,13 +47,19 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative max-w-[640px] pl-[120px] py-20">
-        <h1 className="text-[60px] leading-[1.08] tracking-[-0.04em] text-navy font-bold whitespace-pre-wrap m-0">
+        <h1
+          className={`text-[60px] leading-[1.08] tracking-[-0.04em] text-navy font-bold whitespace-pre-wrap m-0 transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        >
           {heroContent.headline}
         </h1>
-        <p className="text-[17px] leading-[1.65] mt-7 mb-0 max-w-[520px] text-slate-text">
+        <p
+          className={`text-[17px] leading-[1.65] mt-7 mb-0 max-w-[520px] text-slate-text transition-all duration-700 delay-200 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        >
           {heroContent.subtext}
         </p>
-        <div className="flex items-center mt-9 gap-3">
+        <div
+          className={`flex items-center mt-9 gap-3 transition-all duration-700 delay-400 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        >
           <Button
             variant="primary"
             size="md"

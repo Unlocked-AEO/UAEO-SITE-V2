@@ -1,9 +1,13 @@
 import { hiringCTA } from "@/data/mock-about";
+import { useInView } from "@/hooks/useInView";
 
 export function AboutHiring() {
+  const [ref, inView] = useInView(0.15);
+
   return (
     <section
-      className="w-full flex items-center justify-between shrink-0 relative py-20 px-30 overflow-clip gap-15 min-h-70"
+      ref={ref}
+      className={`w-full flex items-center justify-between shrink-0 relative py-20 px-30 overflow-clip gap-15 min-h-70 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{
         backgroundImage:
           "linear-gradient(in oklab 135deg, oklab(26% -0.019 -0.057) 0%, oklab(32.5% -0.023 -0.085) 60%, oklab(25.5% 0.012 -0.092) 100%)",

@@ -14,7 +14,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   { label: "Product", href: "/product", hasDropdown: true },
-  { label: "What is AEO", href: "/what-is-aeo" },
+  { label: "How It Works", href: "/how-it-works" },
   {
     label: "Solutions",
     href: null,
@@ -31,6 +31,7 @@ export const navItems: NavItem[] = [
     href: null,
     hasDropdown: true,
     dropdownItems: [
+      { label: "What is AEO", href: "/what-is-aeo" },
       { label: "Blog", href: "/blog" },
       { label: "Case Studies", href: null },   // NOTE: No page exists
       { label: "About Us", href: "/about" },

@@ -1,8 +1,11 @@
 import { blogArticles } from "@/data/mock-blog";
+import { useInView } from "@/hooks/useInView";
 
 export function BlogArticleGrid() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="pb-14 px-20">
+    <section ref={ref} className={`pb-14 px-20 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex items-center justify-between mb-8">

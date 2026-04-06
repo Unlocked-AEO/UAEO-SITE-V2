@@ -1,10 +1,12 @@
 import { featuredArticle } from "@/data/mock-blog";
+import { useInView } from "@/hooks/useInView";
 
 export function BlogFeaturedArticle() {
   const a = featuredArticle;
+  const [ref, inView] = useInView(0.15);
 
   return (
-    <section className="py-14 px-20">
+    <section ref={ref} className={`py-14 px-20 transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="max-w-7xl mx-auto">
         <div className="flex rounded-[20px] overflow-clip border border-border-light shadow-[0px_4px_24px_rgba(10,37,64,0.07)]">
           {/* Left — text */}

@@ -1,8 +1,11 @@
 import { whyNowSection, whyNowStats } from "@/data/mock-what-is-aeo";
+import { useInView } from "@/hooks/useInView";
 
 export function AEOWhyNow() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="relative py-20 px-10 lg:px-[120px] overflow-clip bg-navy">
+    <section ref={ref} className={`relative py-20 px-10 lg:px-[120px] overflow-clip bg-navy transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       {/* Radial glow */}
       <div
         className="absolute -top-20 right-[120px] w-[360px] h-[360px] rounded-[50%]"

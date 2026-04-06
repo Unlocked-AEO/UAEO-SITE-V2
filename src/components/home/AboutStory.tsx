@@ -1,8 +1,11 @@
 import { storySection, problemCard } from "@/data/mock-about";
+import { useInView } from "@/hooks/useInView";
 
 export function AboutStory() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="w-full flex items-center shrink-0 py-20 px-30 gap-18 min-h-105 bg-surface">
+    <section ref={ref} className={`w-full flex items-center shrink-0 py-20 px-30 gap-18 min-h-105 bg-surface transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       {/* Problem card */}
       <div className="shrink-0 w-[440px] rounded-[20px] bg-white border border-border-light shadow-[0_4px_24px_#0A25400F] p-7">
         <div className="uppercase tracking-[0.8px] mb-4 text-slate-muted font-sans text-[10px]/3">

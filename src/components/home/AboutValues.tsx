@@ -1,4 +1,5 @@
 import { valuesSection, values } from "@/data/mock-about";
+import { useInView } from "@/hooks/useInView";
 
 const icons = {
   clock: (
@@ -20,8 +21,10 @@ const icons = {
 };
 
 export function AboutValues() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="w-full shrink-0 py-20 px-30 min-h-95 bg-white">
+    <section ref={ref} className={`w-full shrink-0 py-20 px-30 min-h-95 bg-white transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       {/* Header */}
       <div className="flex flex-col items-center mb-13">
         <div className="inline-flex items-center mb-4 rounded-[20px] py-1.25 px-3.5 bg-[#F0FDFA] border border-teal/35">

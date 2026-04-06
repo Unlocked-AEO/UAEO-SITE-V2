@@ -5,12 +5,15 @@ import {
   engineScores,
 } from "@/data/mock-landing";
 import { EngineIcon } from "@/components/home/EngineIcon";
+import { useInView } from "@/hooks/useInView";
+import { useCountUp } from "@/hooks/useCountUp";
 
 export function SolutionCards() {
+  const [introRef, introInView] = useInView(0.2);
   return (
     <>
       {/* Section intro */}
-      <section className="flex flex-col items-start max-w-[680px] pt-20 pb-12 bg-white px-20">
+      <section ref={introRef} className={`flex flex-col items-start max-w-[680px] pt-20 pb-12 bg-white px-20 transition-all duration-700 ${introInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
         <span className="tracking-[0.06em] uppercase mb-4 text-teal font-semibold text-[13px]/4">
           {solutionsIntro.label}
         </span>
@@ -34,40 +37,7 @@ export function SolutionCards() {
       {/* Two main cards */}
       <section className="flex pb-6 gap-5 bg-white px-20">
         {/* AI Visibility Score */}
-        <div className="grow shrink basis-0 flex flex-col min-h-[400px] relative rounded-2xl overflow-clip bg-surface p-10">
-          <span className="tracking-[0.08em] uppercase mb-4 text-teal font-semibold text-xs/4">
-            {visibilityScoreCard.label}
-          </span>
-          <h3 className="text-[24px] leading-[1.3] tracking-[-0.02em] mb-3 text-navy font-bold m-0">
-            {visibilityScoreCard.headline}
-          </h3>
-          <p className="text-[14px] leading-[1.6] mb-8 max-w-[340px] text-slate-body m-0">
-            {visibilityScoreCard.description}
-          </p>
-
-          {/* Score card */}
-          <div className="flex flex-col w-full rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0_1px_4px_#0A25400F]">
-            <span className="mb-4 tracking-[-0.1px] text-navy font-medium text-[13px]/4">
-              {visibilityScoreCard.chartTitle}
-            </span>
-            {engineScores.map((engine, i) => (
-              <ScoreRow
-                key={engine.slug}
-                engine={engine}
-                isLast={i === engineScores.length - 1}
-              />
-            ))}
-          </div>
-
-          {/* Decorative gradient */}
-          <div
-            className="absolute top-0 right-0 w-[300px] h-[200px] rounded-tr-2xl rounded-bl-[60px]"
-            style={{
-              backgroundImage:
-                "linear-gradient(in oklab 135deg, oklab(77.6% -0.110 -0.017 / 15%) 0%, oklab(57.8% 0.034 -0.232 / 10%) 100%)",
-            }}
-          />
-        </div>
+        <CardWithScores />
 
         {/* Content Intelligence */}
         <div className="grow shrink basis-0 flex flex-col min-h-[400px] relative rounded-2xl overflow-clip bg-navy p-10">
@@ -108,6 +78,49 @@ export function SolutionCards() {
   );
 }
 
+function CardWithScores() {
+  const [cardRef, cardInView] = useInView(0.2);
+
+  return (
+    <div ref={cardRef} className="grow shrink basis-0 flex flex-col min-h-[400px] relative rounded-2xl overflow-clip bg-surface p-10">
+      <span className="tracking-[0.08em] uppercase mb-4 text-teal font-semibold text-xs/4">
+        {visibilityScoreCard.label}
+      </span>
+      <h3 className="text-[24px] leading-[1.3] tracking-[-0.02em] mb-3 text-navy font-bold m-0">
+        {visibilityScoreCard.headline}
+      </h3>
+      <p className="text-[14px] leading-[1.6] mb-8 max-w-[340px] text-slate-body m-0">
+        {visibilityScoreCard.description}
+      </p>
+
+      {/* Score card */}
+      <div className="flex flex-col w-full rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0_1px_4px_#0A25400F]">
+        <span className="mb-4 tracking-[-0.1px] text-navy font-medium text-[13px]/4">
+          {visibilityScoreCard.chartTitle}
+        </span>
+        {engineScores.map((engine, i) => (
+          <ScoreRow
+            key={engine.slug}
+            engine={engine}
+            isLast={i === engineScores.length - 1}
+            animate={cardInView}
+            delay={i * 150}
+          />
+        ))}
+      </div>
+
+      {/* Decorative gradient */}
+      <div
+        className="absolute top-0 right-0 w-[300px] h-[200px] rounded-tr-2xl rounded-bl-[60px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(in oklab 135deg, oklab(77.6% -0.110 -0.017 / 15%) 0%, oklab(57.8% 0.034 -0.232 / 10%) 100%)",
+        }}
+      />
+    </div>
+  );
+}
+
 interface ScoreRowProps {
   engine: {
     name: string;
@@ -116,9 +129,12 @@ interface ScoreRowProps {
     slug: string;
   };
   isLast: boolean;
+  animate: boolean;
+  delay: number;
 }
 
-function ScoreRow({ engine, isLast }: ScoreRowProps) {
+function ScoreRow({ engine, isLast, animate, delay }: ScoreRowProps) {
+  const animatedScore = useCountUp(animate ? engine.score : 0, 1200);
   const isPositive = engine.change >= 0;
   const scoreColor =
     engine.score >= 70
@@ -147,14 +163,18 @@ function ScoreRow({ engine, isLast }: ScoreRowProps) {
             {engine.change}
           </span>
           <span className={`${scoreColor} font-semibold text-[13px]/4`}>
-            {engine.score}
+            {animatedScore}
           </span>
         </div>
       </div>
       <div className="h-1.5 rounded-[3px] bg-[#F0F4F8] shrink-0">
         <div
-          className={`h-full rounded-[3px] ${barColor}`}
-          style={{ width: `${engine.score}%` }}
+          className={`h-full rounded-[3px] ${barColor} transition-all ease-out`}
+          style={{
+            width: `${animatedScore}%`,
+            transitionDuration: "1200ms",
+            transitionDelay: `${delay}ms`,
+          }}
         />
       </div>
     </div>

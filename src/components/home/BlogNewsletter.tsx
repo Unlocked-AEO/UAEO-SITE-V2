@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { blogNewsletter } from "@/data/mock-blog";
+import { useInView } from "@/hooks/useInView";
 
 export function BlogNewsletter() {
   const [email, setEmail] = useState("");
   const n = blogNewsletter;
+  const [ref, inView] = useInView(0.15);
 
   return (
-    <section className="py-18 px-20 bg-[#F8FAFC] border-t border-b border-border-light">
+    <section ref={ref} className={`py-18 px-20 bg-[#F8FAFC] border-t border-b border-border-light transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="max-w-[560px] flex flex-col items-center gap-4 mx-auto">
         {/* Badge */}
         <span className="inline-flex items-center rounded-[20px] py-[5px] px-3.5 bg-[#F0FDFA] border border-[#4ECDC466]">

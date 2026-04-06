@@ -1,5 +1,6 @@
 import { citationSignalsSection, citationSignals } from "@/data/mock-what-is-aeo";
 import type { CitationSignal } from "@/data/mock-what-is-aeo";
+import { useInView } from "@/hooks/useInView";
 
 function SignalIcon({ icon }: { icon: CitationSignal["icon"] }) {
   switch (icon) {
@@ -39,8 +40,10 @@ function SignalIcon({ icon }: { icon: CitationSignal["icon"] }) {
 }
 
 export function AEOCitationSignals() {
+  const [ref, inView] = useInView(0.15);
+
   return (
-    <section className="py-20 px-10 lg:px-[120px] bg-surface">
+    <section ref={ref} className={`py-20 px-10 lg:px-[120px] bg-surface transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       {/* Section header */}
       <div className="flex flex-col items-center mb-13">
         <div className="inline-flex items-center mb-4 rounded-[20px] py-[5px] px-3.5 bg-teal/6 border border-teal/35">

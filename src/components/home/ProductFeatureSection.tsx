@@ -1,4 +1,5 @@
 import type { ProductFeature } from "@/data/mock-product";
+import { useInView } from "@/hooks/useInView";
 
 function FeatureIcon({ icon }: { icon: ProductFeature["icon"] }) {
   switch (icon) {
@@ -47,30 +48,35 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
   const previewBg = "bg-[#F8FAFC]";
 
   if (icon === "scan") {
+    const gauges = [
+      { label: "AI Visibility", score: 68, color: "#FF9F43" },
+      { label: "Brand Accuracy", score: 81, color: "#4ECDC4" },
+      { label: "Sentiment", score: 74, color: "#4ECDC4" },
+      { label: "Schema", score: 45, color: "#EF4444" },
+      { label: "Freshness", score: 77, color: "#4ECDC4" },
+      { label: "EEAT", score: 61, color: "#FF9F43" },
+    ];
+    const r = 24;
+    const circ = 2 * Math.PI * r;
+
     return (
-      <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col gap-4`}>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-14 h-14 rounded-xl bg-[#FFF4E6] flex items-center justify-center">
-            <span className="text-[#FF9F43] font-['Inter',system-ui,sans-serif] font-extrabold text-xl">72</span>
-          </div>
-          <div>
-            <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm">AEO Score</div>
-            <div className="text-[#94A3B8] font-['Inter',system-ui,sans-serif] text-xs">acme-corp.com</div>
-          </div>
-        </div>
-        {["AI Visibility", "Brand Accuracy", "Sentiment", "Schema", "Freshness", "EEAT"].map((label, i) => {
-          const widths = [68, 81, 74, 45, 77, 61];
-          const colors = ["#FF9F43", "#4ECDC4", "#4ECDC4", "#EF4444", "#4ECDC4", "#FF9F43"];
-          return (
-            <div key={label} className="flex items-center gap-3">
-              <span className="w-24 text-[#64748B] font-['Inter',system-ui,sans-serif] text-[11px] shrink-0">{label}</span>
-              <div className="grow h-1.5 rounded-full bg-[#E6EBF1]">
-                <div className="h-full rounded-full" style={{ width: `${widths[i]}%`, backgroundColor: colors[i] }} />
+      <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col`}>
+        <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-4">Monthly Score Averages</div>
+        <div className="flex flex-wrap justify-between gap-y-5">
+          {gauges.map((g) => {
+            const filled = (g.score / 100) * circ;
+            return (
+              <div key={g.label} className="w-[30%] flex flex-col items-center gap-1.5">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                  <circle cx="30" cy="30" r={r} fill="none" stroke="#F0F4F8" strokeWidth="5" />
+                  <circle cx="30" cy="30" r={r} fill="none" stroke={g.color} strokeWidth="5" strokeDasharray={`${filled} ${circ - filled}`} strokeLinecap="round" transform="rotate(-90 30 30)" />
+                  <text x="30" y="30" textAnchor="middle" dominantBaseline="central" fontFamily="Inter" fontSize="13" fontWeight="800" fill="#0A2540">{g.score}</text>
+                </svg>
+                <span className="text-center text-[#64748B] font-['Inter',system-ui,sans-serif] text-[10px]/3">{g.label}</span>
               </div>
-              <span className="w-6 text-right text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-[11px]">{widths[i]}</span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -166,12 +172,13 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
 
 export function ProductFeatureSection({ feature }: { feature: ProductFeature }) {
   const isRight = feature.layout === "right";
+  const [ref, inView] = useInView(0.15);
 
   return (
-    <section className={`py-20 px-10 ${isRight ? "bg-[#F8FAFC]" : "bg-white"}`}>
+    <section ref={ref} className={`py-20 px-10 ${isRight ? "bg-[#F8FAFC]" : "bg-white"}`}>
       <div className="max-w-[1100px] mx-auto flex items-center gap-16">
         {/* Text */}
-        <div className={`grow shrink basis-[0%] ${isRight ? "order-2" : "order-1"}`}>
+        <div className={`grow shrink basis-[0%] ${isRight ? "order-2" : "order-1"} transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           {/* Badge */}
           <div className="inline-flex items-center mb-5 rounded-[20px] py-1.25 px-3.5 gap-2 bg-[#F0FDFA] border border-solid border-[#4ECDC459]">
             <div
@@ -218,7 +225,7 @@ export function ProductFeatureSection({ feature }: { feature: ProductFeature }) 
         </div>
 
         {/* Preview */}
-        <div className={`w-[440px] shrink-0 ${isRight ? "order-1" : "order-2"}`}>
+        <div className={`w-[440px] shrink-0 ${isRight ? "order-1" : "order-2"} transition-all duration-700 delay-200 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <MockPreview icon={feature.icon} />
         </div>
       </div>

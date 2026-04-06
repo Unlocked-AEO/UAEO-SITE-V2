@@ -15,8 +15,8 @@ export interface HeroStat {
 }
 
 export const heroStats: HeroStat[] = [
-  { value: "2023", label: "Founded", variant: "light" },
-  { value: "SF", label: "San Francisco", variant: "light" },
+  { value: "2025", label: "Founded", variant: "light" },
+  { value: "TO", label: "TORONTO", variant: "light" },
   { value: "12K+", label: "Brands tracked", variant: "teal" },
 ];
 
@@ -131,7 +131,7 @@ export const teamMembers: TeamMember[] = [
   {
     name: "Zach Gould",
     initials: "ZG",
-    role: "Head of Product",
+    role: "Head of Product & Innovation",
     bio: "Product leader obsessed with turning user insights into elegant, high-impact experiences.",
     gradient:
       "linear-gradient(in oklab 135deg, oklab(26% -0.019 -0.057) 0%, oklab(38.6% -0.058 -0.009) 60%, oklab(77.6% -0.110 -0.017) 100%)",
