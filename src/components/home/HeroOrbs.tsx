@@ -45,55 +45,17 @@ const nodes: Node[] = [
   { x: CX, y: CY + ER, r: 20, color: "#0A2540", bg: "#F5F5F5", label: "Grok", slug: "grok", floatX: 8, floatY: -10, floatDuration: 6.5 },
   { x: CX - ER * 0.87, y: CY + ER * 0.5, r: 22, color: "#D97757", bg: "#FDF0EB", label: "Claude", slug: "claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
   { x: CX - ER * 0.87, y: CY - ER * 0.5, r: 20, color: "#2870EA", bg: "#EEF3FF", label: "Copilot", slug: "copilot", floatX: 8, floatY: 10, floatDuration: 6.8 },
-  // 7-22: Signal/data nodes — scattered between and around engines
-  { x: CX - 60, y: CY - 130, r: 6, color: "#4ECDC4", bg: "", floatX: 6, floatY: -8, floatDuration: 4 },
-  { x: CX + 80, y: CY - 100, r: 5, color: "#635BFF", bg: "", floatX: -8, floatY: 6, floatDuration: 4.5 },
-  { x: CX + 130, y: CY + 20, r: 6, color: "#4ECDC4", bg: "", floatX: 10, floatY: 5, floatDuration: 5 },
-  { x: CX + 70, y: CY + 120, r: 5, color: "#635BFF", bg: "", floatX: -6, floatY: -10, floatDuration: 3.5 },
-  { x: CX - 80, y: CY - 50, r: 5, color: "#8792A2", bg: "", floatX: 5, floatY: 8, floatDuration: 4.2 },
-  { x: CX + 50, y: CY + 50, r: 4, color: "#8792A2", bg: "", floatX: -7, floatY: -5, floatDuration: 3.8 },
-  { x: CX - 130, y: CY + 20, r: 5, color: "#4ECDC4", bg: "", floatX: 8, floatY: -6, floatDuration: 5.2 },
-  { x: CX + 140, y: CY - 50, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 10, floatDuration: 4.8 },
-  { x: CX - 50, y: CY + 130, r: 5, color: "#4ECDC4", bg: "", floatX: -7, floatY: 6, floatDuration: 4.6 },
-  { x: CX + 20, y: CY - 50, r: 5, color: "#635BFF", bg: "", floatX: 6, floatY: -9, floatDuration: 3.9 },
-  { x: CX + 40, y: CY - 170, r: 4, color: "#8792A2", bg: "", floatX: -5, floatY: 7, floatDuration: 5.1 },
-  { x: CX - 100, y: CY + 100, r: 5, color: "#4ECDC4", bg: "", floatX: 9, floatY: -4, floatDuration: 4.3 },
-  { x: CX + 160, y: CY + 100, r: 4, color: "#635BFF", bg: "", floatX: -6, floatY: -8, floatDuration: 4.7 },
-  { x: CX - 40, y: CY + 170, r: 4, color: "#8792A2", bg: "", floatX: 4, floatY: 7, floatDuration: 3.6 },
-  { x: CX - 150, y: CY - 100, r: 4, color: "#635BFF", bg: "", floatX: -5, floatY: -6, floatDuration: 4.1 },
-  { x: CX + 100, y: CY - 160, r: 5, color: "#4ECDC4", bg: "", floatX: 7, floatY: -5, floatDuration: 4.4 },
 ];
 
 const connections: [number, number][] = [
-  // Center to all engines
+  // Center (Unlocked AEO) to every engine — the hub
   [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
-  // Center to signal nodes
-  [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 16],
-  // Engine to nearby signals
-  [1, 7], [1, 8], [1, 17], [1, 22], [1, 16],
-  [2, 8], [2, 9], [2, 14], [2, 22],
-  [3, 9], [3, 10], [3, 12], [3, 19],
-  [4, 10], [4, 15], [4, 18], [4, 20],
-  [5, 13], [5, 15], [5, 18], [5, 20],
-  [6, 7], [6, 11], [6, 13], [6, 21],
-  // Engine hexagon ring
+  // Hexagon ring — each engine to its neighbors
   [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1],
-  // Engine cross-diagonals
+  // Cross-diagonals — opposite engines connected through center
   [1, 4], [2, 5], [3, 6],
-  // Signal to signal mesh
-  [7, 11], [7, 16], [7, 21],
-  [8, 14], [8, 16], [8, 22],
-  [9, 14], [9, 19], [9, 12],
-  [10, 19], [10, 15], [10, 12],
-  [11, 13], [11, 21],
-  [12, 16],
-  [13, 21], [13, 18],
-  [14, 22],
-  [15, 20], [15, 18],
-  [17, 7], [17, 22],
-  [18, 20],
-  [19, 10],
-  [21, 6],
+  // Skip connections — every other engine
+  [1, 3], [2, 4], [3, 5], [4, 6], [5, 1], [6, 2],
 ];
 
 export function HeroOrbs() {
@@ -233,7 +195,7 @@ export function HeroOrbs() {
           if (dist < maxDist) {
             const force = (1 - dist / maxDist) * 0.6;
             // Engine nodes attract toward cursor, signal nodes repel
-            const direction = i <= 6 ? 1 : -1;
+            const direction = i === 0 ? 0.3 : 1;
             gsap.to(el, {
               x: node.floatX + dx * force * 0.08 * direction,
               y: node.floatY + dy * force * 0.08 * direction,
@@ -363,16 +325,10 @@ export function HeroOrbs() {
             cx={node.x}
             cy={node.y}
             r={node.r}
-            fill={i <= 5 ? node.bg : "transparent"}
+            fill={node.bg}
             stroke={node.color}
-            strokeWidth={i === 0 ? 0 : i <= 5 ? 1.5 : 1}
-            opacity={i <= 6 ? 1 : 0.5}
+            strokeWidth={i === 0 ? 0 : 1.5}
           />
-
-          {/* Inner dot for signal nodes */}
-          {i > 6 && (
-            <circle cx={node.x} cy={node.y} r={node.r * 0.5} fill={node.color} opacity="0.6" />
-          )}
 
           {/* Center node — Unlocked AEO logo */}
           {i === 0 && (
