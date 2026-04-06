@@ -8,8 +8,8 @@
 
 This is the public-facing marketing homepage for Unlocked AEO. It's a long-scroll page with the following sections (top to bottom):
 
-- **Header** — Logo ("Unlocked AEO"), main navigation (Solutions, How It Works, Pricing, Case Studies, Blog), and two CTAs (Dashboard, Contact Sales). Solutions and How It Works have dropdown indicators but dropdowns are not built yet.
-- **HeroSection** — Large headline ("AI visibility infrastructure to grow your reach."), subtext describing the product, and two CTAs: "Get started" (primary) and "Sign up with Google" (outline with Google-style gradient circle). Decorative gradient blobs on the right side.
+- **Header** — Logo ("Unlocked AEO"), main navigation (Product, How It Works, Solutions dropdown, Pricing, Resources dropdown), and two CTAs (Dashboard → signup/dashboard based on auth, Contact Sales → /contact). Active nav item highlighted with teal border.
+- **HeroSection** — Large headline ("AI visibility infrastructure to grow your reach.") with GSAP word-by-word reveal animation. Subtext and CTAs fade in with stagger. Right side features an **animated network constellation** (`HeroOrbs.tsx`): center Unlocked AEO logo node surrounded by 5 AI engine nodes (ChatGPT, Perplexity, Gemini, Grok, Claude), 14 signal nodes, and ~45 connection lines. Nodes float, connections flash with discovery effects, and the whole network reacts to mouse movement (engine nodes attract, signal nodes repel, nearby lines brighten).
 - **LogoBar** — Row of AI engine icons (ChatGPT, Perplexity, Gemini, Grok, Claude, Copilot) with the tagline "Trusted by teams already winning on AI."
 - **SolutionCards** — Section intro with "Explore all solutions" link, followed by two side-by-side cards:
   - *AI Visibility Score* (light bg) — Per-engine score bars with color coding (green ≥70, yellow ≥50, red <50) and change indicators (▲/▼).

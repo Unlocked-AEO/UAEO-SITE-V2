@@ -1,4 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 import Landing from "@/pages/landing/Landing";
 import HowItWorks from "@/pages/landing/HowItWorks";
 import About from "@/pages/landing/About";
@@ -35,6 +44,7 @@ import Signin from "@/pages/authenticated/Signin";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/how-it-works" element={<HowItWorks />} />

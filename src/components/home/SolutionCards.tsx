@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   solutionsIntro,
   visibilityScoreCard,
@@ -6,7 +9,8 @@ import {
 } from "@/data/mock-landing";
 import { EngineIcon } from "@/components/home/EngineIcon";
 import { useInView } from "@/hooks/useInView";
-import { useCountUp } from "@/hooks/useCountUp";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function SolutionCards() {
   const [introRef, introInView] = useInView(0.2);
@@ -79,7 +83,98 @@ export function SolutionCards() {
 }
 
 function CardWithScores() {
-  const [cardRef, cardInView] = useInView(0.2);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const scoreCardRef = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const changeRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Card entrance
+      gsap.from(cardRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      // Score card slides up
+      gsap.from(scoreCardRef.current, {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: scoreCardRef.current,
+          start: "top 90%",
+          once: true,
+          onEnter: () => {
+            // Stagger rows sliding in from left
+            gsap.from(rowRefs.current.filter(Boolean), {
+              x: -40,
+              opacity: 0,
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: 0.1,
+            });
+
+            // Bars fill with elastic ease
+            barRefs.current.forEach((bar, i) => {
+              if (!bar) return;
+              const score = engineScores[i].score;
+              gsap.fromTo(
+                bar,
+                { width: "0%" },
+                {
+                  width: `${score}%`,
+                  duration: 1.2,
+                  ease: "elastic.out(1, 0.6)",
+                  delay: i * 0.12 + 0.3,
+                }
+              );
+            });
+
+            // Numbers count up with GSAP
+            numberRefs.current.forEach((el, i) => {
+              if (!el) return;
+              const target = engineScores[i].score;
+              gsap.fromTo(
+                { val: 0 },
+                { val: target },
+                {
+                  duration: 1.0,
+                  delay: i * 0.12 + 0.3,
+                  ease: "power2.out",
+                  onUpdate: function () {
+                    if (el) el.textContent = String(Math.round(this.targets()[0].val));
+                  },
+                }
+              );
+            });
+
+            // Change indicators pop in
+            gsap.from(changeRefs.current.filter(Boolean), {
+              scale: 0,
+              opacity: 0,
+              duration: 0.4,
+              ease: "back.out(2)",
+              stagger: 0.1,
+              delay: 0.8,
+            });
+          },
+        },
+      });
+    }, cardRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div ref={cardRef} className="grow shrink basis-0 flex flex-col min-h-[400px] relative rounded-2xl overflow-clip bg-surface p-10">
@@ -94,19 +189,56 @@ function CardWithScores() {
       </p>
 
       {/* Score card */}
-      <div className="flex flex-col w-full rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0_1px_4px_#0A25400F]">
+      <div ref={scoreCardRef} className="flex flex-col w-full rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0_1px_4px_#0A25400F]">
         <span className="mb-4 tracking-[-0.1px] text-navy font-medium text-[13px]/4">
           {visibilityScoreCard.chartTitle}
         </span>
-        {engineScores.map((engine, i) => (
-          <ScoreRow
-            key={engine.slug}
-            engine={engine}
-            isLast={i === engineScores.length - 1}
-            animate={cardInView}
-            delay={i * 150}
-          />
-        ))}
+        {engineScores.map((engine, i) => {
+          const isPositive = engine.change >= 0;
+          const scoreColor =
+            engine.score >= 70 ? "text-success" : engine.score >= 50 ? "text-warning" : "text-danger";
+          const barColorHex =
+            engine.score >= 70 ? "#27AE60" : engine.score >= 50 ? "#FF9F43" : "#E74C3C";
+          const changeColor = isPositive ? "text-success" : "text-danger";
+          const isLast = i === engineScores.length - 1;
+
+          return (
+            <div
+              key={engine.slug}
+              ref={(el) => { rowRefs.current[i] = el; }}
+              className={`flex flex-col ${isLast ? "" : "mb-4"} gap-[5px]`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-[7px]">
+                  <EngineIcon slug={engine.slug} variant="badge" />
+                  <span className="text-slate-body text-xs/4">{engine.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    ref={(el) => { changeRefs.current[i] = el; }}
+                    className={`${changeColor} font-semibold text-[10px]/3`}
+                  >
+                    {isPositive ? "▲" : "▼"} {isPositive ? "+" : ""}
+                    {engine.change}
+                  </span>
+                  <span
+                    ref={(el) => { numberRefs.current[i] = el; }}
+                    className={`${scoreColor} font-semibold text-[13px]/4`}
+                  >
+                    0
+                  </span>
+                </div>
+              </div>
+              <div className="h-1.5 rounded-[3px] bg-[#F0F4F8] shrink-0">
+                <div
+                  ref={(el) => { barRefs.current[i] = el; }}
+                  className="h-full rounded-[3px]"
+                  style={{ width: "0%", backgroundColor: barColorHex }}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Decorative gradient */}
@@ -117,66 +249,6 @@ function CardWithScores() {
             "linear-gradient(in oklab 135deg, oklab(77.6% -0.110 -0.017 / 15%) 0%, oklab(57.8% 0.034 -0.232 / 10%) 100%)",
         }}
       />
-    </div>
-  );
-}
-
-interface ScoreRowProps {
-  engine: {
-    name: string;
-    score: number;
-    change: number;
-    slug: string;
-  };
-  isLast: boolean;
-  animate: boolean;
-  delay: number;
-}
-
-function ScoreRow({ engine, isLast, animate, delay }: ScoreRowProps) {
-  const animatedScore = useCountUp(animate ? engine.score : 0, 1200);
-  const isPositive = engine.change >= 0;
-  const scoreColor =
-    engine.score >= 70
-      ? "text-success"
-      : engine.score >= 50
-        ? "text-warning"
-        : "text-danger";
-  const barColor =
-    engine.score >= 70
-      ? "bg-success"
-      : engine.score >= 50
-        ? "bg-warning"
-        : "bg-danger";
-  const changeColor = isPositive ? "text-success" : "text-danger";
-
-  return (
-    <div className={`flex flex-col ${isLast ? "" : "mb-4"} gap-[5px]`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-[7px]">
-          <EngineIcon slug={engine.slug} variant="badge" />
-          <span className="text-slate-body text-xs/4">{engine.name}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className={`${changeColor} font-semibold text-[10px]/3`}>
-            {isPositive ? "▲" : "▼"} {isPositive ? "+" : ""}
-            {engine.change}
-          </span>
-          <span className={`${scoreColor} font-semibold text-[13px]/4`}>
-            {animatedScore}
-          </span>
-        </div>
-      </div>
-      <div className="h-1.5 rounded-[3px] bg-[#F0F4F8] shrink-0">
-        <div
-          className={`h-full rounded-[3px] ${barColor} transition-all ease-out`}
-          style={{
-            width: `${animatedScore}%`,
-            transitionDuration: "1200ms",
-            transitionDelay: `${delay}ms`,
-          }}
-        />
-      </div>
     </div>
   );
 }

@@ -1,64 +1,91 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import { heroContent } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
+import { HeroOrbs } from "@/components/home/HeroOrbs";
 
 export function HeroSection() {
   const navigate = useNavigate();
-  const [loaded, setLoaded] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const subtextRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    requestAnimationFrame(() => setLoaded(true));
+    const ctx = gsap.context(() => {
+      // Split headline into words
+      if (headlineRef.current) {
+        const text = headlineRef.current.innerText;
+        headlineRef.current.innerHTML = text
+          .split(/(\s+)/)
+          .map((word) =>
+            word.trim()
+              ? `<span class="inline-block overflow-hidden pb-2"><span class="hero-word inline-block">${word}</span></span>`
+              : " "
+          )
+          .join("");
+
+        gsap.from(".hero-word", {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.06,
+          delay: 0.2,
+        });
+      }
+
+      gsap.from(subtextRef.current, {
+        y: 30,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power2.out",
+        delay: 0.7,
+      });
+
+      gsap.from(ctaRef.current, {
+        y: 30,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power2.out",
+        delay: 0.9,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section className="relative w-full min-h-[660px] flex items-center overflow-clip bg-white">
-      {/* Background gradients */}
-      <div className="absolute -right-[60px] -top-10 w-[780px] h-[760px] overflow-clip">
-        <div
-          className="absolute top-0 right-0 w-[760px] h-[760px] opacity-85 rounded-tl-[50%] rounded-bl-[50%]"
-          style={{
-            backgroundImage:
-              "linear-gradient(in oklab 135deg, oklab(98.9% -0.015 -0.003) 0%, oklab(92.2% -0.068 -0.004) 15%, oklab(77.6% -0.110 -0.017) 30%, oklab(70.7% -0.113 -0.017) 45%, oklab(86% -0.097 -0.008) 55%, oklab(96.8% -0.019 -0.004) 70%, oklab(100% -.0001 0) 85%)",
-          }}
-        />
-        <div
-          className="absolute top-20 right-[60px] w-[500px] h-[500px] rounded-full"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle farthest-corner at 40% 40% in oklab, oklab(86.3% 0.022 0.131 / 40%) 0%, oklab(78.8% 0.078 0.125 / 30%) 25%, oklab(0% .0001 .0001 / 0%) 60%)",
-          }}
-        />
-        <div
-          className="absolute top-[200px] right-[100px] w-[400px] h-[400px] rounded-full"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle farthest-corner at 50% 50% in oklab, oklab(77.6% -0.110 -0.017 / 50%) 0%, oklab(69.8% -0.111 -0.014 / 30%) 40%, oklab(0% -.0001 0 / 0%) 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-[100px] right-[50px] w-[350px] h-[350px] rounded-full"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle farthest-corner at 50% 50% in oklab, oklab(68.7% -0.019 -0.163 / 35%) 0%, oklab(62.7% -0.019 -0.173 / 20%) 40%, oklab(0% 0 -.0001 / 0%) 65%)",
-          }}
-        />
-      </div>
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-[660px] flex items-center overflow-hidden bg-white"
+    >
+      {/* Animated orbs visualization */}
+      <HeroOrbs />
 
-      {/* Content */}
+      {/* Soft ambient glow behind the orbs */}
+      <div className="absolute right-[100px] top-[80px] w-[500px] h-[500px] rounded-full pointer-events-none" style={{
+        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.08) 0%, transparent 70%)",
+      }} />
+
+      {/* Content — left aligned */}
       <div className="relative max-w-[640px] pl-[120px] py-20">
         <h1
-          className={`text-[60px] leading-[1.08] tracking-[-0.04em] text-navy font-bold whitespace-pre-wrap m-0 transition-all duration-700 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          ref={headlineRef}
+          className="text-[60px] leading-[1.08] tracking-[-0.04em] text-navy font-bold whitespace-pre-wrap m-0"
         >
           {heroContent.headline}
         </h1>
         <p
-          className={`text-[17px] leading-[1.65] mt-7 mb-0 max-w-[520px] text-slate-text transition-all duration-700 delay-200 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          ref={subtextRef}
+          className="text-[17px] leading-[1.65] mt-7 mb-0 max-w-[520px] text-slate-text"
         >
           {heroContent.subtext}
         </p>
         <div
-          className={`flex items-center mt-9 gap-3 transition-all duration-700 delay-400 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          ref={ctaRef}
+          className="flex items-center mt-9 gap-3"
         >
           <Button
             variant="primary"

@@ -1,14 +1,43 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   competitiveIntelCard,
   schemaCard,
   reputationCard,
 } from "@/data/mock-landing";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export function FeatureCards() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const card1 = useRef<HTMLDivElement>(null);
+  const card2 = useRef<HTMLDivElement>(null);
+  const card3 = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from([card1.current, card2.current, card3.current], {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="flex pb-6 gap-5 bg-white px-20">
+    <section ref={sectionRef} className="flex pb-6 gap-5 bg-white px-20">
       {/* Competitive Intelligence */}
-      <div className="grow shrink basis-0 flex flex-col rounded-2xl bg-surface p-8">
+      <div ref={card1} className="grow shrink basis-0 flex flex-col rounded-2xl bg-surface p-8">
         <div
           className="flex items-center justify-center mb-5 rounded-[10px] shrink-0 size-10"
           style={{
@@ -54,7 +83,7 @@ export function FeatureCards() {
       </div>
 
       {/* Schema & Structured Data */}
-      <div className="grow shrink basis-0 flex flex-col rounded-2xl bg-surface p-8">
+      <div ref={card2} className="grow shrink basis-0 flex flex-col rounded-2xl bg-surface p-8">
         <div
           className="flex items-center justify-center mb-5 rounded-[10px] shrink-0 size-10"
           style={{
@@ -95,7 +124,7 @@ export function FeatureCards() {
       </div>
 
       {/* Reputation Accuracy */}
-      <div className="grow shrink basis-0 flex flex-col rounded-2xl bg-navy p-8">
+      <div ref={card3} className="grow shrink basis-0 flex flex-col rounded-2xl bg-navy p-8">
         <div className="flex items-center justify-center mb-5 rounded-[10px] bg-teal/20 shrink-0 size-10">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path

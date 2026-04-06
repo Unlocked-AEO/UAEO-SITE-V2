@@ -6,7 +6,19 @@ A complete reference of every dynamic/animated element across the site for the i
 
 ---
 
-## Animation Hooks
+## Animation Libraries & Hooks
+
+### GSAP (GreenSock)
+Used for complex, choreographed animations on landing pages. Installed via `npm install gsap`.
+
+| Feature | Usage |
+|---------|-------|
+| `gsap.from()` / `gsap.to()` | Entrance animations, floating, parallax |
+| `gsap.timeline()` | Sequenced multi-element animations |
+| `ScrollTrigger` | Scroll-triggered section reveals |
+| Mouse events | Interactive parallax and hover effects |
+
+### Custom React Hooks
 
 | Hook | File | Description |
 |------|------|-------------|
@@ -54,19 +66,43 @@ A complete reference of every dynamic/animated element across the site for the i
 
 ## Landing Page (`/`)
 
-### Hero (`HeroSection.tsx`)
+### Hero (`HeroSection.tsx`) — GSAP powered
 | Element | Animation | Trigger |
 |---------|-----------|---------|
-| Headline | Fade in + slide up | Page load |
-| Subtext | Fade in + slide up (200ms delay) | Page load |
-| CTA buttons | Fade in + slide up (400ms delay) | Page load |
+| Headline | GSAP word-by-word split: each word slides up 60px with 0.06s stagger (`power3.out`) | Page load |
+| Subtext | GSAP slide up 30px + fade in (0.7s delay) | Page load |
+| CTA buttons | GSAP slide up 30px + fade in (0.9s delay) | Page load |
 
-### Solution Cards — AI Visibility (`SolutionCards.tsx`)
+### Hero Network Visualization (`HeroOrbs.tsx`) — GSAP powered
 | Element | Animation | Trigger |
 |---------|-----------|---------|
-| Section intro | Fade in + slide up | Scroll into view |
-| 6 engine score numbers (78, 71, 65, 38, 82, 59) | Count up from 0 | Scroll into view |
-| 6 engine progress bars | Width grows from 0% to score % (staggered 150ms each) | Scroll into view |
+| 20 network nodes (center + 5 AI engines + 14 signal nodes) | Scale in from 0 with `back.out(2)` bounce, staggered from center | Page load |
+| ~45 connection lines | Draw in from 0 length with random stagger delays | Page load |
+| 5 AI engine pulse rings | Continuous expanding/fading rings (`repeat: -1`) | Continuous |
+| All nodes | Float on independent sine-wave paths (3.5–7.5s cycles) | Continuous |
+| Connection lines | Opacity breathes independently per line | Continuous |
+| Random connections | Flash bright (opacity 0.7, width 2.5px) every 1.5s, 1–2 at once | Continuous |
+| Engine nodes | Attract toward mouse cursor on hover | Mouse move |
+| Signal nodes | Repel away from mouse cursor on hover | Mouse move |
+| Nearby connections | Brighten + thicken when mouse is within 150px | Mouse move |
+| All nodes on mouse leave | Spring back to float position with `elastic.out` | Mouse leave |
+| Labels | Fade in + slide up after network forms | Page load |
+
+### Solution Cards — AI Visibility (`SolutionCards.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Section intro | Fade in + slide up (useInView) | Scroll into view |
+| Card container | GSAP slide up 50px (`power3.out`) via ScrollTrigger | Scroll into view |
+| Score card inner | GSAP slide up 30px | Scroll into view |
+| 6 engine rows | GSAP slide in from left 40px, stagger 0.1s (`power3.out`) | Scroll into view |
+| 6 engine progress bars | GSAP fill 0% → target% with `elastic.out(1, 0.6)` bounce, stagger 0.12s | Scroll into view |
+| 6 engine score numbers | GSAP count-up 0 → target, synced with bar fill | Scroll into view |
+| 6 change indicators (▲/▼) | GSAP pop in from scale 0 with `back.out(2)`, delayed 0.8s | Scroll into view |
+
+### Feature Cards (`FeatureCards.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| 3 feature cards | GSAP slide up 60px with 0.15s stagger (`power3.out`) via ScrollTrigger | Scroll into view |
 
 ### Stats Section (`StatsSection.tsx`)
 | Element | Animation | Trigger |
@@ -82,6 +118,19 @@ A complete reference of every dynamic/animated element across the site for the i
 | Funnel chart | Fade in + slide from right (300ms delay) | Scroll into view |
 | 4 funnel bars | Width grows from 0% to target % (staggered 150ms each, starting at 400ms) | Scroll into view |
 | Funnel bar values (24,847 / 16,895 / 7,183 / 3,022) | Fade in after bar fills (600ms after bar starts) | Scroll into view |
+
+### Testimonials (`TestimonialsSection.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Engine tabs | GSAP slide up 30px + fade in via ScrollTrigger | Scroll into view |
+| Quote block | GSAP slide up 40px + fade in (0.2s delay) | Scroll into view |
+| Quote switch | GSAP fade out + slide up → fade in + slide down (0.25s out, 0.35s in) | Tab click |
+| Pagination dots | Smooth width transition on active state | Tab click |
+
+### CTA Section (`CTASection.tsx`) — GSAP powered
+| Element | Animation | Trigger |
+|---------|-----------|---------|
+| Label, headline, description, buttons | GSAP timeline cascade with overlapping timing (-0.3s offsets) | Scroll into view |
 
 ---
 
@@ -190,3 +239,67 @@ const animatedValue = useCountUp(targetNumber, 1200);
 ```tsx
 const [ref, animatedValue] = useScrollCountUp(targetNumber, 1400);
 ```
+
+### GSAP Patterns
+
+**GSAP entrance (slide up + fade in):**
+```tsx
+gsap.from(element, {
+  y: 40, opacity: 0, duration: 0.7, ease: "power3.out", delay: 0.2,
+});
+```
+
+**GSAP ScrollTrigger (one-shot):**
+```tsx
+gsap.from(element, {
+  y: 60, opacity: 0, duration: 0.8, ease: "power3.out",
+  scrollTrigger: { trigger: element, start: "top 80%", once: true },
+});
+```
+
+**GSAP stagger:**
+```tsx
+gsap.from(elements, {
+  y: 60, opacity: 0, duration: 0.8, ease: "power3.out",
+  stagger: 0.15,
+});
+```
+
+**GSAP elastic bar fill:**
+```tsx
+gsap.fromTo(bar, { width: "0%" }, {
+  width: `${target}%`, duration: 1.2, ease: "elastic.out(1, 0.6)",
+});
+```
+
+**GSAP timeline cascade:**
+```tsx
+const tl = gsap.timeline({ scrollTrigger: { ... } });
+tl.from(el1, { ... })
+  .from(el2, { ... }, "-=0.3")
+  .from(el3, { ... }, "-=0.3");
+```
+
+**GSAP continuous float:**
+```tsx
+gsap.to(element, {
+  y: 15, x: -10, duration: 7, ease: "sine.inOut", yoyo: true, repeat: -1,
+});
+```
+
+**GSAP mouse parallax:**
+```tsx
+gsap.to(element, {
+  x: mouseX * factor, y: mouseY * factor, duration: 1.2, ease: "power2.out",
+});
+```
+
+---
+
+## Global Behaviors
+
+### Scroll to Top (`App.tsx`)
+Every route change scrolls the page to the top via the `ScrollToTop` component using `useLocation` and `window.scrollTo(0, 0)`.
+
+### Mock Auth (`src/lib/mock-auth.ts`)
+Toggle `IS_LOGGED_IN` to switch between authenticated and unauthenticated flows. When `true`, signup/signin pages redirect to `/dashboard`. When `false`, dashboard CTAs redirect to `/signup`.

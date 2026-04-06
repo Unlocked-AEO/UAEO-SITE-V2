@@ -37,6 +37,11 @@ This document maps every navigable route, which buttons/links lead to it, and fl
 | `/dashboard/preferences` | `src/pages/dashboard/Preferences.tsx` | Live |
 | `/dashboard/billing` | `src/pages/dashboard/Billing.tsx` | Live |
 | `/dashboard/support` | `src/pages/dashboard/Support.tsx` | Live |
+| `/signup` | `src/pages/authenticated/Signup.tsx` | Live |
+| `/signin` | `src/pages/authenticated/Signin.tsx` | Live |
+| `/contact` | `src/pages/landing/Contact.tsx` | Live |
+| `/schedule` | `src/pages/landing/ScheduleCall.tsx` | Live |
+| `/product` | `src/pages/landing/Product.tsx` | Live |
 
 ---
 
@@ -46,13 +51,17 @@ This document maps every navigable route, which buttons/links lead to it, and fl
 | Button/Link | Navigates to |
 |-------------|-------------|
 | Logo "Unlocked AEO" | `/` |
+| "Product" | `/product` |
 | "How It Works" | `/how-it-works` |
 | "Pricing" | `/pricing` |
-| "Blog" | `/blog` |
-| "Dashboard" button | `/dashboard` |
-| "Solutions" | **No page** — logs ACTION |
-| "Case Studies" | **No page** — logs ACTION |
-| "Contact sales" | **No page** — logs ACTION |
+| Solutions dropdown → For Brands/Agencies/Enterprise | **No pages** — logs ACTION |
+| Resources dropdown → "What is AEO" | `/what-is-aeo` |
+| Resources dropdown → "Blog" | `/blog` |
+| Resources dropdown → "Case Studies" | **No page** — logs ACTION |
+| Resources dropdown → "About Us" | `/about` |
+| "Dashboard" button | `/signup` (logged out) or `/dashboard` (logged in) |
+| "Contact sales" | `/contact` |
+| Active nav indicator | Teal bottom border + dark text on current route |
 
 ### Landing Footer (`src/components/layout/Footer.tsx`)
 | Button/Link | Navigates to |
@@ -65,7 +74,7 @@ This document maps every navigable route, which buttons/links lead to it, and fl
 | "For Brands/Agencies/Enterprise/Startups" | **No pages** — logs ACTION |
 | "Case Studies" | **No page** — logs ACTION |
 | "AEO Glossary" | **No page** — logs ACTION |
-| "Contact" | **No page** — logs ACTION |
+| "Contact" | `/contact` |
 | "Cookies" | **No page** — logs ACTION |
 | "Sitemap" | **No page** — logs ACTION |
 | Social icons (Threads, X, LinkedIn) | **External** — logs ACTION |
@@ -77,7 +86,7 @@ This document maps every navigable route, which buttons/links lead to it, and fl
 | User avatar / company name | `/dashboard/profile` |
 | "Overview" tab | `/dashboard` |
 | "Scans" tab | `/dashboard/scans` |
-| "Implementation Plan" tab | `/dashboard/improvement-plan` |
+| "Improvement Plan" tab | `/dashboard/improvement-plan` |
 | "Competitors" tab | **No page** — logs ACTION |
 | "Risk Insights" tab | **No page** — logs ACTION |
 
