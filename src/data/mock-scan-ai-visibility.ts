@@ -43,7 +43,7 @@ export const engineMiniScores: EngineMinScore[] = [
   { name: "ChatGPT", score: 78, scoreColor: "#0A2540", iconBg: "#EAF5F0", iconSlug: "chatgpt" },
   { name: "Perplexity", score: 71, scoreColor: "#0A2540", iconBg: "#E8F4F5", iconSlug: "perplexity" },
   { name: "Gemini", score: 65, scoreColor: "#FF9F43", iconBg: "#FFFFFF", iconSlug: "gemini", hasBorder: true },
-  { name: "Grok", score: 38, scoreColor: "#FF4D4D", iconBg: "#000000", iconSlug: "grok" },
+  { name: "Grok", score: 38, scoreColor: "#FF4D4D", iconBg: "#F5F5F5", iconSlug: "grok" },
   { name: "Claude", score: 82, scoreColor: "#4ECDC4", iconBg: "#FDF0EB", iconSlug: "claude" },
 ];
 

@@ -3,6 +3,7 @@ import geminiLogo from "@/assets/gemini-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
 import openaiLogo from "@/assets/openai-logo.svg";
 import perplexityLogo from "@/assets/perplexity-logo.svg";
+import grokLogo from "@/assets/grok-logo.svg";
 
 // Engine bar colors from the design
 function barColor(score: number): string {
@@ -82,9 +83,7 @@ function EngineIcon({ slug }: { slug: string }) {
       );
     case "grok":
       return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF" style={{ flexShrink: '0' }}>
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-        </svg>
+        <img src={grokLogo} alt="Grok" width="14" height="14" className="shrink-0" style={{ flexShrink: '0' }} />
       );
     case "claude":
       return (
