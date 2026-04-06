@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { dashboardUser } from "@/data/mock-dashboard";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 import { settingsTabs, profilePageHeader } from "@/data/mock-profile";
 import type { SettingsTab } from "@/data/mock-profile";
 
@@ -19,24 +20,7 @@ export function SettingsShell({ activeTab, children }: SettingsShellProps) {
           className="flex items-center gap-2 bg-transparent border-none cursor-pointer p-0"
           onClick={() => navigate("/")}
         >
-          <div className="flex items-center justify-center shrink-0 rounded-md bg-teal size-7">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="shrink-0"
-            >
-              <circle cx="8" cy="8" r="5.5" stroke="#FFFFFF" strokeWidth="1.5" />
-              <path
-                d="M5.5 8h5M8 5.5v5"
-                stroke="#FFFFFF"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
+          <LogoIcon size={28} />
           <span className="text-navy font-sans text-sm/[18px]">
             Unlocked AEO
           </span>

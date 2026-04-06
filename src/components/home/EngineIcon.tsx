@@ -1,3 +1,5 @@
+import geminiLogo from "@/assets/gemini-logo.svg";
+
 interface EngineIconProps {
   slug: string;
   size?: number;
@@ -37,12 +39,7 @@ export function EngineIcon({ slug, size = 20, variant = "logo" }: EngineIconProp
       );
     case "gemini":
       return (
-        <svg width={size} height={size} viewBox="0 0 20 20" fill="none" className="shrink-0">
-          <path
-            d="M10 2C10 2 12.5 7.5 18 10C12.5 12.5 10 18 10 18C10 18 7.5 12.5 2 10C7.5 7.5 10 2 10 2Z"
-            fill="#4285F4"
-          />
-        </svg>
+        <img src={geminiLogo} alt="Gemini" width={size} height={size} className="shrink-0" />
       );
     case "grok":
       return (
@@ -104,19 +101,7 @@ function EngineIconBadge({ slug }: { slug: string }) {
     gemini: {
       bg: "bg-white border border-[#E8EAED]",
       icon: (
-        <svg width="12" height="12" viewBox="0 0 192 192" fill="none" className="shrink-0">
-          <defs>
-            <linearGradient id="gemini-grad" x1="0" y1="0" x2="192" y2="192" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#4285F4" />
-              <stop offset="0.5" stopColor="#9B72CB" />
-              <stop offset="1" stopColor="#D96570" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M96 20c-4.4 13.4-14.2 24.8-28 31.2C54.2 57.6 40 58.4 27 54c4.4 13.4 3.4 28.4-3.2 41.2C17.2 108 7.8 117.4 0 122c13.4 4.4 24.8 14.2 31.2 28C37.6 163.8 38.4 178 34 191c13.4-4.4 28.4-3.4 41.2 3.2 12.8 6.6 22.2 16 26.8 23.8 4.6-7.8 14-17.2 26.8-23.8C141.6 187.6 156.6 186.6 170 191c-4.4-13.4-3.4-28.4 3.2-41.2C179.8 136.8 192 127.4 192 122c-13.4-4.4-24.8-14.2-31.2-28C154.4 80.2 155.4 65.2 158 52c-13.4 4.4-28.4 3.4-41.2-3.2C103.8 42.2 100.6 27.8 96 20z"
-            fill="url(#gemini-grad)"
-          />
-        </svg>
+        <img src={geminiLogo} alt="Gemini" width="14" height="14" className="shrink-0" />
       ),
     },
     grok: {

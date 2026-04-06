@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import logoSvg from "@/assets/logo.svg";
 
 interface Node {
   x: number;
@@ -342,13 +343,17 @@ export function HeroOrbs() {
           {/* Center node — Unlocked AEO logo */}
           {i === 0 && (
             <>
-              <circle cx={node.x} cy={node.y} r={node.r - 3} fill="#0A2540" />
-              <g transform={`translate(${node.x - 10}, ${node.y - 10}) scale(0.625)`}>
-                <path
-                  d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 4c2.21 0 4.26.65 5.98 1.76L7.76 21.98A9.96 9.96 0 0 1 6 16c0-5.514 4.486-10 10-10zm0 20c-2.21 0-4.26-.65-5.98-1.76l14.22-14.22A9.96 9.96 0 0 1 26 16c0 5.514-4.486 10-10 10z"
-                  fill="white"
-                />
-              </g>
+              <clipPath id="center-clip">
+                <circle cx={node.x} cy={node.y} r={node.r} />
+              </clipPath>
+              <image
+                href={logoSvg}
+                x={node.x - node.r}
+                y={node.y - node.r}
+                width={node.r * 2}
+                height={node.r * 2}
+                clipPath="url(#center-clip)"
+              />
             </>
           )}
 

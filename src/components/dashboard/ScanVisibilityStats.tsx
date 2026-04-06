@@ -1,4 +1,5 @@
 import { visibilityStats, engineMiniScores } from "@/data/mock-scan-ai-visibility";
+import geminiLogo from "@/assets/gemini-logo.svg";
 
 function EngineIcon({ slug }: { slug: string }) {
   switch (slug) {
@@ -16,16 +17,7 @@ function EngineIcon({ slug }: { slug: string }) {
       );
     case "gemini":
       return (
-        <svg width="12" height="12" viewBox="0 0 192 192" fill="none" style={{ flexShrink: '0' }}>
-          <defs>
-            <linearGradient id="gemini-vis-stat" x1="0" y1="0" x2="192" y2="192" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#4285F4" />
-              <stop offset="0.5" stopColor="#9B72CB" />
-              <stop offset="1" stopColor="#D96570" />
-            </linearGradient>
-          </defs>
-          <path d="M96 20c-4.4 13.4-14.2 24.8-28 31.2C54.2 57.6 40 58.4 27 54c4.4 13.4 3.4 28.4-3.2 41.2C17.2 108 7.8 117.4 0 122c13.4 4.4 24.8 14.2 31.2 28C37.6 163.8 38.4 178 34 191c13.4-4.4 28.4-3.4 41.2 3.2 12.8 6.6 22.2 16 26.8 23.8 4.6-7.8 14-17.2 26.8-23.8C141.6 187.6 156.6 186.6 170 191c-4.4-13.4-3.4-28.4 3.2-41.2C179.8 136.8 192 127.4 192 122c-13.4-4.4-24.8-14.2-31.2-28C154.4 80.2 155.4 65.2 158 52c-13.4 4.4-28.4 3.4-41.2-3.2C103.8 42.2 100.6 27.8 96 20z" fill="url(#gemini-vis-stat)" />
-        </svg>
+        <img src={geminiLogo} alt="Gemini" width="12" height="12" className="shrink-0" style={{ flexShrink: '0' }} />
       );
     case "grok":
       return (

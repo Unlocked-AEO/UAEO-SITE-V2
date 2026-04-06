@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { signupSidebar } from "@/data/mock-signup";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 
 export function SignupSidebar() {
   const navigate = useNavigate();
@@ -11,11 +12,7 @@ export function SignupSidebar() {
         className="flex items-center mb-auto gap-2.5 bg-transparent border-none cursor-pointer p-0"
         onClick={() => navigate("/")}
       >
-        <div className="flex items-center justify-center rounded-[9px] bg-[#4ECDC4] shrink-0 size-9">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ rotate: '180deg', flexShrink: '0', transformOrigin: '50% 50%' }}>
-            <path d="M4 10h12M10 4l6 6-6 6" stroke="#0A2540" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transformOrigin: '50% 50%' }} />
-          </svg>
-        </div>
+        <LogoIcon size={36} className="rounded-[9px]" />
         <div className="inline-block text-white font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-base/5">
           Unlocked AEO
         </div>

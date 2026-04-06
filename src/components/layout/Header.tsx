@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { navItems } from "@/data/mock-landing";
 import type { NavItem } from "@/data/mock-landing";
 import { Button } from "@/components/ui/Button";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 import { IS_LOGGED_IN } from "@/lib/mock-auth";
 
 function NavButton({ item, isActive }: { item: NavItem; isActive: boolean }) {
@@ -83,13 +84,7 @@ export function Header() {
         className="flex items-center gap-2.5 cursor-pointer bg-transparent border-none p-0"
         onClick={() => navigate("/")}
       >
-        <div
-          className="w-[26px] h-[26px] rounded-[5px] shrink-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(in oklab 135deg, oklab(62.2% -0.105 -0.015) 0%, oklab(77.6% -0.110 -0.017) 100%)",
-          }}
-        />
+        <LogoIcon size={26} />
         <span className="tracking-[-0.5px] text-navy font-bold text-[17px]/[22px]">
           Unlocked AEO
         </span>
