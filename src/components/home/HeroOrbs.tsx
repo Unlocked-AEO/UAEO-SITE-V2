@@ -6,6 +6,7 @@ import perplexityLogo from "@/assets/perplexity-logo.svg";
 import geminiLogo from "@/assets/gemini-logo.svg";
 import grokLogo from "@/assets/grok-logo.svg";
 import claudeLogo from "@/assets/claude-logo.svg";
+import copilotLogo from "@/assets/copilot-logo.svg";
 
 const engineLogos: Record<string, string> = {
   chatgpt: openaiLogo,
@@ -13,6 +14,7 @@ const engineLogos: Record<string, string> = {
   gemini: geminiLogo,
   grok: grokLogo,
   claude: claudeLogo,
+  copilot: copilotLogo,
 };
 
 interface Node {
@@ -37,6 +39,7 @@ const nodes: Node[] = [
   { x: 620, y: 380, r: 17, color: "#4285F4", bg: "#FFFFFF", label: "Gemini", slug: "gemini", floatX: -8, floatY: 10, floatDuration: 5.5 },
   { x: 520, y: 540, r: 15, color: "#0A2540", bg: "#F5F5F5", label: "Grok", slug: "grok", floatX: 12, floatY: -8, floatDuration: 6.5 },
   { x: 200, y: 500, r: 18, color: "#D97757", bg: "#FDF0EB", label: "Claude", slug: "claude", floatX: -10, floatY: -6, floatDuration: 7.5 },
+  { x: 400, y: 140, r: 16, color: "#2870EA", bg: "#EEF3FF", label: "Copilot", slug: "copilot", floatX: -6, floatY: 10, floatDuration: 6.8 },
   // Signal/data nodes
   { x: 300, y: 220, r: 6, color: "#4ECDC4", bg: "", floatX: 6, floatY: -8, floatDuration: 4 },
   { x: 480, y: 260, r: 5, color: "#635BFF", bg: "", floatX: -8, floatY: 6, floatDuration: 4.5 },
@@ -57,24 +60,25 @@ const nodes: Node[] = [
 
 const connections: [number, number][] = [
   // Center to engines
-  [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
+  [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6],
   // Center to signal nodes
-  [0, 6], [0, 7], [0, 8], [0, 9], [0, 15], [0, 17],
+  [0, 7], [0, 8], [0, 9], [0, 10], [0, 16], [0, 18],
   // Engine to nearby signals
-  [1, 6], [1, 10], [1, 12], [1, 17],
-  [2, 7], [2, 13], [2, 16], [2, 18],
-  [3, 8], [3, 13], [3, 15], [3, 18],
-  [4, 8], [4, 11], [4, 14], [4, 19],
-  [5, 9], [5, 12], [5, 14], [5, 19],
+  [1, 7], [1, 11], [1, 13], [1, 18],
+  [2, 8], [2, 14], [2, 17], [2, 19],
+  [3, 9], [3, 14], [3, 16], [3, 19],
+  [4, 9], [4, 12], [4, 15], [4, 20],
+  [5, 10], [5, 13], [5, 15], [5, 20],
+  [6, 7], [6, 11], [6, 17], [6, 8],
   // Signal to signal (cross-connections)
-  [6, 10], [6, 16], [6, 17],
-  [7, 13], [7, 16], [7, 18],
-  [8, 11], [8, 15],
-  [9, 12], [9, 14], [9, 17],
-  [10, 16], [11, 19], [12, 14],
-  [13, 18], [15, 8], [17, 6],
+  [7, 11], [7, 17], [7, 18],
+  [8, 14], [8, 17], [8, 19],
+  [9, 12], [9, 16],
+  [10, 13], [10, 15], [10, 18],
+  [11, 17], [12, 20], [13, 15],
+  [14, 19], [16, 9], [18, 7],
   // Engine cross-links
-  [1, 2], [2, 3], [3, 4], [4, 5], [5, 1],
+  [1, 2], [2, 3], [3, 4], [4, 5], [5, 1], [6, 1], [6, 2],
 ];
 
 export function HeroOrbs() {
@@ -214,7 +218,7 @@ export function HeroOrbs() {
           if (dist < maxDist) {
             const force = (1 - dist / maxDist) * 0.6;
             // Engine nodes attract toward cursor, signal nodes repel
-            const direction = i <= 5 ? 1 : -1;
+            const direction = i <= 6 ? 1 : -1;
             gsap.to(el, {
               x: node.floatX + dx * force * 0.08 * direction,
               y: node.floatY + dy * force * 0.08 * direction,
@@ -326,7 +330,7 @@ export function HeroOrbs() {
       {nodes.map((node, i) => (
         <g key={`node-${i}`} className="orb-node">
           {/* Pulse ring for AI engine nodes */}
-          {i >= 1 && i <= 5 && (
+          {i >= 1 && i <= 6 && (
             <circle
               className="orb-pulse"
               cx={node.x}
@@ -347,11 +351,11 @@ export function HeroOrbs() {
             fill={i <= 5 ? node.bg : "transparent"}
             stroke={node.color}
             strokeWidth={i === 0 ? 0 : i <= 5 ? 1.5 : 1}
-            opacity={i <= 5 ? 1 : 0.5}
+            opacity={i <= 6 ? 1 : 0.5}
           />
 
           {/* Inner dot for signal nodes */}
-          {i > 5 && (
+          {i > 6 && (
             <circle cx={node.x} cy={node.y} r={node.r * 0.5} fill={node.color} opacity="0.6" />
           )}
 
@@ -373,7 +377,7 @@ export function HeroOrbs() {
           )}
 
           {/* AI Engine logos inside their circles */}
-          {i >= 1 && i <= 5 && node.slug && (
+          {i >= 1 && i <= 6 && node.slug && (
             <>
               <clipPath id={`engine-clip-${i}`}>
                 <circle cx={node.x} cy={node.y} r={node.r - 2} />
