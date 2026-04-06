@@ -1,7 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
-import { LogoBar } from "@/components/home/LogoBar";
 import { SolutionCards } from "@/components/home/SolutionCards";
 import { FeatureCards } from "@/components/home/FeatureCards";
 import { AnalyticsBanner } from "@/components/home/AnalyticsBanner";
@@ -25,7 +24,6 @@ export default function Landing() {
       <Header />
       <main>
         <HeroSection />
-        <LogoBar />
         <SolutionCards />
         <FeatureCards />
         <AnalyticsBanner />

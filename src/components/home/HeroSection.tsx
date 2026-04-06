@@ -61,13 +61,8 @@ export function HeroSection() {
       ref={sectionRef}
       className="relative w-full min-h-[660px] flex items-center overflow-hidden bg-white"
     >
-      {/* Animated orbs visualization */}
+      {/* Animated network + ambient blobs */}
       <HeroOrbs />
-
-      {/* Soft ambient glow behind the orbs */}
-      <div className="absolute right-[100px] top-[80px] w-[500px] h-[500px] rounded-full pointer-events-none" style={{
-        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.08) 0%, transparent 70%)",
-      }} />
 
       {/* Content — left aligned */}
       <div className="relative max-w-[640px] pl-[120px] py-20">
