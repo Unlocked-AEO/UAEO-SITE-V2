@@ -1,9 +1,69 @@
+import { useState, useEffect, useRef } from "react";
 import { pricingPlans, ANNUAL_DISCOUNT } from "@/data/mock-pricing";
 import type { PricingPlan } from "@/data/mock-pricing";
 
-function formatPrice(monthlyPrice: number, isAnnual: boolean): string {
-  const price = isAnnual ? monthlyPrice * ANNUAL_DISCOUNT : monthlyPrice;
-  return `$${price.toFixed(2)}`;
+function useAnimatedPrice(target: number, duration = 600): number {
+  const [value, setValue] = useState(target);
+  const prevTarget = useRef(target);
+  const rafId = useRef(0);
+
+  useEffect(() => {
+    const from = prevTarget.current;
+    prevTarget.current = target;
+    if (from === target) return;
+
+    let startTime: number | null = null;
+
+    function animate(timestamp: number) {
+      if (startTime === null) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(from + (target - from) * eased);
+      if (progress < 1) rafId.current = requestAnimationFrame(animate);
+    }
+
+    rafId.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId.current);
+  }, [target, duration]);
+
+  return value;
+}
+
+function AnimatedPrice({
+  monthlyPrice,
+  isAnnual,
+  priceColor,
+  periodColor,
+}: {
+  monthlyPrice: number | null;
+  isAnnual: boolean;
+  priceColor: string;
+  periodColor: string;
+}) {
+  if (monthlyPrice === null) {
+    return (
+      <div className="flex items-end mb-2 gap-1">
+        <span className={`text-[42px] tracking-[-2px] leading-none ${priceColor} font-bold`}>
+          Custom
+        </span>
+      </div>
+    );
+  }
+
+  const targetPrice = isAnnual ? monthlyPrice * ANNUAL_DISCOUNT : monthlyPrice;
+  const animatedValue = useAnimatedPrice(targetPrice);
+
+  return (
+    <div className="flex items-end mb-2 gap-1">
+      <span className={`text-[42px] tracking-[-2px] leading-none ${priceColor} font-bold`}>
+        ${animatedValue.toFixed(2)}
+      </span>
+      <span className={`pb-1.5 ${periodColor} text-[15px]/[18px]`}>
+        /month
+      </span>
+    </div>
+  );
 }
 
 function PlanCard({
@@ -14,7 +74,6 @@ function PlanCard({
   isAnnual: boolean;
 }) {
   const isHighlighted = plan.highlighted;
-  const hasPrice = plan.monthlyPrice !== null;
 
   const cardClasses = isHighlighted
     ? "flex flex-col grow shrink basis-0 relative rounded-[20px] py-9 px-8 self-stretch bg-navy border-2 border-teal"
@@ -55,20 +114,12 @@ function PlanCard({
         {plan.name}
       </span>
 
-      <div className="flex items-end mb-2 gap-1">
-        <span
-          className={`text-[42px] tracking-[-2px] leading-none ${priceColor} font-bold`}
-        >
-          {hasPrice
-            ? formatPrice(plan.monthlyPrice!, isAnnual)
-            : "Custom"}
-        </span>
-        {hasPrice && (
-          <span className={`pb-1.5 ${periodColor} text-[15px]/[18px]`}>
-            /month
-          </span>
-        )}
-      </div>
+      <AnimatedPrice
+        monthlyPrice={plan.monthlyPrice}
+        isAnnual={isAnnual}
+        priceColor={priceColor}
+        periodColor={periodColor}
+      />
 
       <span className={`mb-8 ${billingColor} text-[13px]/4`}>
         {billingNote}

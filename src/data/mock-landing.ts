@@ -1,17 +1,41 @@
 // ─── Navigation ─────────────────────────────────────────────
 
+export interface NavDropdownItem {
+  label: string;
+  href: string | null;
+}
+
 export interface NavItem {
   label: string;
   href: string | null;
   hasDropdown?: boolean;
+  dropdownItems?: NavDropdownItem[];
 }
 
 export const navItems: NavItem[] = [
-  { label: "Solutions", href: null, hasDropdown: true }, // NOTE: No page exists — needs a Solutions page or dropdown
-  { label: "How It Works", href: "/how-it-works", hasDropdown: true },
+  { label: "Product", href: "/how-it-works", hasDropdown: true },
+  { label: "What is AEO", href: "/what-is-aeo" },
+  {
+    label: "Solutions",
+    href: null,
+    hasDropdown: true,
+    dropdownItems: [
+      { label: "For Brands", href: null },    // NOTE: No page exists
+      { label: "For Agencies", href: null },   // NOTE: No page exists
+      { label: "For Enterprise", href: null }, // NOTE: No page exists
+    ],
+  },
   { label: "Pricing", href: "/pricing" },
-  { label: "Case Studies", href: null }, // NOTE: No Case Studies page exists yet
-  { label: "Blog", href: "/blog" },
+  {
+    label: "Resources",
+    href: null,
+    hasDropdown: true,
+    dropdownItems: [
+      { label: "Blog", href: "/blog" },
+      { label: "Case Studies", href: null },   // NOTE: No page exists
+      { label: "About Us", href: "/about" },
+    ],
+  },
 ];
 
 // ─── Hero ───────────────────────────────────────────────────
