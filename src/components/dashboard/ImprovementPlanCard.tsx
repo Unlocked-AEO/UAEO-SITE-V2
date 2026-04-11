@@ -54,16 +54,16 @@ function FixRow({ fix }: { fix: FixItem }) {
 
   return (
     <div
-      className={`flex items-center rounded-[10px] py-3.5 px-4 gap-4 bg-[#FAFBFC] border border-border-light ${
-        isDismissed ? "opacity-50" : ""
+      className={`flex items-center rounded-xl py-3.5 px-4 gap-4 bg-white border border-border-light hover:border-border-input transition-all duration-150 ${
+        isDismissed ? "opacity-40" : ""
       }`}
     >
       <StatusIcon status={fix.status} />
       <div className="grow shrink basis-0 min-w-0">
-        <div className={`text-[13px]/[140%] font-sans font-bold ${isDismissed ? "text-[#8792A2] line-through decoration-1" : "text-[#0A2540]"}`}>
+        <div className={`text-[13px]/[140%] font-semibold ${isDismissed ? "text-slate-muted line-through decoration-1" : "text-navy"}`}>
           {fix.title}
         </div>
-        <div className={`mt-0.75 text-xs/4 font-sans ${isDismissed ? "text-[#8792A2]" : "text-[#425466]"}`}>
+        <div className={`mt-1 text-xs/4 ${isDismissed ? "text-slate-muted" : "text-slate-body"}`}>
           {fix.description}
         </div>
       </div>
@@ -84,7 +84,7 @@ function FixRow({ fix }: { fix: FixItem }) {
           </div>
         </div>
         <button
-          className="flex items-center justify-center shrink-0 rounded-md bg-[#F0F4F8] size-7 border-none cursor-pointer hover:bg-[#E6EBF1] transition-colors"
+          className="flex items-center justify-center shrink-0 rounded-lg bg-surface size-7 border-none cursor-pointer hover:bg-border-light transition-colors duration-150"
           onClick={() => console.log("ACTION: expand_fix_details", { id: fix.id })}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
@@ -102,7 +102,7 @@ function ExpandedFixRow({ fix }: { fix: FixItem }) {
   const badge = statusBadge[fix.status];
 
   return (
-    <div className="rounded-[10px] overflow-clip bg-white border-[1.5px] border-teal">
+    <div className="rounded-xl overflow-clip bg-white border-[1.5px] border-teal shadow-sm">
       {/* Header — teal bg */}
       <div className="flex items-center py-3.5 px-4 gap-4 bg-[#F7FEFE]">
         <StatusIcon status={fix.status} />
@@ -155,9 +155,9 @@ interface ImprovementPlanCardProps {
 
 export function ImprovementPlanCard({ expandedFixId }: ImprovementPlanCardProps) {
   return (
-    <div className="flex flex-col rounded-xl overflow-clip bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
+    <div className="flex flex-col rounded-xl overflow-clip bg-white border border-border-light shadow-sm">
       {/* Title */}
-      <div className="pt-5 shrink-0 font-sans font-bold px-6 text-[15px]/[18px] text-navy">
+      <div className="pt-5 shrink-0 font-semibold px-6 text-[15px]/5 text-navy">
         Improvement Plan
       </div>
 

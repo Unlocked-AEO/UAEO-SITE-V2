@@ -47,10 +47,10 @@ export function BrandAccuracyStats() {
               {config.icon}
             </div>
             <div className="flex flex-col gap-0.5">
-              <div className="text-[28px] leading-[round(up,110%,1px)] inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-extrabold">
+              <div className="text-[28px] leading-[round(up,110%,1px)] inline-block text-[#0A2540] font-sans font-extrabold">
                 {stat.value}
               </div>
-              <div className="inline-block text-[#64748B] font-['Inter',system-ui,sans-serif] text-[13px]/4">
+              <div className="inline-block text-[#64748B] font-sans text-[13px]/4">
                 {stat.label}
               </div>
             </div>

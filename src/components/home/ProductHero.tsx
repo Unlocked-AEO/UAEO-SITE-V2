@@ -62,7 +62,7 @@ export function ProductHero() {
         </div>
 
         {/* Headline */}
-        <h1 className={`relative text-[56px] leading-[108%] tracking-[-2.5px] mb-5 text-center text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold whitespace-pre-line transition-all duration-700 delay-150 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <h1 className={`relative text-[56px] leading-[108%] tracking-[-2.5px] mb-5 text-center text-[#0A2540] font-sans font-bold whitespace-pre-line transition-all duration-700 delay-150 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           {productHero.headline}
         </h1>
 
@@ -77,7 +77,7 @@ export function ProductHero() {
             className="rounded-[10px] py-3.5 px-7 bg-[#4ECDC4] border-none cursor-pointer hover:opacity-90 transition-opacity"
             onClick={() => navigate("/signup")}
           >
-            <span className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-[15px]/4.5">
+            <span className="text-[#0A2540] font-sans font-semibold text-[15px]/4.5">
               Start a free scan →
             </span>
           </button>
@@ -85,7 +85,7 @@ export function ProductHero() {
             className="rounded-[10px] py-3.5 px-7 bg-transparent border-[1.5px] border-solid border-[#E2E8F0] cursor-pointer hover:bg-[#F8FAFC] transition-colors"
             onClick={() => navigate("/schedule")}
           >
-            <span className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-[15px]/4.5">
+            <span className="text-[#0A2540] font-sans font-semibold text-[15px]/4.5">
               Book a demo
             </span>
           </button>

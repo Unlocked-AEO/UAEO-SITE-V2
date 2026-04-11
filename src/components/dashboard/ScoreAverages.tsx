@@ -44,7 +44,7 @@ function ScoreGauge({ item }: { item: ScoreAverage }) {
           y="38"
           textAnchor="middle"
           dominantBaseline="central"
-          fontFamily="Inter"
+          fontFamily="Manrope"
           fontSize="14"
           fontWeight="800"
           fill="#0A2540"

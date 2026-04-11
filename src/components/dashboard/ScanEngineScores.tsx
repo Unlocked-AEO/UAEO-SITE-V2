@@ -20,7 +20,7 @@ function scoreTextColor(score: number): string {
 export function ScanEngineScores() {
   return (
     <div className="rounded-xl pt-5 bg-white border border-solid border-[#E6EBF1] [box-shadow:#0A25400F_0px_1px_4px] px-5 h-full flex flex-col">
-      <div className="mb-4 tracking-[-0.01em] text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold text-[13px]/4">
+      <div className="mb-4 tracking-[-0.01em] text-[#0A2540] font-sans font-bold text-[13px]/4">
         Score by AI Engine
       </div>
       <div className="flex flex-col grow justify-around">
@@ -42,15 +42,15 @@ export function ScanEngineScores() {
               <EngineIcon slug={engine.iconSlug} />
             </div>
             <div className="grow shrink basis-[0%] min-w-0">
-              <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-xs/4">
+              <div className="text-[#0A2540] font-sans font-semibold text-xs/4">
                 {engine.name}
               </div>
-              <div className="text-[#8792A2] font-['Inter',system-ui,sans-serif] text-[10px]/3">
+              <div className="text-[#8792A2] font-sans text-[10px]/3">
                 {engine.model}
               </div>
             </div>
             <div className="flex flex-col items-end gap-1">
-              <div className={`tracking-[-0.02em] inline-block font-['Inter',system-ui,sans-serif] font-extrabold text-[15px]/4.5 ${scoreTextColor(engine.score)}`}>
+              <div className={`tracking-[-0.02em] inline-block font-sans font-extrabold text-[15px]/4.5 ${scoreTextColor(engine.score)}`}>
                 {engine.score}
               </div>
               <div className="w-15 h-1 rounded-[99px] overflow-clip bg-[#F0F4F8] shrink-0">

@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { KPICards } from "@/components/dashboard/KPICards";
-import { ScoreAverages } from "@/components/dashboard/ScoreAverages";
+import { ScoreOverview } from "@/components/dashboard/ScoreOverview";
 import { EngineScores } from "@/components/dashboard/EngineScores";
 import { IndustryLeaderboard } from "@/components/dashboard/IndustryLeaderboard";
-import { ScoreTrends } from "@/components/dashboard/ScoreTrends";
 import { TopRecommendations } from "@/components/dashboard/TopRecommendations";
 import { RiskInsightsCards } from "@/components/dashboard/RiskInsights";
 
@@ -44,8 +43,8 @@ export default function Overview() {
       <DashboardShell activeTab="overview">
         <div className="flex items-center justify-center min-h-[500px]">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-3 border-[#F0F4F8] border-t-teal rounded-full animate-spin" />
-            <span className="text-slate-muted text-sm">Loading...</span>
+            <div className="w-8 h-8 border-3 border-surface border-t-teal rounded-full animate-spin" />
+            <span className="text-slate-muted text-sm">Loading dashboard...</span>
           </div>
         </div>
       </DashboardShell>
@@ -64,7 +63,7 @@ export default function Overview() {
             trends, and recommendations.
           </p>
           <button
-            className="rounded-[10px] py-3 px-6 bg-teal text-navy font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
+            className="rounded-lg py-3 px-6 bg-teal text-white font-semibold text-sm border-none cursor-pointer hover:bg-[#3DBDB5] transition-colors duration-150"
             onClick={() => navigate("/dashboard/scans/new")}
           >
             Run your first scan
@@ -85,7 +84,7 @@ export default function Overview() {
             We couldn't load your dashboard data. Please try again.
           </p>
           <button
-            className="rounded-[10px] py-3 px-6 bg-navy text-white font-semibold text-sm border-none cursor-pointer hover:opacity-90 transition-opacity"
+            className="rounded-lg py-3 px-6 bg-teal text-white font-semibold text-sm border-none cursor-pointer hover:bg-[#3DBDB5] transition-colors duration-150"
             onClick={() => console.log("ACTION: retry_load_dashboard")}
           >
             Retry
@@ -102,16 +101,15 @@ export default function Overview() {
         <KPICards />
       </div>
 
-      {/* Row 2: Score averages + Engine scores + Leaderboard */}
-      <div ref={row2} className="flex gap-4">
-        <ScoreAverages />
-        <EngineScores />
-        <IndustryLeaderboard />
+      {/* Row 2: Combined score averages + trend chart */}
+      <div ref={row2}>
+        <ScoreOverview />
       </div>
 
-      {/* Row 3: Score trends + Recommendations */}
+      {/* Row 3: Engine scores + Leaderboard + Recommendations */}
       <div ref={row3} className="flex gap-4">
-        <ScoreTrends />
+        <EngineScores />
+        <IndustryLeaderboard />
         <TopRecommendations />
       </div>
 

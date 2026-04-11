@@ -30,17 +30,17 @@ export function FreshnessPageTable() {
                 className="shrink-0 rounded-[50%] size-2"
                 style={{ backgroundColor: cat.dotColor }}
               />
-              <div className="inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-[13px]/4">
+              <div className="inline-block text-[#0A2540] font-sans font-bold shrink-0 text-[13px]/4">
                 {cat.status}
               </div>
             </div>
             <div
-              className="text-[24px] leading-[round(up,100%,1px)] inline-block font-['Inter',system-ui,sans-serif] font-extrabold"
+              className="text-[24px] leading-[round(up,100%,1px)] inline-block font-sans font-extrabold"
               style={{ color: cat.countColor }}
             >
               {cat.count}
             </div>
-            <div className="text-[11px] leading-[round(up,140%,1px)] inline-block text-[#94A3B8] font-['Inter',system-ui,sans-serif]">
+            <div className="text-[11px] leading-[round(up,140%,1px)] inline-block text-[#94A3B8] font-sans">
               {cat.description}
             </div>
           </div>
@@ -56,7 +56,7 @@ export function FreshnessPageTable() {
                     : ""
                 }`}
               >
-                <div className="inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-medium shrink-0 text-[13px]/4">
+                <div className="inline-block text-[#0A2540] font-sans font-medium shrink-0 text-[13px]/4">
                   {page.title}
                 </div>
                 <div className="inline-block text-[#94A3B8] font-[ui-monospace,'SFMono-Regular','SF_Mono','Menlo','Consolas','Liberation_Mono',monospace] shrink-0 text-xs/4">
@@ -66,11 +66,11 @@ export function FreshnessPageTable() {
             ))}
             {cat.moreCount && (
               <div className="flex items-center justify-between py-2.25">
-                <div className="inline-block text-[#94A3B8] font-['Inter',system-ui,sans-serif] shrink-0 text-xs/4">
+                <div className="inline-block text-[#94A3B8] font-sans shrink-0 text-xs/4">
                   + {cat.moreCount} more pages
                 </div>
                 <button
-                  className="inline-block text-[#4ECDC4] font-['Inter',system-ui,sans-serif] font-semibold shrink-0 text-xs/4 bg-transparent border-none cursor-pointer p-0"
+                  className="inline-block text-[#4ECDC4] font-sans font-semibold shrink-0 text-xs/4 bg-transparent border-none cursor-pointer p-0"
                   onClick={() =>
                     console.log("ACTION: view_all_pages", { status: cat.status })
                   }

@@ -28,6 +28,7 @@ export interface KPICard {
   change: string;
   changeDirection: "up" | "down";
   comparison: string;
+  sparkline: number[];
 }
 
 export const kpiCards: KPICard[] = [
@@ -37,6 +38,7 @@ export const kpiCards: KPICard[] = [
     change: "+3",
     changeDirection: "up",
     comparison: "vs last month",
+    sparkline: [4, 6, 5, 8, 7, 9, 11, 10, 12, 14],
   },
   {
     label: "Total Visits",
@@ -44,6 +46,7 @@ export const kpiCards: KPICard[] = [
     change: "+12%",
     changeDirection: "up",
     comparison: "vs last month",
+    sparkline: [3200, 3800, 4100, 4600, 5200, 5800, 6400, 7100, 7600, 8420],
   },
 ];
 
@@ -53,13 +56,14 @@ export const mentionsCard: KPICard = {
   change: "+18%",
   changeDirection: "up",
   comparison: "vs last month",
+  sparkline: [80, 95, 110, 130, 145, 160, 180, 200, 220, 247],
 };
 
 export const carouselCards: KPICard[] = [
-  { label: "Monthly Mentions", value: "247", change: "+18%", changeDirection: "up", comparison: "vs last month" },
-  { label: "Monthly Citations", value: "89", change: "+12%", changeDirection: "up", comparison: "vs last month" },
-  { label: "Monthly Recommendations", value: "34", change: "+8%", changeDirection: "up", comparison: "vs last month" },
-  { label: "Hallucinations Detected", value: "7", change: "-3", changeDirection: "down", comparison: "vs last month" },
+  { label: "Monthly Mentions", value: "247", change: "+18%", changeDirection: "up", comparison: "vs last month", sparkline: [80, 95, 110, 130, 145, 160, 180, 200, 220, 247] },
+  { label: "Monthly Citations", value: "89", change: "+12%", changeDirection: "up", comparison: "vs last month", sparkline: [30, 35, 40, 48, 52, 58, 65, 72, 80, 89] },
+  { label: "Monthly Recommendations", value: "34", change: "+8%", changeDirection: "up", comparison: "vs last month", sparkline: [12, 14, 16, 18, 20, 22, 25, 28, 30, 34] },
+  { label: "Hallucinations Detected", value: "7", change: "-3", changeDirection: "down", comparison: "vs last month", sparkline: [18, 16, 15, 14, 12, 11, 10, 9, 8, 7] },
 ];
 
 // ─── Share of Voice ─────────────────────────────────────────
@@ -144,9 +148,9 @@ export const trendLines: TrendLine[] = [
   { label: "AI Visibility", dataKey: "aiVisibility", color: "#FF9F43", active: true },
   { label: "Brand Accuracy", dataKey: "brandAccuracy", color: "#27AE60", active: true },
   { label: "Sentiment", dataKey: "sentiment", color: "#4ECDC4", active: true },
-  { label: "Schema", dataKey: "schema", color: "#E6EBF1", active: false },
-  { label: "Freshness", dataKey: "freshness", color: "#E6EBF1", active: false },
-  { label: "EEAT", dataKey: "eeat", color: "#E6EBF1", active: false },
+  { label: "Schema", dataKey: "schema", color: "#635BFF", active: true },
+  { label: "Freshness", dataKey: "freshness", color: "#E74C3C", active: true },
+  { label: "EEAT", dataKey: "eeat", color: "#3B82F6", active: true },
 ];
 
 export const trendMonths = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];

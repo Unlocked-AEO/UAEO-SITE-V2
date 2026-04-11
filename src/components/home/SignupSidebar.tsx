@@ -13,17 +13,17 @@ export function SignupSidebar() {
         onClick={() => navigate("/")}
       >
         <LogoIcon size={36} className="rounded-[9px]" />
-        <div className="inline-block text-white font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-base/5">
+        <div className="inline-block text-white font-sans font-bold shrink-0 text-base/5">
           Unlocked AEO
         </div>
       </button>
 
       {/* Headline */}
       <div className="flex flex-col mb-12 gap-5">
-        <div className="text-[32px] leading-[round(up,120%,1px)] text-white font-['Inter',system-ui,sans-serif] font-extrabold m-0">
+        <div className="text-[32px] leading-[round(up,120%,1px)] text-white font-sans font-extrabold m-0">
           {signupSidebar.headline}
         </div>
-        <div className="text-[15px] leading-[round(up,165%,1px)] text-[#94A3B8] font-['Inter',system-ui,sans-serif] m-0">
+        <div className="text-[15px] leading-[round(up,165%,1px)] text-[#94A3B8] font-sans m-0">
           {signupSidebar.subtext}
         </div>
       </div>
@@ -37,7 +37,7 @@ export function SignupSidebar() {
                 <path d="M2 6l3 3 5-5" stroke="#4ECDC4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <div className="inline-block text-[#CBD5E1] font-['Inter',system-ui,sans-serif] shrink-0 text-sm/4.5">
+            <div className="inline-block text-[#CBD5E1] font-sans shrink-0 text-sm/4.5">
               {feature}
             </div>
           </div>
@@ -46,13 +46,13 @@ export function SignupSidebar() {
 
       {/* Trusted by */}
       <div className="pt-6 border-t border-t-solid border-t-[#FFFFFF14]">
-        <div className="mt-0 mb-3 text-[#475569] font-['Inter',system-ui,sans-serif] text-[13px]/4 mx-0">
+        <div className="mt-0 mb-3 text-[#475569] font-sans text-[13px]/4 mx-0">
           {signupSidebar.trustedBy}
         </div>
         <div className="flex gap-2">
           {signupSidebar.logos.map((logo) => (
             <div key={logo} className="h-7 flex items-center rounded-md px-3 bg-[#FFFFFF0F]">
-              <div className="inline-block text-[#64748B] font-['Inter',system-ui,sans-serif] font-medium shrink-0 text-xs/4">
+              <div className="inline-block text-[#64748B] font-sans font-medium shrink-0 text-xs/4">
                 {logo}
               </div>
             </div>

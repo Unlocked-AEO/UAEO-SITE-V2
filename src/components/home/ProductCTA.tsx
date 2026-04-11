@@ -20,7 +20,7 @@ export function ProductCTA() {
         }}
       />
       <div className="relative">
-        <h2 className="text-[40px] tracking-[-1px] leading-[120%] mb-3.5 text-white font-['Inter',system-ui,sans-serif] font-bold whitespace-pre-line">
+        <h2 className="text-[40px] tracking-[-1px] leading-[120%] mb-3.5 text-white font-sans font-bold whitespace-pre-line">
           {productCTA.headline}
         </h2>
         <p className="text-[16px] max-w-115 leading-[165%] text-[#FFFFFF8C] font-sans">

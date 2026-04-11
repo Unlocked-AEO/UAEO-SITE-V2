@@ -36,7 +36,7 @@ export function ScanTabs({ activeTab, scanId = "1" }: ScanTabsProps) {
             }}
           >
             <div
-              className={`[white-space-collapse:collapse] inline-block w-max font-['Inter',system-ui,sans-serif] shrink-0 text-[13px]/4 ${
+              className={`[white-space-collapse:collapse] inline-block w-max font-sans shrink-0 text-[13px]/4 ${
                 isActive
                   ? "text-[#0A2540] font-semibold"
                   : "text-[#8792A2] font-medium"
@@ -50,7 +50,7 @@ export function ScanTabs({ activeTab, scanId = "1" }: ScanTabsProps) {
                 style={{ backgroundColor: tab.scoreBg! }}
               >
                 <div
-                  className="inline-block font-['Inter',system-ui,sans-serif] font-bold text-[10px]/3"
+                  className="inline-block font-sans font-bold text-[10px]/3"
                   style={{ color: tab.scoreColor! }}
                 >
                   {tab.score}

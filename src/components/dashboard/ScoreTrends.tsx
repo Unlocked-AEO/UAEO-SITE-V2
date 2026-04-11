@@ -56,14 +56,14 @@ export function ScoreTrends() {
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: "#8792A2", fontFamily: "Inter" }}
+              tick={{ fontSize: 10, fill: "#8792A2", fontFamily: "Manrope" }}
               dy={10}
             />
             <YAxis
               domain={[0, 100]}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 9, fill: "#C0C8D4", fontFamily: "Inter" }}
+              tick={{ fontSize: 9, fill: "#C0C8D4", fontFamily: "Manrope" }}
               ticks={[0, 25, 50, 75, 100]}
             />
             <Tooltip
@@ -73,7 +73,7 @@ export function ScoreTrends() {
                 borderRadius: 8,
                 padding: "8px 12px",
                 fontSize: 12,
-                fontFamily: "Inter",
+                fontFamily: "Manrope",
               }}
               itemStyle={{ color: "#FFFFFF", padding: "2px 0" }}
               labelStyle={{

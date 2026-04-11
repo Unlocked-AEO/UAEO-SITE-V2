@@ -61,7 +61,7 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
 
     return (
       <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col`}>
-        <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-4">Monthly Score Averages</div>
+        <div className="text-[#0A2540] font-sans font-semibold text-sm mb-4">Monthly Score Averages</div>
         <div className="flex flex-wrap justify-between gap-y-5">
           {gauges.map((g) => {
             const filled = (g.score / 100) * circ;
@@ -70,9 +70,9 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
                 <svg width="60" height="60" viewBox="0 0 60 60">
                   <circle cx="30" cy="30" r={r} fill="none" stroke="#F0F4F8" strokeWidth="5" />
                   <circle cx="30" cy="30" r={r} fill="none" stroke={g.color} strokeWidth="5" strokeDasharray={`${filled} ${circ - filled}`} strokeLinecap="round" transform="rotate(-90 30 30)" />
-                  <text x="30" y="30" textAnchor="middle" dominantBaseline="central" fontFamily="Inter" fontSize="13" fontWeight="800" fill="#0A2540">{g.score}</text>
+                  <text x="30" y="30" textAnchor="middle" dominantBaseline="central" fontFamily="Manrope" fontSize="13" fontWeight="800" fill="#0A2540">{g.score}</text>
                 </svg>
-                <span className="text-center text-[#64748B] font-['Inter',system-ui,sans-serif] text-[10px]/3">{g.label}</span>
+                <span className="text-center text-[#64748B] font-sans text-[10px]/3">{g.label}</span>
               </div>
             );
           })}
@@ -84,7 +84,7 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
   if (icon === "plan") {
     return (
       <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col gap-3`}>
-        <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-1">Improvement Plan</div>
+        <div className="text-[#0A2540] font-sans font-semibold text-sm mb-1">Improvement Plan</div>
         {[
           { task: "Add FAQ schema markup", impact: "+15 pts", done: true },
           { task: "Update Grok entity data", impact: "+12 pts", done: true },
@@ -96,8 +96,8 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
             <div className={`size-4 rounded-full flex items-center justify-center shrink-0 ${item.done ? "bg-[#4ECDC4]" : "border-[1.5px] border-solid border-[#E2E8F0]"}`}>
               {item.done && <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </div>
-            <span className={`grow text-[12px] font-['Inter',system-ui,sans-serif] ${item.done ? "text-[#94A3B8] line-through" : "text-[#0A2540]"}`}>{item.task}</span>
-            <span className="text-[#4ECDC4] font-['Inter',system-ui,sans-serif] font-semibold text-[11px] shrink-0">{item.impact}</span>
+            <span className={`grow text-[12px] font-sans ${item.done ? "text-[#94A3B8] line-through" : "text-[#0A2540]"}`}>{item.task}</span>
+            <span className="text-[#4ECDC4] font-sans font-semibold text-[11px] shrink-0">{item.impact}</span>
           </div>
         ))}
       </div>
@@ -107,7 +107,7 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
   if (icon === "competitive") {
     return (
       <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col gap-3`}>
-        <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-1">Share of Voice</div>
+        <div className="text-[#0A2540] font-sans font-semibold text-sm mb-1">Share of Voice</div>
         {[
           { name: "Your Brand", score: 74, color: "#4ECDC4", highlight: true },
           { name: "Competitor A", score: 82, color: "#0A2540", highlight: false },
@@ -115,11 +115,11 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
           { name: "Competitor C", score: 55, color: "#94A3B8", highlight: false },
         ].map((item) => (
           <div key={item.name} className={`flex items-center gap-3 py-2.5 px-3 rounded-lg ${item.highlight ? "bg-[#F0FDFA] border border-solid border-[#4ECDC4]" : "bg-white border border-solid border-[#E6EBF1]"}`}>
-            <span className={`w-24 font-['Inter',system-ui,sans-serif] text-[12px] shrink-0 ${item.highlight ? "text-[#4ECDC4] font-semibold" : "text-[#0A2540]"}`}>{item.name}</span>
+            <span className={`w-24 font-sans text-[12px] shrink-0 ${item.highlight ? "text-[#4ECDC4] font-semibold" : "text-[#0A2540]"}`}>{item.name}</span>
             <div className="grow h-2 rounded-full bg-[#E6EBF1]">
               <div className="h-full rounded-full" style={{ width: `${item.score}%`, backgroundColor: item.color }} />
             </div>
-            <span className="w-6 text-right font-['Inter',system-ui,sans-serif] font-semibold text-[12px]" style={{ color: item.color }}>{item.score}</span>
+            <span className="w-6 text-right font-sans font-semibold text-[12px]" style={{ color: item.color }}>{item.score}</span>
           </div>
         ))}
       </div>
@@ -129,7 +129,7 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
   if (icon === "risk") {
     return (
       <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col gap-3`}>
-        <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-1">Active Risks</div>
+        <div className="text-[#0A2540] font-sans font-semibold text-sm mb-1">Active Risks</div>
         {[
           { title: "Grok brand gap widening", level: "High", bg: "#FEF2F2", color: "#EF4444", dotColor: "#EF4444" },
           { title: "Schema below industry avg", level: "Medium", bg: "#FFF7ED", color: "#F97316", dotColor: "#F97316" },
@@ -138,8 +138,8 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
         ].map((item) => (
           <div key={item.title} className="flex items-center gap-3 py-3 px-3.5 rounded-lg border border-solid border-[#E6EBF1] bg-white">
             <div className="size-2 rounded-full shrink-0" style={{ backgroundColor: item.dotColor }} />
-            <span className="grow text-[#0A2540] font-['Inter',system-ui,sans-serif] text-[12px]">{item.title}</span>
-            <span className="rounded-md py-0.5 px-2 font-['Inter',system-ui,sans-serif] font-semibold text-[11px]" style={{ backgroundColor: item.bg, color: item.color }}>{item.level}</span>
+            <span className="grow text-[#0A2540] font-sans text-[12px]">{item.title}</span>
+            <span className="rounded-md py-0.5 px-2 font-sans font-semibold text-[11px]" style={{ backgroundColor: item.bg, color: item.color }}>{item.level}</span>
           </div>
         ))}
       </div>
@@ -149,7 +149,7 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
   // Agentic
   return (
     <div className={`rounded-2xl ${previewBg} border border-solid border-[#E6EBF1] p-6 h-full flex flex-col gap-3`}>
-      <div className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-sm mb-1">Agent Activity</div>
+      <div className="text-[#0A2540] font-sans font-semibold text-sm mb-1">Agent Activity</div>
       {[
         { action: "Generated FAQ schema for /pricing", status: "Awaiting approval", statusBg: "#FFF7ED", statusColor: "#F97316" },
         { action: "Rewrote meta description for /features", status: "Approved", statusBg: "#F0FDF4", statusColor: "#22C55E" },
@@ -161,8 +161,8 @@ function MockPreview({ icon }: { icon: ProductFeature["icon"] }) {
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="2" fill="white" /></svg>
           </div>
           <div className="grow">
-            <span className="text-[#0A2540] font-['Inter',system-ui,sans-serif] text-[12px] block">{item.action}</span>
-            <span className="font-['Inter',system-ui,sans-serif] text-[11px] mt-0.5 inline-block rounded-md py-0.5 px-1.5" style={{ backgroundColor: item.statusBg, color: item.statusColor }}>{item.status}</span>
+            <span className="text-[#0A2540] font-sans text-[12px] block">{item.action}</span>
+            <span className="font-sans text-[11px] mt-0.5 inline-block rounded-md py-0.5 px-1.5" style={{ backgroundColor: item.statusBg, color: item.statusColor }}>{item.status}</span>
           </div>
         </div>
       ))}
@@ -191,19 +191,19 @@ export function ProductFeatureSection({ feature }: { feature: ProductFeature }) 
               {feature.badge}
             </span>
             {feature.comingSoon && (
-              <span className="rounded-[20px] py-0.5 px-2 bg-[#FEF3C7] text-[#92400E] font-['Inter',system-ui,sans-serif] font-semibold text-[10px]/3">
+              <span className="rounded-[20px] py-0.5 px-2 bg-[#FEF3C7] text-[#92400E] font-sans font-semibold text-[10px]/3">
                 Coming Soon
               </span>
             )}
           </div>
 
           {/* Headline */}
-          <h2 className="text-[36px] leading-[115%] tracking-[-1px] mb-5 text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold whitespace-pre-line">
+          <h2 className="text-[36px] leading-[115%] tracking-[-1px] mb-5 text-[#0A2540] font-sans font-bold whitespace-pre-line">
             {feature.headline}
           </h2>
 
           {/* Description */}
-          <p className="text-[16px] leading-[170%] mb-7 text-[#64748B] font-['Inter',system-ui,sans-serif] m-0">
+          <p className="text-[16px] leading-[170%] mb-7 text-[#64748B] font-sans m-0">
             {feature.description}
           </p>
 
@@ -216,7 +216,7 @@ export function ProductFeatureSection({ feature }: { feature: ProductFeature }) 
                     <path d="M2 6l3 3 5-5" stroke="#4ECDC4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="text-[#475569] font-['Inter',system-ui,sans-serif] text-[15px]/5">
+                <span className="text-[#475569] font-sans text-[15px]/5">
                   {highlight}
                 </span>
               </div>

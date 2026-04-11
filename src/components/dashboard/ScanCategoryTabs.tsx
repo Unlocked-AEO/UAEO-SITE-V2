@@ -33,7 +33,7 @@ export function ScanCategoryTabs({
             }}
           >
             <div
-              className={`inline-block [white-space-collapse:collapse] shrink-0 w-max font-['Inter',system-ui,sans-serif] text-[13px]/4 ${
+              className={`inline-block [white-space-collapse:collapse] shrink-0 w-max font-sans text-[13px]/4 ${
                 isActive
                   ? "text-[#0A2540] font-semibold"
                   : "text-[#8792A2] font-medium"
@@ -43,7 +43,7 @@ export function ScanCategoryTabs({
             </div>
             {tab.score !== null && colors && (
               <div className={`inline-block rounded-[99px] py-0.5 px-1.75 shrink-0 [white-space-collapse:collapse] ${colors.bg}`}>
-                <div className={`inline-block ${colors.text} font-['Inter',system-ui,sans-serif] font-bold text-[10px]/3`}>
+                <div className={`inline-block ${colors.text} font-sans font-bold text-[10px]/3`}>
                   {tab.score}
                 </div>
               </div>

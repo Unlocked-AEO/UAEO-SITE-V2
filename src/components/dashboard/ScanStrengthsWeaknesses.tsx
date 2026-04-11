@@ -11,7 +11,7 @@ export function ScanStrengthsWeaknesses() {
               <path d="M2 6.5L5 9.5L11 3.5" stroke="#4ECDC4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <div className="inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-sm/4.5">
+          <div className="inline-block text-[#0A2540] font-sans font-bold shrink-0 text-sm/4.5">
             Strengths
           </div>
         </div>
@@ -19,7 +19,7 @@ export function ScanStrengthsWeaknesses() {
           {strengths.map((item, i) => (
             <div key={i} className="flex items-start gap-2.5">
               <div className="w-1.25 h-1.25 mt-1.25 shrink-0 rounded-[50%] bg-[#4ECDC4]" />
-              <div className="text-[11px] leading-[round(up,150%,1px)] inline-block [white-space-collapse:preserve] w-max text-[#425466] font-['Inter',system-ui,sans-serif] shrink-0">
+              <div className="text-[11px] leading-[round(up,150%,1px)] inline-block [white-space-collapse:preserve] w-max text-[#425466] font-sans shrink-0">
                 {item.text}
               </div>
             </div>
@@ -36,7 +36,7 @@ export function ScanStrengthsWeaknesses() {
               <circle cx="6.5" cy="6.5" r="5.5" stroke="#FF4D4D" strokeWidth="1.5" />
             </svg>
           </div>
-          <div className="inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-sm/4.5">
+          <div className="inline-block text-[#0A2540] font-sans font-bold shrink-0 text-sm/4.5">
             Weaknesses
           </div>
         </div>
@@ -44,7 +44,7 @@ export function ScanStrengthsWeaknesses() {
           {weaknesses.map((item, i) => (
             <div key={i} className="flex items-start gap-2.5">
               <div className={`w-1.25 h-1.25 mt-1.25 shrink-0 rounded-[50%] ${item.severity === "red" ? "bg-[#FF4D4D]" : "bg-[#FF9F43]"}`} />
-              <div className="text-[11px] leading-[round(up,150%,1px)] inline-block [white-space-collapse:preserve] w-max text-[#425466] font-['Inter',system-ui,sans-serif] shrink-0">
+              <div className="text-[11px] leading-[round(up,150%,1px)] inline-block [white-space-collapse:preserve] w-max text-[#425466] font-sans shrink-0">
                 {item.text}
               </div>
             </div>

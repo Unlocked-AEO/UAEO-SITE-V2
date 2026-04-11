@@ -11,74 +11,78 @@ export function DashboardShell({ activeTab, children }: DashboardShellProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="font-sans antialiased flex flex-col min-h-screen bg-[#F0F4F8]">
-      {/* Top bar */}
-      <header className="flex items-center shrink-0 h-14 px-7 gap-3 bg-white border-b border-border-light">
-        <button
-          className="flex items-center gap-2.5 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => navigate("/")}
-        >
-          <LogoIcon size={28} />
-          <span className="tracking-[-0.3px] text-navy font-bold text-[15px]/[18px]">
-            Unlocked AEO
-          </span>
-        </button>
-
-        <div className="grow" />
-
-        <button
-          className="flex items-center gap-4 bg-transparent border-none cursor-pointer p-0"
-          onClick={() => navigate("/dashboard/profile")}
-        >
-          <div className="flex flex-col items-end gap-px">
-            <span className="text-navy font-semibold text-[13px]/4">
-              {dashboardUser.company}
-            </span>
-            <span className="text-slate-muted text-[10px]/3">
-              {dashboardUser.lastScan}
-            </span>
-          </div>
-          <div className="flex items-center justify-center shrink-0 rounded-full bg-teal size-9">
-            <span className="text-white font-bold text-[13px]/4">
-              {dashboardUser.initials}
-            </span>
-          </div>
-        </button>
-      </header>
-
-      {/* Tab nav */}
-      <nav className="flex px-7 bg-white border-b border-border-light">
-        {dashboardTabs.map((tab) => (
+    <div className="font-sans antialiased flex flex-col min-h-screen bg-surface">
+      {/* Header */}
+      <header className="flex items-end shrink-0 px-8 bg-white border-b border-border-light">
+        {/* Logo */}
+        <div className="flex items-center h-14 shrink-0">
           <button
-            key={tab.slug}
-            className={`flex items-center -mb-px px-4 py-3 border-b-2 bg-transparent border-none cursor-pointer transition-colors ${
-              tab.slug === activeTab
-                ? "border-b-teal"
-                : "border-b-transparent"
-            }`}
-            onClick={() => {
-              if (tab.href) {
-                navigate(tab.href);
-              } else {
-                console.log("ACTION: navigate_dashboard_tab", { tab: tab.slug });
-              }
-            }}
+            className="flex items-center gap-2.5 bg-transparent border-none cursor-pointer p-0 hover:opacity-80 transition-opacity duration-150"
+            onClick={() => navigate("/")}
           >
-            <span
-              className={`text-[13px]/4 whitespace-nowrap ${
-                tab.slug === activeTab
-                  ? "text-navy font-semibold"
-                  : "text-slate-muted"
-              }`}
-            >
-              {tab.label}
+            <LogoIcon size={28} />
+            <span className="tracking-[-0.3px] text-navy font-semibold text-sm/5">
+              Unlocked AEO
             </span>
           </button>
-        ))}
-      </nav>
+        </div>
+
+        {/* Tabs */}
+        <nav className="flex mx-auto -mb-px">
+          {dashboardTabs.map((tab) => (
+            <button
+              key={tab.slug}
+              className={`flex items-center px-5 py-4 border-b-2 bg-transparent border-x-0 border-t-0 cursor-pointer transition-colors duration-150 ${
+                tab.slug === activeTab
+                  ? "border-b-teal"
+                  : "border-b-transparent hover:border-b-border-light"
+              }`}
+              onClick={() => {
+                if (tab.href) {
+                  navigate(tab.href);
+                } else {
+                  console.log("ACTION: navigate_dashboard_tab", { tab: tab.slug });
+                }
+              }}
+            >
+              <span
+                className={`text-[13px]/4 whitespace-nowrap transition-colors duration-150 ${
+                  tab.slug === activeTab
+                    ? "text-navy font-semibold"
+                    : "text-slate-muted hover:text-slate-body"
+                }`}
+              >
+                {tab.label}
+              </span>
+            </button>
+          ))}
+        </nav>
+
+        {/* User */}
+        <div className="flex items-center h-14 shrink-0">
+          <button
+            className="flex items-center gap-3 bg-transparent border-none cursor-pointer p-0 hover:opacity-80 transition-opacity duration-150"
+            onClick={() => navigate("/dashboard/profile")}
+          >
+            <div className="flex flex-col items-end gap-0.5">
+              <span className="text-navy font-medium text-[13px]/4">
+                {dashboardUser.company}
+              </span>
+              <span className="text-slate-muted text-[11px]/3">
+                {dashboardUser.lastScan}
+              </span>
+            </div>
+            <div className="flex items-center justify-center shrink-0 rounded-full bg-teal size-8">
+              <span className="text-white font-semibold text-xs/4">
+                {dashboardUser.initials}
+              </span>
+            </div>
+          </button>
+        </div>
+      </header>
 
       {/* Content */}
-      <main className="grow flex flex-col gap-5 pt-6 pb-10 px-7">
+      <main className="grow flex flex-col gap-5 pt-6 pb-10 px-8">
         {children}
       </main>
     </div>

@@ -21,10 +21,10 @@ export default function ScheduleCall() {
               <path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h2 className="text-[28px] tracking-[-1px] leading-[115%] mb-3 text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold">
+          <h2 className="text-[28px] tracking-[-1px] leading-[115%] mb-3 text-[#0A2540] font-sans font-bold">
             We're happy to help — no pressure.
           </h2>
-          <p className="text-[16px] leading-[170%] max-w-[480px] text-[#64748B] font-['Inter',system-ui,sans-serif] m-0">
+          <p className="text-[16px] leading-[170%] max-w-[480px] text-[#64748B] font-sans m-0">
             Whether you're just exploring or ready to get started, our team is here to answer your questions and help you find the right fit. No hard sells, no commitments — just a friendly conversation.
           </p>
         </div>

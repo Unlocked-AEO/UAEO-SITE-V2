@@ -17,7 +17,7 @@ export function SolutionCards() {
   return (
     <>
       {/* Section intro */}
-      <section ref={introRef} className={`flex flex-col items-start max-w-[680px] pt-20 pb-12 bg-white px-20 transition-all duration-700 ${introInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+      <section ref={introRef} className={`flex flex-col items-center text-center max-w-[680px] mx-auto pt-20 pb-12 bg-white px-20 transition-all duration-700 ${introInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
         <span className="tracking-[0.06em] uppercase mb-4 text-teal font-semibold text-[13px]/4">
           {solutionsIntro.label}
         </span>

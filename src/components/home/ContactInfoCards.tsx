@@ -41,7 +41,7 @@ export function ContactInfoCards() {
               Get in Touch
             </div>
           </div>
-          <h2 className="text-[38px] tracking-[-1px] leading-[115%] text-center text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold">
+          <h2 className="text-[38px] tracking-[-1px] leading-[115%] text-center text-[#0A2540] font-sans font-bold">
             Other ways to reach us.
           </h2>
         </div>
@@ -63,7 +63,7 @@ export function ContactInfoCards() {
                 {card.description}
               </div>
               <button
-                className="mt-5 text-[#4ECDC4] font-['Inter',system-ui,sans-serif] font-semibold text-sm/4.5 bg-transparent border-none cursor-pointer p-0 hover:underline text-left"
+                className="mt-5 text-[#4ECDC4] font-sans font-semibold text-sm/4.5 bg-transparent border-none cursor-pointer p-0 hover:underline text-left"
                 onClick={() => {
                   if (card.ctaAction === "book_demo") {
                     navigate("/schedule");

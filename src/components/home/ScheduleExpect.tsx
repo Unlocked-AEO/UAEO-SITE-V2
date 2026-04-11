@@ -43,7 +43,7 @@ export function ScheduleExpect() {
               What to Expect
             </div>
           </div>
-          <h2 className="text-[38px] tracking-[-1px] leading-[115%] text-center text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold">
+          <h2 className="text-[38px] tracking-[-1px] leading-[115%] text-center text-[#0A2540] font-sans font-bold">
             30 minutes. Zero fluff.
           </h2>
         </div>
@@ -57,7 +57,7 @@ export function ScheduleExpect() {
               >
                 <ExpectIcon icon={item.icon} />
               </div>
-              <div className="mb-2 text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-[15px]/5">
+              <div className="mb-2 text-[#0A2540] font-sans font-semibold text-[15px]/5">
                 {item.title}
               </div>
               <div className="text-[13px] leading-[160%] text-[#64748B] font-sans">

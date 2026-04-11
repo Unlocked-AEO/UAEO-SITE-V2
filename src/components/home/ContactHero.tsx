@@ -27,7 +27,7 @@ export function ContactHero() {
       </div>
 
       {/* Headline */}
-      <h1 className="relative text-[54px] leading-[108%] tracking-[-2px] mb-5 text-center text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold whitespace-pre-line">
+      <h1 className="relative text-[54px] leading-[108%] tracking-[-2px] mb-5 text-center text-[#0A2540] font-sans font-bold whitespace-pre-line">
         {contactHero.headline}
       </h1>
 

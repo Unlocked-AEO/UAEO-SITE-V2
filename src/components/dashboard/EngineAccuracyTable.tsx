@@ -18,11 +18,11 @@ export function EngineAccuracyTable() {
             className="flex items-center justify-center shrink-0 rounded-lg size-7"
             style={{ backgroundColor: engine.iconBg }}
           >
-            <div className="inline-block text-white font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-[11px]/3.5">
+            <div className="inline-block text-white font-sans font-bold shrink-0 text-[11px]/3.5">
               {engine.initial}
             </div>
           </div>
-          <div className="w-25 shrink-0 inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-medium text-[13px]/4">
+          <div className="w-25 shrink-0 inline-block text-[#0A2540] font-sans font-medium text-[13px]/4">
             {engine.name}
           </div>
           <div className="grow shrink basis-[0%] h-2 rounded-[999px] overflow-clip bg-[#F1F5F9]">
@@ -31,7 +31,7 @@ export function EngineAccuracyTable() {
               style={{ width: `${engine.accuracy}%`, backgroundColor: engine.barColor }}
             />
           </div>
-          <div className="w-10.5 text-right inline-block text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold shrink-0 text-sm/4.5">
+          <div className="w-10.5 text-right inline-block text-[#0A2540] font-sans font-bold shrink-0 text-sm/4.5">
             {engine.accuracy}%
           </div>
           <div
@@ -39,7 +39,7 @@ export function EngineAccuracyTable() {
             style={{ backgroundColor: engine.statusBg }}
           >
             <div
-              className="inline-block text-center font-['Inter',system-ui,sans-serif] font-semibold text-[11px]/3.5"
+              className="inline-block text-center font-sans font-semibold text-[11px]/3.5"
               style={{ color: engine.statusColor }}
             >
               {engine.status}

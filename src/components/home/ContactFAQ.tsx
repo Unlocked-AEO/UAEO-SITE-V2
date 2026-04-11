@@ -11,13 +11,13 @@ export function ContactFAQ() {
       <div className="max-w-[680px] mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
-          <h2 className="text-[28px] tracking-[-1px] leading-[115%] mb-2 text-center text-[#0A2540] font-['Inter',system-ui,sans-serif] font-bold">
+          <h2 className="text-[28px] tracking-[-1px] leading-[115%] mb-2 text-center text-[#0A2540] font-sans font-bold">
             Common questions
           </h2>
-          <p className="text-[15px] leading-[165%] text-center text-[#64748B] font-['Inter',system-ui,sans-serif] m-0">
+          <p className="text-[15px] leading-[165%] text-center text-[#64748B] font-sans m-0">
             Can't find what you're looking for?{" "}
             <button
-              className="text-[#4ECDC4] font-['Inter',system-ui,sans-serif] font-semibold text-[15px] bg-transparent border-none cursor-pointer p-0 hover:underline"
+              className="text-[#4ECDC4] font-sans font-semibold text-[15px] bg-transparent border-none cursor-pointer p-0 hover:underline"
               onClick={() => navigate("/faq")}
             >
               Browse all FAQs →
@@ -38,7 +38,7 @@ export function ContactFAQ() {
                 onClick={() => setOpenIndex(isOpen ? null : i)}
               >
                 <div className="flex items-center justify-between py-5 gap-4">
-                  <span className="text-[#0A2540] font-['Inter',system-ui,sans-serif] font-semibold text-[15px]/5">
+                  <span className="text-[#0A2540] font-sans font-semibold text-[15px]/5">
                     {faq.question}
                   </span>
                   <svg
@@ -53,7 +53,7 @@ export function ContactFAQ() {
                 </div>
                 {isOpen && (
                   <div className="pb-5 -mt-1">
-                    <p className="text-[14px] leading-[165%] text-[#64748B] font-['Inter',system-ui,sans-serif] m-0">
+                    <p className="text-[14px] leading-[165%] text-[#64748B] font-sans m-0">
                       {faq.answer}
                     </p>
                   </div>

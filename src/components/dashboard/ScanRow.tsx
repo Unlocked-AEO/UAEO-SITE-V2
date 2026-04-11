@@ -23,83 +23,33 @@ function ScanLogo() {
 
 function ClockIcon() {
   return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0"
-    >
-      <circle cx="6" cy="6" r="5" stroke="#8792A2" strokeWidth="1.2" />
-      <path
-        d="M6 3.5V6l1.5 1.5"
-        stroke="#8792A2"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <circle cx="6" cy="6" r="5" stroke="#94A3B8" strokeWidth="1.2" />
+      <path d="M6 3.5V6l1.5 1.5" stroke="#94A3B8" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   );
 }
 
 function ExportIcon() {
   return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 14 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0"
-    >
-      <path
-        d="M2 10V12h10V10M7 2v7M4.5 6.5L7 9l2.5-2.5"
-        stroke="#425466"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M2 10V12h10V10M7 2v7M4.5 6.5L7 9l2.5-2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 function TrashIcon() {
   return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0"
-    >
-      <path
-        d="M2 3h10M5 3V2h4v1M4 3v8a1 1 0 001 1h4a1 1 0 001-1V3M6 6v4M8 6v4"
-        stroke="#E74C3C"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M2 3h10M5 3V2h4v1M4 3v8a1 1 0 001 1h4a1 1 0 001-1V3M6 6v4M8 6v4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
 
 function ArrowRightIcon() {
   return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 13 13"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="shrink-0"
-    >
-      <path
-        d="M2.5 6.5h8M7 3l3.5 3.5L7 10"
-        stroke="#4ECDC4"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -107,39 +57,34 @@ function ArrowRightIcon() {
 export function ScanRow({ scan }: { scan: Scan }) {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center rounded-[10px] py-4 px-5 gap-5 bg-[#FAFBFC] border border-border-light">
-      {/* Logo */}
+    <div className="flex items-center rounded-xl py-4 px-5 gap-5 bg-white border border-border-light hover:border-border-input transition-colors duration-150">
       <ScanLogo />
 
-      {/* Domain + date */}
       <div className="flex flex-col grow shrink basis-0 min-w-0 gap-1">
-        <span className="text-navy font-sans font-bold text-sm/[18px]">
+        <span className="text-navy font-semibold text-sm/5">
           {scan.domain}
         </span>
-        <div className="flex items-center gap-1.25">
+        <div className="flex items-center gap-1.5">
           <ClockIcon />
-          <span className="text-slate-muted font-sans text-[11px]/3.5">
+          <span className="text-[#94A3B8] text-[11px]/3.5">
             {scan.date}
           </span>
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-2 shrink-0">
         <button
-          className="flex items-center rounded-[7px] py-1.5 px-3 gap-1.5 bg-white border border-border-light cursor-pointer hover:bg-[#F0F4F8] transition-colors"
+          className="flex items-center rounded-lg py-1.5 px-3 gap-1.5 text-slate-body bg-white border border-border-light cursor-pointer hover:bg-surface hover:border-border-input transition-all duration-150"
           onClick={() =>
             console.log("ACTION: export_scan", { id: scan.id })
           }
         >
           <ExportIcon />
-          <span className="text-slate-body font-sans font-medium text-xs/4">
-            Export
-          </span>
+          <span className="font-medium text-xs/4">Export</span>
         </button>
 
         <button
-          className="flex items-center justify-center rounded-[7px] py-1.5 px-2.5 bg-[#FFF5F5] border border-[#FFCDD2] cursor-pointer hover:bg-[#FFEBEE] transition-colors"
+          className="flex items-center justify-center rounded-lg py-1.5 px-2.5 text-danger bg-[#FFF5F5] border border-[#FECACA] cursor-pointer hover:bg-[#FEE2E2] transition-all duration-150"
           onClick={() =>
             console.log("ACTION: delete_scan", { id: scan.id })
           }
@@ -148,14 +93,10 @@ export function ScanRow({ scan }: { scan: Scan }) {
         </button>
 
         <button
-          className="flex items-center rounded-lg py-2.25 px-4.5 gap-1.5 shrink-0 min-w-[130px] bg-white border-[1.5px] border-teal cursor-pointer hover:bg-[#F7FEFE] transition-colors"
-          onClick={() =>
-            navigate(`/dashboard/scans/${scan.id}`)
-          }
+          className="flex items-center rounded-lg py-2 px-4 gap-1.5 shrink-0 text-teal bg-white border-[1.5px] border-teal cursor-pointer hover:bg-[#F0FDFA] transition-all duration-150"
+          onClick={() => navigate(`/dashboard/scans/${scan.id}`)}
         >
-          <span className="text-teal font-sans font-semibold text-[13px]/4">
-            View Scan
-          </span>
+          <span className="font-semibold text-[13px]/4">View Scan</span>
           <ArrowRightIcon />
         </button>
       </div>

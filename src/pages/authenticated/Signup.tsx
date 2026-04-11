@@ -14,7 +14,7 @@ export default function Signup() {
   if (IS_LOGGED_IN) return null;
 
   return (
-    <div className="font-['Inter',system-ui,sans-serif] antialiased flex overflow-clip min-h-screen bg-[#F4F6F9] text-xs/4">
+    <div className="font-sans antialiased flex overflow-clip min-h-screen bg-[#F4F6F9] text-xs/4">
       <SignupSidebar />
       <SignupForm />
     </div>
