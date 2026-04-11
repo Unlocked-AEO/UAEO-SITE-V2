@@ -9,10 +9,10 @@
 This is the public-facing marketing homepage for Unlocked AEO. It's a long-scroll page with the following sections (top to bottom):
 
 - **Header** — Logo ("Unlocked AEO"), main navigation (Product, How It Works, Solutions dropdown, Pricing, Resources dropdown), and two CTAs (Dashboard → signup/dashboard based on auth, Contact Sales → /contact). Active nav item highlighted with teal border.
-- **HeroSection** — Large headline ("AI visibility infrastructure to grow your reach.") with GSAP word-by-word reveal animation. Subtext and CTAs fade in with stagger. Right side features large ambient teal/purple gradient blobs (GSAP floating) with an **animated network constellation** (`HeroOrbs.tsx`) overlaid: center Unlocked AEO logo surrounded by 6 AI engine logos (ChatGPT, Perplexity, Gemini, Grok, Claude, Copilot) in a hexagonal layout with 21 connection lines. Each node shows its actual brand SVG logo. Nodes float, connections flash with discovery effects, and engines attract toward mouse cursor on hover. All logos use real brand assets from `src/assets/`.
+- **HeroSection** — Large headline ("AI visibility infrastructure to grow your reach.") with GSAP word-by-word reveal animation. Subtext and CTAs fade in with stagger. Right side features layered gradient blobs — a large teal half-circle shape, an iris/purple radial, a teal radial, and a blue accent radial — creating a soft, ambient background effect.
 - **SolutionCards** — Section intro with "Explore all solutions" link, followed by two side-by-side cards:
   - *AI Visibility Score* (light bg) — Per-engine score bars with color coding (green ≥70, yellow ≥50, red <50) and change indicators (▲/▼).
-  - *Content Intelligence* (dark/navy bg) — Checklist of optimization results and a projected citation increase.
+  - *Content Intelligence* (dark/navy bg) — Each checklist item is its own card row with a teal checkmark icon. Projection row is highlighted with teal tint. GSAP scroll animation: card slides up, checklist items stagger in from left.
 - **FeatureCards** — Three equal-width cards:
   - *Competitive Intelligence* — Description + two stats (3.2× avg cite gap, 14 rivals tracked).
   - *Schema & Structured Data* — Description + colored tag pills (FAQ, HowTo, Organization, Product, Review).
@@ -88,3 +88,14 @@ Everything else on the page is static. No animations, count-ups, or auto-refresh
 - Nav dropdowns for "Solutions" and "How It Works" show a ▾ indicator but the dropdown menus themselves are not built yet.
 - The code block in the Agency section is purely decorative — it shows a mock API usage example to appeal to technical buyers.
 - All gradients use `oklab` color space for smooth, perceptually uniform blending.
+
+## Changelog
+
+### 2026-04-11
+- **Changed**: Hero section restored to gradient blobs background (removed logo-to-LLM network visualization / HeroOrbs)
+- **Changed**: Solutions intro section centered horizontally (`items-center text-center mx-auto`)
+- **Changed**: Content Intelligence card — checklist items are now individual card rows with teal checkmark icons, projection row highlighted with teal tint, fills the card height with `justify-between`
+- **Added**: GSAP scroll animations on Content Intelligence card — card slides up, checklist items stagger in from left
+- **Changed**: Site font switched from Inter to Manrope across all pages
+- **Removed**: `HeroOrbs` component (logo network visualization) — no longer imported
+- **Why**: Simplify hero, improve Content Intelligence card layout and flow

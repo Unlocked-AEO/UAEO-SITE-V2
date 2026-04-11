@@ -44,41 +44,106 @@ export function SolutionCards() {
         <CardWithScores />
 
         {/* Content Intelligence */}
-        <div className="grow shrink basis-0 flex flex-col min-h-[400px] relative rounded-2xl overflow-clip bg-navy p-10">
-          <span className="tracking-[0.08em] uppercase mb-4 text-teal font-semibold text-xs/4">
-            {contentIntelCard.label}
-          </span>
-          <h3 className="text-[24px] leading-[1.3] tracking-[-0.02em] mb-3 text-white font-bold m-0">
-            {contentIntelCard.headline}
-          </h3>
-          <p className="text-[14px] leading-[1.6] mb-8 max-w-[340px] text-white/65 m-0">
-            {contentIntelCard.description}
-          </p>
-
-          <div className="rounded-[10px] py-[18px] px-[18px] bg-white/7 border border-white/10">
-            {contentIntelCard.checklist.map((item) => (
-              <p
-                key={item}
-                className="mb-1 text-[12px] leading-[1.7] text-teal m-0"
-              >
-                ✓ {item}
-              </p>
-            ))}
-            <p className="mb-0 text-[12px] leading-[1.7] text-white/40 m-0">
-              → {contentIntelCard.projection}
-            </p>
-          </div>
-
-          <div
-            className="absolute -bottom-10 -right-10 w-[200px] h-[200px] rounded-full"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle farthest-corner at 50% 50% in oklab, oklab(77.6% -0.110 -0.017 / 25%) 0%, oklab(0% -.0001 0 / 0%) 70%)",
-            }}
-          />
-        </div>
+        <ContentIntelCard />
       </section>
     </>
+  );
+}
+
+function ContentIntelCard() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const checklistRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Card entrance
+      gsap.from(cardRef.current, {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      // Checklist items stagger in
+      if (checklistRef.current) {
+        const items = checklistRef.current.querySelectorAll(".checklist-item");
+        gsap.from(items, {
+          x: -20,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: checklistRef.current,
+            start: "top 90%",
+            once: true,
+          },
+        });
+      }
+    }, cardRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className="grow shrink basis-0 flex flex-col justify-between min-h-[400px] relative rounded-2xl overflow-clip bg-navy p-10"
+    >
+      <div>
+        <span className="tracking-[0.08em] uppercase mb-4 block text-teal font-semibold text-xs/4">
+          {contentIntelCard.label}
+        </span>
+        <h3 className="text-[24px] leading-[1.3] tracking-[-0.02em] mb-3 text-white font-bold m-0">
+          {contentIntelCard.headline}
+        </h3>
+        <p className="text-[14px] leading-[1.6] mb-0 text-white/65 m-0">
+          {contentIntelCard.description}
+        </p>
+      </div>
+
+      <div ref={checklistRef} className="flex flex-col gap-2 mt-8">
+        {contentIntelCard.checklist.map((item) => (
+          <div
+            key={item}
+            className="checklist-item flex items-center gap-3 rounded-lg py-3 px-4 bg-white/7 border border-white/10"
+          >
+            <div className="flex items-center justify-center shrink-0 rounded-full bg-teal/20 size-6">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
+                <path d="M2 6l3 3 5-5" stroke="#4ECDC4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <span className="text-[13px] leading-[1.5] text-teal font-medium">
+              {item}
+            </span>
+          </div>
+        ))}
+        <div className="checklist-item flex items-center gap-3 rounded-lg py-3 px-4 bg-teal/10 border border-teal/20">
+          <div className="flex items-center justify-center shrink-0 rounded-full bg-teal/20 size-6">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
+              <path d="M3 6h6M6 3l3 3-3 3" stroke="#4ECDC4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-[13px] leading-[1.5] text-white font-semibold">
+            Projected citations: {contentIntelCard.projection}
+          </span>
+        </div>
+      </div>
+
+      {/* Decorative glow */}
+      <div
+        className="absolute -bottom-16 -right-16 w-[280px] h-[280px] rounded-full"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle farthest-corner at 50% 50% in oklab, oklab(77.6% -0.110 -0.017 / 20%) 0%, oklab(0% -.0001 0 / 0%) 65%)",
+        }}
+      />
+    </div>
   );
 }
 
