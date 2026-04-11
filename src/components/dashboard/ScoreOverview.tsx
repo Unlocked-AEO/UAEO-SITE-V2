@@ -139,14 +139,14 @@ export function ScoreOverview() {
               return (
                 <button
                   key={line.label}
-                  className="rounded-full py-1 px-2.5 border-none cursor-pointer transition-all duration-200"
+                  className="flex items-center justify-center rounded-full py-1 px-2.5 border-none cursor-pointer transition-all duration-200"
                   style={{
                     backgroundColor: isActive ? line.color : "#F0F4F8",
                     color: isActive ? "#FFFFFF" : "#8792A2",
                   }}
                   onClick={() => toggleLine(line.dataKey)}
                 >
-                  <span className="text-[10px]/3 font-medium">{line.label}</span>
+                  <span className="text-[10px]/3 font-medium leading-none">{line.label}</span>
                 </button>
               );
             })}
