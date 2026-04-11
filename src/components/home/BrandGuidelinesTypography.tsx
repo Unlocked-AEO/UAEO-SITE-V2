@@ -32,10 +32,10 @@ export function BrandGuidelinesTypography() {
         description={s.description}
       />
 
-      {/* Inter specimen */}
+      {/* Manrope specimen */}
       <div className="flex flex-col rounded-[20px] py-12 px-8 md:px-14 gap-2 bg-[#F8FAFC] border border-[#E2E8F0]">
         <span className="tracking-widest uppercase mb-4 text-[#94A3B8] font-sans font-bold text-[11px]/[14px]">
-          Inter — Primary Typeface
+          Manrope — Primary Typeface
         </span>
         <div className="text-[48px] md:text-[72px] tracking-[-3px] leading-none text-navy font-sans font-extrabold">
           Aa Bb Cc

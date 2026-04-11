@@ -17,7 +17,7 @@ A static reference page documenting the Unlocked AEO visual brand system. Design
 - **02 — Colour Palette** — Two groups of colour swatches:
   - *Primary*: Midnight Navy (#0A2540), Signal Teal (#4ECDC4), Pure White (#FFFFFF) — each with hex, RGB, and HSL values
   - *Secondary & Utility*: Teal Mist (#F0FDFA), Slate (#475569), Muted (#64748B), Border (#E2E8F0), Surface (#F8FAFC)
-- **03 — Typography** — Inter typeface specimen showing the full alphabet, numbers, and special characters. Below it, a table showing the type scale: Display, Heading 1, Heading 2, Body, Label/UI, and Caption/Overline — each with size, weight, line height, and usage guidance.
+- **03 — Typography** — Manrope typeface specimen showing the full alphabet, numbers, and special characters. Below it, a table showing the type scale: Display, Heading 1, Heading 2, Body, Label/UI, and Caption/Overline — each with size, weight, line height, and usage guidance.
 - **04 — Spacing & Grid** — A visual spacing scale (4px–120px) using teal squares, plus three grid spec cards for Desktop (12 col, 120px gutters), Tablet (8 col, 48px gutters), and Mobile (4 col, 24px gutters).
 - **05 — UI Components** — Showcases three component types:
   - *Buttons*: Primary (navy), Teal CTA, Outline, and Ghost variants with size/padding/radius specs
@@ -52,7 +52,7 @@ This is a read-only reference page. No buttons trigger actions.
 | BrandGuidelinesHero | `src/components/home/BrandGuidelinesHero.tsx` | Dark navy hero with logo lockup, title, subtitle, and decorative radial glow |
 | BrandGuidelinesLogo | `src/components/home/BrandGuidelinesLogo.tsx` | Three logo variant cards + clearspace warning callout |
 | BrandGuidelinesColour | `src/components/home/BrandGuidelinesColour.tsx` | Primary and secondary colour swatch grids with hex/RGB/HSL values |
-| BrandGuidelinesTypography | `src/components/home/BrandGuidelinesTypography.tsx` | Inter specimen block + type scale table |
+| BrandGuidelinesTypography | `src/components/home/BrandGuidelinesTypography.tsx` | Manrope specimen block + type scale table |
 | BrandGuidelinesSpacing | `src/components/home/BrandGuidelinesSpacing.tsx` | Visual spacing scale + desktop/tablet/mobile grid spec cards |
 | BrandGuidelinesComponents | `src/components/home/BrandGuidelinesComponents.tsx` | Button, badge, and card variant showcases |
 | BrandSectionHeader | `src/components/home/BrandGuidelinesSectionHeader.tsx` | Reusable section header with number, label, title, and description |

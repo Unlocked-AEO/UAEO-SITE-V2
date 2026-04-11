@@ -69,7 +69,7 @@ export const sections: Record<string, BrandSection> = {
     label: "Typography",
     title: "Type System",
     description:
-      "We use a single typeface across the entire product and brand: Inter. Its geometric precision and wide weight range make it versatile for headlines, UI, and legal copy alike.",
+      "We use a single typeface across the entire product and brand: Manrope. Its geometric precision, optical sizing, and wide weight range (200–800) make it versatile for headlines, UI, and legal copy alike.",
   },
   spacing: {
     number: "04",
@@ -244,5 +244,5 @@ export const buttonSpecs: ButtonSpec = {
   height: "44px (default) · 36px (sm) · 52px (lg)",
   padding: "14px 28px (default)",
   borderRadius: "8px",
-  font: "Inter 600–700, 14–15px",
+  font: "Manrope 600–700, 14–15px",
 };
