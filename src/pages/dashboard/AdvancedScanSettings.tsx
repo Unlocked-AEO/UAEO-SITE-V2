@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { dashboardUser } from "@/data/mock-dashboard";
 import { advancedScanHeader } from "@/data/mock-advanced-scan";
 import { IndustryContextCard } from "@/components/dashboard/IndustryContextCard";
-import { CustomPromptsCard } from "@/components/dashboard/CustomPromptsCard";
-import { PromptBankSection } from "@/components/dashboard/PromptBankSection";
+import { SelectPromptsSection } from "@/components/dashboard/SelectPromptsSection";
 
 // Change this to see different versions: "loading" | "success" | "empty" | "error"
 const DEMO_STATE = "success";
@@ -140,8 +139,7 @@ export default function AdvancedScanSettings() {
         {DEMO_STATE === "success" && (
           <>
             <IndustryContextCard />
-            <CustomPromptsCard />
-            <PromptBankSection />
+            <SelectPromptsSection />
           </>
         )}
         {DEMO_STATE === "empty" && <EmptyState />}

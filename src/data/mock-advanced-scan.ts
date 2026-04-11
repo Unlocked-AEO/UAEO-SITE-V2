@@ -5,13 +5,13 @@ export const advancedScanHeader = {
   subtitle: "Configure scan context, prompts and variables",
 };
 
-// ─── Industry & Context ────────────────────────────────────
+// ─── Scan Variables ───────────────────────────────────────
 
-export const industryContext = {
-  sectionTitle: "Industry & Context",
-  sectionSubtitle: "Select your industry and fill in scan variables",
+export const scanVariablesSection = {
+  sectionTitle: "Scan Variables",
+  sectionSubtitle:
+    "Some prompts from the prompt bank contain placeholder values like [location] or [brand]. The values you set here will replace those placeholders in the actual prompts.",
   industry: "SaaS / B2B Software",
-  industryNote: "From your profile · Change",
 };
 
 export interface ScanVariable {

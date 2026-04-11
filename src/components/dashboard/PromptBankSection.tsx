@@ -224,13 +224,13 @@ function CategoryRow({ category }: { category: PromptCategory }) {
 
 export function PromptBankSection() {
   return (
-    <div className="flex flex-col gap-5">
-      {/* Section header */}
+    <div className="flex flex-col">
+      {/* Sub-header */}
       <div className="flex items-center justify-between pt-5 pb-4 border-b border-[#F0F4F8] px-6">
         <div>
-          <h2 className="text-navy font-sans text-sm/[18px] m-0">
+          <span className="tracking-[0.08em] uppercase text-[#64748B] font-sans text-[11px]/3.5">
             {promptBankSection.title}
-          </h2>
+          </span>
           <p className="mt-0.75 text-[#94A3B8] font-sans text-xs/4 m-0">
             {promptBankSection.subtitle}
           </p>
