@@ -38,3 +38,4 @@ Track of all pages in this design repo and their spec files.
 | Contact | /contact | src/pages/landing/Contact.tsx | [contact.spec.md](contact.spec.md) | Done |
 | Schedule a Call | /schedule | src/pages/landing/ScheduleCall.tsx | [schedule-call.spec.md](schedule-call.spec.md) | Done |
 | Product | /product | src/pages/landing/Product.tsx | [product.spec.md](product.spec.md) | Done |
+| Content Optimisation | /dashboard/content-optimisation | src/pages/dashboard/ContentOptimisation.tsx | [content-optimisation.spec.md](content-optimisation.spec.md) | Done |

@@ -17,6 +17,7 @@ export const dashboardTabs: DashboardTab[] = [
   { label: "Scans", slug: "scans", href: "/dashboard/scans" },
   { label: "Improvement Plan", slug: "implementation-plan", href: "/dashboard/improvement-plan" },
   { label: "Competitors", slug: "competitors", href: null },       // NOTE: No Competitors page exists
+  { label: "Content Optimisation", slug: "content-optimisation", href: "/dashboard/content-optimisation" },
   { label: "Risk Insights", slug: "risk-insights", href: null },   // NOTE: No Risk Insights page exists
 ];
 

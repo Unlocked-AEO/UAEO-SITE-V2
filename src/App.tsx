@@ -33,6 +33,7 @@ import Scans from "@/pages/dashboard/Scans";
 import RunScan from "@/pages/dashboard/RunScan";
 import AdvancedScanSettings from "@/pages/dashboard/AdvancedScanSettings";
 import ImprovementPlan from "@/pages/dashboard/ImprovementPlan";
+import ContentOptimisation from "@/pages/dashboard/ContentOptimisation";
 import ImprovementPlanExpanded from "@/pages/dashboard/ImprovementPlanExpanded";
 import ScanOverview from "@/pages/dashboard/ScanOverview";
 import ScanAIVisibility from "@/pages/dashboard/ScanAIVisibility";
@@ -72,6 +73,7 @@ function App() {
         <Route path="/dashboard/scans/new" element={<RunScan />} />
         <Route path="/dashboard/scans/settings" element={<AdvancedScanSettings />} />
         <Route path="/dashboard/improvement-plan" element={<ImprovementPlan />} />
+        <Route path="/dashboard/content-optimisation" element={<ContentOptimisation />} />
         <Route path="/dashboard/improvement-plan/fix" element={<ImprovementPlanExpanded />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
