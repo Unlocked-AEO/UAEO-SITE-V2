@@ -12,6 +12,7 @@ import type {
   OptimisationNote,
   IterationEntry,
 } from "@/data/mock-content-optimisation";
+import type { SourceRef } from "./sse";
 
 const BASE = "/api";
 
@@ -58,6 +59,7 @@ export interface DraftResponse {
   signals: AEOSignal[];
   totalScore: number;
   notes: OptimisationNote[];
+  sources: SourceRef[];
   status: "generating" | "ready" | "approved" | "failed";
   createdAt: string;
   updatedAt: string;

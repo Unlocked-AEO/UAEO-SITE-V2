@@ -1,7 +1,9 @@
 import { useState } from "react";
 import type { AEOSignal, IterationEntry } from "@/data/mock-content-optimisation";
+import type { SourceRef } from "@/lib/api/sse";
 import { AEOScoreCard } from "./AEOScoreCard";
 import { AIDisclaimer } from "./AIDisclaimer";
+import { SourcesCard } from "./SourcesCard";
 import { Button } from "@/components/ui/Button";
 import { Markdown } from "@/components/ui/Markdown";
 
@@ -11,6 +13,7 @@ interface ReviewStageProps {
   signals: AEOSignal[];
   totalScore: number;
   iterations: IterationEntry[];
+  sources: SourceRef[];
   onApprove: () => void;
   onRegenerate: (feedback: string, mode: "refine" | "new-base") => void;
 }
@@ -20,6 +23,7 @@ export function ReviewStage({
   signals,
   totalScore,
   iterations,
+  sources,
   onApprove,
   onRegenerate,
 }: ReviewStageProps) {
@@ -115,6 +119,8 @@ export function ReviewStage({
       {/* Score Sidebar */}
       <div className="flex flex-col gap-5">
         <AEOScoreCard signals={signals} totalScore={totalScore} />
+
+        <SourcesCard sources={sources} />
 
         <div className="rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
           <div className="mb-3 text-navy text-[13px]/4 font-semibold">Iteration history</div>

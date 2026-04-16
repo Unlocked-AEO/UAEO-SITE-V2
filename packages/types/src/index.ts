@@ -77,6 +77,21 @@ export interface CreateJobResponse {
   draftId: string;
 }
 
+/**
+ * One resolved source (URL or upload) attached to a draft. `loaded`
+ * reflects whether the content was actually fetched; `cited` reflects
+ * whether the draft ended up using the source via a `[s#]` marker.
+ */
+export interface SourceRef {
+  id: string;                       // "s1", "s2", ...
+  type: "url" | "upload";
+  origin: string;                   // URL or filename
+  title?: string;
+  loaded: boolean;                  // false when fetch failed
+  error?: string;                   // populated when loaded === false
+  cited: boolean;                   // true when the draft referenced this id
+}
+
 export interface DraftRecord {
   id: string;
   workspaceId: string;
@@ -87,6 +102,7 @@ export interface DraftRecord {
   signals: AEOSignal[];
   totalScore: number;
   notes: OptimisationNote[];
+  sources: SourceRef[];
   status: "generating" | "ready" | "approved" | "failed";
   createdAt: string;
   updatedAt: string;
@@ -142,6 +158,7 @@ export interface SseDoneEvent {
   totalScore: number;
   signals: AEOSignal[];
   notes: OptimisationNote[];
+  sources: SourceRef[];
   markdown: string;
 }
 

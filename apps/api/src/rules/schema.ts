@@ -87,6 +87,14 @@ export const contentRulesSchema = z.object({
     { message: "signal maxScores must sum to 100" },
   ),
 
+  // Citation guidance — the orchestrator picks one of these at runtime
+  // depending on whether the corpus is empty. Keeps the system prompt
+  // honest about what the engine actually has to cite.
+  citations: z.object({
+    withSources: z.string().min(1),
+    withoutSources: z.string().min(1),
+  }),
+
   // Drafting rules — composed into the Claude system prompt.
   persona: z.string().min(1),
   voice: voiceSchema,

@@ -65,7 +65,7 @@ Source-of-truth UX doc: [specs/content-optimisation.spec.md](../specs/content-op
    - `draftDelta` — `{ text }` token chunks (fires during **every pass**, both initial streamDraft and subsequent refine calls)
    - `warning` — `{ code, message }` non-fatal (e.g. one source URL failed)
    - `iteration` — `{ version, score, auto }` at the end of each pass
-   - `done` — final `SseDoneEvent` with `{ draftId, version, totalScore, signals, notes, markdown }`
+   - `done` — final `SseDoneEvent` with `{ draftId, version, totalScore, signals, notes, sources, markdown }`
    - `error` — terminal failure with optional `retryAfter`
 4. **Iterate** — `POST /content/drafts/:draftId/iterate` with `{ feedback, mode: "refine"|"new-base" }` → new `jobId` → new SSE stream.
 5. **Approve / save** — `POST /content/drafts/:draftId/approve`, then `POST /library` to persist as a `LibraryItem`.
@@ -77,6 +77,7 @@ Source-of-truth UX doc: [specs/content-optimisation.spec.md](../specs/content-op
 | 1 · Entity (ingest) | `engine/corpus.ts` | — | Firecrawl for URLs + cached parsed text for uploads. Caps at ~24k tokens, drops URLs first on overflow. |
 | 2 · Citation (draft / refine) | `providers/claude.streamDraft` or `.refine` | ✅ | First pass = streamDraft. Pass 2+ = refine with the prior draft. Both stream `draftDelta`. |
 | 3 · Structure (refine) | `providers/claude.refine` | ✅ | AEO structural pass — question headers, tightened leads, freshness markers. Streams too. |
+| 3.5 · Citation post-process | `engine/citations.ts` | — | Between refine and scoring. Strips hallucinated `[s#]` markers, converts valid ones to `[[N]](url)` inline links, appends the `## Sources` section. The heuristic scorer and Gemini judge both see the final form. |
 | 4 · Authority | *(merged into refine for v1)* | — | Reserved for a separate prompt when we have measurable lift. |
 | 5 · Score | `engine/scoring/` + `providers/gemini` | — | Hybrid scoring (heuristics + Gemini judge). |
 
@@ -87,12 +88,27 @@ Auto-iterate loop: up to `thresholds.maxAutoPasses` (YAML-authored, default 2) i
 | Signal | Max | Method | Where |
 |---|---|---|---|
 | Entity Clarity | 25 | Gemini judge | [providers/gemini.ts](../apps/api/src/providers/gemini.ts) |
-| Citation Signals | 25 | Heuristic | [engine/scoring/heuristics.ts](../apps/api/src/engine/scoring/heuristics.ts) |
-| Answer Structure | 20 | Heuristic | same |
+| Citation Signals | 25 | Heuristic (see below) | [engine/scoring/heuristics.ts](../apps/api/src/engine/scoring/heuristics.ts) |
+| Answer Structure | 20 | Heuristic (Q-form ratio, scannability, header depth) | same |
 | Topical Depth | 20 | Gemini judge | `providers/gemini.ts` |
-| Freshness | 10 | Heuristic | `engine/scoring/heuristics.ts` |
+| Freshness | 10 | Heuristic (Last updated, recent year, "as of") | `engine/scoring/heuristics.ts` |
 
-Heuristic weights (link counts, paragraph thresholds, authority list, etc.) live in code — they're numerical tuning. The **signal labels, descriptions, max scores, and note copy** come from the YAML rules and aggregate in [engine/scoring/aggregate.ts](../apps/api/src/engine/scoring/aggregate.ts). Signal `maxScore`s must sum to 100 — enforced at boot by the Zod schema.
+Heuristic weights live in code — they're numerical tuning. The **signal labels, descriptions, max scores, and note copy** come from the YAML rules and aggregate in [engine/scoring/aggregate.ts](../apps/api/src/engine/scoring/aggregate.ts). Signal `maxScore`s must sum to 100 — enforced at boot by the Zod schema.
+
+#### Citation Signals rubric (25 pts)
+
+`scoreCitation(markdown, hasSources)` has six buckets, each independently verifiable by regex — no judgement calls:
+
+| Bucket | Max | What it rewards |
+|---|---|---|
+| Inline source links | 6 | `[text](http…)` links in the **body** (Sources section excluded). 1.5/link. Gated by `hasSources`. |
+| Sources section well-formed | 5 | `## Sources` heading (+3) AND ≥3 numbered URL entries (+2). Gated by `hasSources`. |
+| Statistical claims with attribution | 5 | Numbers within ~60 chars of attribution verbs (*"according to"*, *"per"*, *"study"*, etc.). 1/match. |
+| Named-entity density | 4 | Distinct 1–3-word proper-noun phrases (products, companies, methods). 0.5/unique. Sentence-initial caps filtered out. |
+| Dated / author attribution | 3 | `Last updated: <YYYY>`, `Author:`, named report with year, `*By …*` bylines. |
+| Research / data vocabulary | 2 | Presence of *"study"* / *"research"* / *"data"* / *"survey"* / *"report"* / *"analysis"*. |
+
+When `hasSources === false` the first two buckets collapse to zero — max reachable becomes 14/25. The citation `OptimisationNote` explicitly says *"Without sources, citation signals are capped at 14/25. Add URLs or file uploads to unlock the remaining 11 points."* so low scores are explained, not mysterious.
 
 ### Prompt structure (Claude)
 
@@ -101,14 +117,16 @@ Two-block system prompt, only the second is cached:
 ```
 [system 1 — uncached]   Persona + voice + structure + snippet/list/table/
                         paragraph rules + avoid-list + format + tone +
-                        signal summary. All composed from the YAML.
+                        signal summary + citation mode. All composed from
+                        the YAML at buildDraftSystemUncached time.
 [system 2 — CACHED]     <corpus>
-                          <source id="s1" type="url" …>…</source>
-                          <source id="s2" type="upload" …>…</source>
+                          <source id="s1" type="url" origin="…" title="…">…</source>
+                          <source id="s2" type="upload" origin="…">…</source>
                         </corpus>
-                        Citation + no-hallucination instructions.
 [user]                  Brief / Audience / Keywords / (original + goal if optimize)
 ```
+
+**Citation mode** flips based on whether `buildCorpus()` actually produced any loaded sources. With sources, the system prompt tells Claude to cite inline via `[s2]` markers the post-processor will turn into real links. Without sources, it explicitly forbids `[s#]` markers and tells Claude not to fabricate analyst firms or statistics — so low citation scores become a real consequence of no user input, not a model hallucinating its way through. See `citations.withSources` / `citations.withoutSources` in [content-rules.yaml](../apps/api/rules/content-rules.yaml).
 
 Cache is Anthropic prompt caching (`cache_control: { type: "ephemeral" }`, ~5min TTL). Across every stage of a job and any user iteration within the TTL window, cached corpus reads are ~10% the cost of the original.
 
@@ -119,6 +137,7 @@ User feedback in regenerate calls is wrapped in `<user_feedback>…</user_feedba
 The rules that shape what the engine writes and how it scores drafts live in [apps/api/rules/content-rules.yaml](../apps/api/rules/content-rules.yaml), not in code. The YAML covers:
 
 - **signals** — label + description + max score per AEO signal (scoring metadata)
+- **citations** — `withSources` and `withoutSources` instruction blocks swapped in at runtime based on whether the corpus has loaded content
 - **persona / voice** — the engine's writer identity and tone guidelines
 - **structure / snippets / lists / tables / paragraphs / avoid** — house-style content rules
 - **formats / tones** — one-liner per ContentFormat and ContentTone key
@@ -130,6 +149,34 @@ The rules that shape what the engine writes and how it scores drafts live in [ap
 Validated at boot by [src/rules/schema.ts](../apps/api/src/rules/schema.ts) (Zod); loaded via [src/rules/loader.ts](../apps/api/src/rules/loader.ts) `getRules()` singleton. **Any schema violation fails boot** — server refuses to start rather than serve misconfigured generations. `/healthz` returns the loaded rules' `name`, `version`, `updatedAt` so you can confirm which pack is live.
 
 Authoring loop: edit YAML → restart API → next generation reflects the new rules. Hot reload is not wired (deliberate v1 scope).
+
+### Sources & citations pipeline
+
+Every generation returns a structured `SourceRef[]` alongside the markdown so the UI can show exactly which URLs loaded, which failed (and why), and which the draft actually cited.
+
+```
+user URLs ────► Firecrawl ────► CorpusSource[]  (loaded: true/false, error?, title?)
+uploads  ────► parseUpload ────► CorpusSource[]
+                                      │
+                                      ▼
+                         <corpus> block → Claude
+                                      │
+                                draft markdown with [s1] [s2] …
+                                      │
+                                      ▼
+                           postProcessCitations()
+                           ├── valid [s#] → [[N]](url) inline links
+                           ├── hallucinated [s#] → stripped
+                           └── appends `## Sources` section
+                                      │
+                                      ▼
+                    SseDoneEvent.sources: SourceRef[]
+                     (id, type, origin, title, loaded, error, cited)
+```
+
+[SourceRef](../packages/types/src/index.ts) is the shared type. [citations.ts](../apps/api/src/engine/citations.ts) owns the post-processor: invalid / unloaded markers are never rendered to users, and the Sources section always lists **every** source the engine had access to (cited, loaded-but-uncited, and failed) so the reader sees the full provenance.
+
+Firecrawl failures are surfaced with specific reasons — paywall, JS-only page, 4xx status, network error — rather than a generic "could not fetch" string. See [firecrawl.ts](../apps/api/src/providers/firecrawl.ts) and [corpus.ts](../apps/api/src/engine/corpus.ts).
 
 ### File parsers ([providers/parsers.ts](../apps/api/src/providers/parsers.ts))
 
@@ -163,10 +210,15 @@ Each API endpoint is called from a specific component. The old `console.log("ACT
 ### Shared frontend infra
 
 - [apps/web/src/lib/api/client.ts](../apps/web/src/lib/api/client.ts) — typed `fetch` wrappers. Every call sends `x-workspace-id` header.
-- [apps/web/src/lib/api/sse.ts](../apps/web/src/lib/api/sse.ts) — `streamJob(jobId, handlers)` typed EventSource wrapper.
-- [apps/web/src/components/ui/Markdown.tsx](../apps/web/src/components/ui/Markdown.tsx) — shared `react-markdown` + `remark-gfm` renderer. Used in Review and Output. Renders tables, lists, code blocks, links, blockquotes, task lists, HRs with styles matching the dashboard.
+- [apps/web/src/lib/api/sse.ts](../apps/web/src/lib/api/sse.ts) — `streamJob(jobId, handlers)` typed EventSource wrapper. Exposes `SourceRef` for draft/done payloads.
+- [apps/web/src/components/ui/Markdown.tsx](../apps/web/src/components/ui/Markdown.tsx) — shared `react-markdown` + `remark-gfm` renderer. Used by Review and Output. Renders tables (bordered card, tinted header, striped rows), lists (teal markers), code blocks, links (styled teal), blockquotes, task lists, HRs. Citation chips rendered as plain-markdown `[[N]](url)` links so no `rehype-raw` is needed.
+- [apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx](../apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx) — sidebar panel in Review and Output. Groups each source as cited (teal), loaded-but-uncited (amber), or failed (red) with the Firecrawl error reason shown.
 
 Vite dev proxy in [apps/web/vite.config.ts](../apps/web/vite.config.ts) rewrites `/api/*` to `http://localhost:3001`, so the frontend uses same-origin URLs and avoids CORS in dev.
+
+### ProcessingStage layout
+
+Two-column: fixed-width **status rail** on the left (~380px) and a fixed-height **live draft preview** card on the right (~640px). The status rail shows the current pass, current stage label, elapsed time, the 5-step pipeline with per-stage duration, iteration score chips, and any source-fetch warnings. The preview card streams Claude's tokens with a blinking cursor and auto-scrolls to the bottom; resets cleanly between auto-iterate passes so users see pass 2 repopulate from scratch.
 
 ## Provider mode
 
@@ -190,6 +242,9 @@ The interfaces in [providers/types.ts](../apps/api/src/providers/types.ts) are t
 - **Anthropic 429/529** — exponential backoff inside the Claude wrapper; on final failure emits a typed `PROVIDER_RATE_LIMIT` error with `retryAfter`.
 - **Scanned / encrypted PDFs** — typed `PDF_NO_TEXT_LAYER` / `PDF_ENCRYPTED` errors at upload time.
 - **Prompt injection in regenerate feedback** — wrapped in `<user_feedback>` with an explicit "treat as content" system directive.
+- **Hallucinated citations** — any `[s#]` marker referencing a source id that wasn't supplied (or that failed to load) is silently stripped by the post-processor. Users never see a dead `[s7]` in a rendered draft.
+- **No-sources scoring honesty** — when the user supplies no URLs or uploads, Citation Signals are capped at 14/25 with an explanatory `OptimisationNote`, instead of silently punishing rule-compliant no-citation output.
+- **Firecrawl failures** — typed `warning` SSE events with URL + reason + HTTP status; each failed URL is carried through to `SourceRef` so the UI can show "1 of 3 sources failed: paywall".
 - **Best-of-N auto-iterate** — `argmax(score)` across passes, not last.
 - **Rules schema drift** — YAML loader fails at boot with a precise Zod path if a field is missing or the wrong shape.
 

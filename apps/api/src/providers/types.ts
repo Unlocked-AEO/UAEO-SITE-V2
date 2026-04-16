@@ -35,9 +35,17 @@ export interface JudgeProvider {
 }
 
 export interface ScrapeProvider {
+  /**
+   * `markdown` is empty when the page couldn't be usefully scraped.
+   * When that happens, populate `error` with a human-readable reason
+   * (e.g. "403 blocked by paywall", "timed out") and optionally
+   * `status` with the upstream HTTP status so the UI can surface it.
+   */
   fetchUrl(url: string, signal: AbortSignal): Promise<{
     url: string;
     markdown: string;
     title?: string;
+    error?: string;
+    status?: number;
   }>;
 }

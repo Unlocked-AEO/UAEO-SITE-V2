@@ -40,6 +40,32 @@ signals:
     description: "Recency markers, publication dates and updated-content cues."
     maxScore: 10
 
+# ─── Citations ───────────────────────────────────────────────────────
+# Picked at runtime based on whether a corpus was assembled from URLs
+# or uploads. `withSources` tells the engine to cite by id; `withoutSources`
+# tells it NOT to fabricate authority when there's nothing real to cite.
+
+citations:
+  withSources: |
+    Cite sources inline using their corpus id, e.g. [s2]. Only cite ids
+    that appear in the supplied <corpus>. Do not invent statistics,
+    analyst firms, or publications that aren't in the corpus. The post-
+    processor will convert [s#] markers into real hyperlinks — so every
+    marker you write must match a real <source> id.
+  withoutSources: |
+    No external sources were provided. Do NOT use [s#] markers. Do NOT
+    name specific analyst firms, publications, studies, or statistics
+    you cannot verify from first principles. Where a claim would normally
+    need a citation, hedge plainly (e.g., "industry estimates suggest…"
+    or "commonly reported…") rather than inventing a specific source.
+
+    Still strengthen what you can: include a dated "Last updated: <month YYYY>"
+    marker at the top; name specific products, methodologies and standards
+    precisely (e.g. "HubSpot Professional", "SOC 2 Type II"); attribute
+    statistics with hedged language; and include a byline such as
+    "*By the Unlocked AEO Research Team*". These are citation-adjacent
+    signals that don't require fabricated authority.
+
 # ─── Persona ─────────────────────────────────────────────────────────
 
 persona: |

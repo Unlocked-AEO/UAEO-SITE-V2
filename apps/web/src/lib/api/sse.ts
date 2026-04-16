@@ -10,16 +10,29 @@ import type { AEOSignal, OptimisationNote } from "@/data/mock-content-optimisati
 export type StageKey = "entity" | "citation" | "structure" | "authority" | "score";
 export type StageStatus = "active" | "complete" | "failed";
 
+/** Mirrors SourceRef in @unlocked/types. Kept inline to avoid the cross-workspace
+ *  type import until we promote the mock-content-optimisation file to the shared package. */
+export interface SourceRef {
+  id: string;
+  type: "url" | "upload";
+  origin: string;
+  title?: string;
+  loaded: boolean;
+  error?: string;
+  cited: boolean;
+}
+
 export interface StageEvent { key: StageKey; status: StageStatus }
 export interface DraftDeltaEvent { text: string }
 export interface IterationEvent { version: number; score: number; auto: boolean }
-export interface WarningEvent { code: string; message: string }
+export interface WarningEvent { code: string; message: string; url?: string; reason?: string; status?: number }
 export interface DoneEvent {
   draftId: string;
   version: number;
   totalScore: number;
   signals: AEOSignal[];
   notes: OptimisationNote[];
+  sources: SourceRef[];
   markdown: string;
 }
 export interface ErrorEvent { code: string; message: string; retryAfter?: number }

@@ -1,6 +1,8 @@
 // Builds the <corpus> block from URLs (scraped) + uploads (already
 // parsed). This is the single string fed to Claude inside the cached
-// system block. See docs/ARCHITECTURE.md for the prompt structure.
+// system block. Also returns the structured source list the orchestrator
+// exposes in the SSE `done` event so the UI can show which URLs loaded
+// vs failed vs got cited.
 
 import type { ContentRepository } from "../repository/ContentRepository.ts";
 import type { ScrapeProvider } from "../providers/types.ts";
@@ -12,7 +14,10 @@ export interface CorpusSource {
   id: string;
   type: "url" | "upload";
   origin: string;
+  title?: string;
   text: string;
+  loaded: boolean;        // false when fetch failed; still included so the UI can show the failure
+  error?: string;
 }
 
 export interface BuildCorpusInput {
@@ -22,7 +27,7 @@ export interface BuildCorpusInput {
   repo: ContentRepository;
   scrape: ScrapeProvider;
   signal: AbortSignal;
-  onWarning: (code: string, message: string) => void;
+  onWarning: (code: string, message: string, detail?: Record<string, unknown>) => void;
 }
 
 export interface BuildCorpusOutput {
@@ -43,23 +48,47 @@ export async function buildCorpus(input: BuildCorpusInput): Promise<BuildCorpusO
     urls.map(u => input.scrape.fetchUrl(u, input.signal)),
   );
   scrapeResults.forEach((r, i) => {
+    const url = urls[i];
+    const id = `s${sources.length + 1}`;
     if (r.status === "fulfilled" && r.value.markdown) {
       sources.push({
-        id: `s${sources.length + 1}`,
+        id,
         type: "url",
         origin: r.value.url,
+        title: r.value.title,
         text: r.value.markdown.slice(0, PER_SOURCE_CHAR_CAP),
+        loaded: true,
       });
     } else {
-      input.onWarning("SOURCE_FETCH_FAILED", `Could not fetch ${urls[i]}`);
+      // Either the promise rejected outright, or Firecrawl returned
+      // no usable content. Record it so the UI can show which URLs
+      // failed and why.
+      const errMsg =
+        r.status === "rejected"
+          ? (r.reason?.message ?? String(r.reason))
+          : (r.value.error ?? "Empty response from scraper");
+      sources.push({
+        id,
+        type: "url",
+        origin: url,
+        title: r.status === "fulfilled" ? r.value.title : undefined,
+        text: "",
+        loaded: false,
+        error: errMsg,
+      });
+      input.onWarning("SOURCE_FETCH_FAILED", `Could not read ${url}: ${errMsg}`, {
+        url,
+        reason: errMsg,
+        status: r.status === "fulfilled" ? r.value.status : undefined,
+      });
     }
   });
 
   // 2. Uploads (already parsed at upload time).
-  for (const id of input.uploadIds) {
-    const u = await input.repo.getUpload(input.workspaceId, id);
+  for (const uploadId of input.uploadIds) {
+    const u = await input.repo.getUpload(input.workspaceId, uploadId);
     if (!u) {
-      input.onWarning("UPLOAD_MISSING", `Upload ${id} not found`);
+      input.onWarning("UPLOAD_MISSING", `Upload ${uploadId} not found`);
       continue;
     }
     sources.push({
@@ -67,29 +96,39 @@ export async function buildCorpus(input: BuildCorpusInput): Promise<BuildCorpusO
       type: "upload",
       origin: u.filename,
       text: u.parsedText.slice(0, PER_SOURCE_CHAR_CAP),
+      loaded: true,
     });
   }
 
-  // 3. Total cap — drop URLs first if over.
-  let total = sources.reduce((s, x) => s + x.text.length, 0);
+  // 3. Total cap — drop URLs first if over (failed URLs cost 0 chars
+  // so they never trigger truncation).
+  const loaded = () => sources.filter(s => s.loaded);
+  let total = loaded().reduce((sum, x) => sum + x.text.length, 0);
   const truncatedSourceIds: string[] = [];
-  while (total > TOTAL_CHAR_CAP && sources.length > 0) {
-    const dropIdx = sources.findIndex(s => s.type === "url");
-    const idx = dropIdx === -1 ? sources.length - 1 : dropIdx;
-    const dropped = sources.splice(idx, 1)[0];
+  while (total > TOTAL_CHAR_CAP && loaded().length > 0) {
+    const dropIdx = sources.findIndex(s => s.loaded && s.type === "url");
+    const idx = dropIdx === -1 ? sources.findIndex(s => s.loaded) : dropIdx;
+    if (idx === -1) break;
+    const dropped = sources[idx];
     truncatedSourceIds.push(dropped.id);
     total -= dropped.text.length;
-    input.onWarning(
-      "CORPUS_TRUNCATED",
-      `Dropped source ${dropped.origin} to fit context budget`,
-    );
+    // Mark as dropped rather than remove so the UI can still show what
+    // the user supplied and why it wasn't used.
+    sources[idx] = { ...dropped, loaded: false, text: "", error: "Dropped to fit context budget" };
+    input.onWarning("CORPUS_TRUNCATED", `Dropped ${dropped.origin} to fit context budget`, {
+      id: dropped.id,
+    });
   }
 
-  // 4. Render with provenance fences.
-  const corpus = sources.length === 0
+  // 4. Render with provenance fences — only loaded sources go into the
+  // corpus block the model sees.
+  const usable = sources.filter(s => s.loaded);
+  const corpus = usable.length === 0
     ? ""
-    : "<corpus>\n" + sources.map(s =>
-        `<source id="${s.id}" type="${s.type}" origin="${escapeAttr(s.origin)}">\n${s.text}\n</source>`,
+    : "<corpus>\n" + usable.map(s =>
+        `<source id="${s.id}" type="${s.type}" origin="${escapeAttr(s.origin)}"${
+          s.title ? ` title="${escapeAttr(s.title)}"` : ""
+        }>\n${s.text}\n</source>`,
       ).join("\n\n") + "\n</corpus>";
 
   return { corpus, sources, truncatedSourceIds };

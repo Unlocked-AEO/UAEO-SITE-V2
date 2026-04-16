@@ -15,6 +15,7 @@ import { getRules } from "../../rules/loader.ts";
 export interface AggregateInput {
   markdown: string;
   judge: { entity: number; depth: number; rationale: string };
+  hasSources: boolean;
 }
 
 export interface AggregateOutput {
@@ -23,7 +24,7 @@ export interface AggregateOutput {
   notes: OptimisationNote[];
 }
 
-export function aggregateScores({ markdown, judge }: AggregateInput): AggregateOutput {
+export function aggregateScores({ markdown, judge, hasSources }: AggregateInput): AggregateOutput {
   const rules = getRules();
   const s = rules.signals;
 
@@ -39,7 +40,7 @@ export function aggregateScores({ markdown, judge }: AggregateInput): AggregateO
       key: "citation",
       label: s.citation.label,
       description: s.citation.description,
-      score: scoreCitation(markdown),
+      score: scoreCitation(markdown, hasSources),
       maxScore: s.citation.maxScore,
     },
     {
@@ -70,11 +71,20 @@ export function aggregateScores({ markdown, judge }: AggregateInput): AggregateO
   // Derive notes from anything scoring <80% of max. Copy comes from rules.
   const notes: OptimisationNote[] = signals
     .filter((sig) => sig.score / sig.maxScore < 0.8)
-    .map<OptimisationNote>((sig) => ({
-      category: sig.key,
-      change: `${sig.label} flagged at ${sig.score}/${sig.maxScore}`,
-      impact: rules.notes.impactCopy[sig.key],
-    }));
+    .map<OptimisationNote>((sig) => {
+      let impact = rules.notes.impactCopy[sig.key];
+      // When the citation signal is low because no sources were supplied,
+      // explain the ceiling — otherwise users see "Citation Signals 7/25"
+      // and assume the engine is broken.
+      if (sig.key === "citation" && !hasSources) {
+        impact = `Without sources, citation signals are capped at 14/25. Add URLs or file uploads to unlock the remaining 11 points. ${impact}`;
+      }
+      return {
+        category: sig.key,
+        change: `${sig.label} flagged at ${sig.score}/${sig.maxScore}`,
+        impact,
+      };
+    });
 
   return { signals, totalScore, notes };
 }

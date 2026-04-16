@@ -11,19 +11,21 @@ import type {
   ContentConfig,
   DraftRecord,
   IterationEntry,
+  SourceRef,
   SseDoneEvent,
   StageKey,
 } from "@unlocked/types";
 import type { ContentRepository } from "../repository/ContentRepository.ts";
 import type { Providers } from "../providers/index.ts";
 import { publish } from "../lib/jobs.ts";
-import { buildCorpus } from "./corpus.ts";
+import { buildCorpus, type CorpusSource } from "./corpus.ts";
 import {
   buildDraftSystemCached,
   buildDraftSystemUncached,
   buildDraftUser,
   buildRefineUser,
 } from "./prompts.ts";
+import { postProcessCitations } from "./citations.ts";
 import { aggregateScores } from "./scoring/aggregate.ts";
 import { getRules } from "../rules/loader.ts";
 
@@ -57,15 +59,23 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
       repo,
       scrape: providers.scrape,
       signal,
-      onWarning: (code, message) => publish(jobId, "warning", { code, message }),
+      onWarning: (code, message, detail) =>
+        publish(jobId, "warning", { code, message, ...(detail ?? {}) }),
     });
     stage("entity", "complete");
 
     // ─── Stages 2-5 wrapped for auto-iteration ────────────────────
-    const systemUncached = buildDraftSystemUncached(config);
+    const hasCorpus = sources.some(s => s.loaded);
+    const systemUncached = buildDraftSystemUncached(config, hasCorpus);
     const systemCached = buildDraftSystemCached(corpus);
 
-    let bestDraft: { markdown: string; score: number; signals: any; notes: any } | null = null;
+    let bestDraft: {
+      markdown: string;
+      score: number;
+      signals: any;
+      notes: any;
+      usedSourceIds: Set<string>;
+    } | null = null;
     const isUserIteration = !!input.iterateOn;
 
     // For user-driven `refine`, we start from the prior draft and skip auto-iteration.
@@ -87,7 +97,7 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
         markdown = await providers.draft.refine({
           systemUncached,
           systemCached,
-          user: buildRefineUser(priorDraft, input.iterateOn?.feedback ?? null),
+          user: buildRefineUser(priorDraft, input.iterateOn?.feedback ?? null, hasCorpus),
           signal,
           onDelta: streamDelta,
         });
@@ -107,11 +117,16 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
       markdown = await providers.draft.refine({
         systemUncached,
         systemCached,
-        user: buildRefineUser(markdown, null),
+        user: buildRefineUser(markdown, null, hasCorpus),
         signal,
         onDelta: streamDelta,
       });
       stage("structure", "complete");
+
+      // Post-process citations: strip hallucinated [s#] markers,
+      // convert valid ones into hyperlinks, append a Sources section.
+      const post = postProcessCitations(markdown, sources);
+      markdown = post.markdown;
 
       // Stage 4: authority layering — placeholder; merged into refine for now.
       stage("authority", "active");
@@ -129,14 +144,14 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
         format: config.format,
         signal,
       });
-      const { signals, totalScore, notes } = aggregateScores({ markdown, judge });
+      const { signals, totalScore, notes } = aggregateScores({ markdown, judge, hasSources: hasCorpus });
       stage("score", "complete");
 
       const version = pass + 1;
       publish(jobId, "iteration", { version, score: totalScore, auto: !isUserIteration });
 
       if (!bestDraft || totalScore > bestDraft.score) {
-        bestDraft = { markdown, score: totalScore, signals, notes };
+        bestDraft = { markdown, score: totalScore, signals, notes, usedSourceIds: post.usedSourceIds };
       }
 
       // Stop early if we cleared the bar.
@@ -145,6 +160,8 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
     }
 
     if (!bestDraft) throw new Error("Pipeline produced no draft");
+
+    const sourceRefs: SourceRef[] = sources.map(s => toSourceRef(s, bestDraft!.usedSourceIds));
 
     // ─── Persist ──────────────────────────────────────────────────
     const now = new Date().toISOString();
@@ -163,6 +180,7 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
       draft = await repo.updateDraft(workspaceId, existing.id, {
         signals: bestDraft.signals,
         notes: bestDraft.notes,
+        sources: sourceRefs,
         status: "ready",
       });
     } else {
@@ -176,6 +194,7 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
         signals: bestDraft.signals,
         totalScore: bestDraft.score,
         notes: bestDraft.notes,
+        sources: sourceRefs,
         status: "ready",
         createdAt: now,
         updatedAt: now,
@@ -188,6 +207,7 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
       totalScore: draft.totalScore,
       signals: draft.signals,
       notes: draft.notes,
+      sources: draft.sources,
       markdown: draft.markdown,
     };
     publish(jobId, "done", done);
@@ -199,4 +219,16 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
     });
     throw e;
   }
+}
+
+function toSourceRef(s: CorpusSource, usedIds: Set<string>): SourceRef {
+  return {
+    id: s.id,
+    type: s.type,
+    origin: s.origin,
+    title: s.title,
+    loaded: s.loaded,
+    error: s.error,
+    cited: usedIds.has(s.id),
+  };
 }

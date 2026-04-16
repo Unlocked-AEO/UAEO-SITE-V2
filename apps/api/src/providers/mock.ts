@@ -79,6 +79,7 @@ export const mockScrapeProvider: ScrapeProvider = {
       url,
       markdown: `# Mock content for ${url}\n\nThis is placeholder text returned by the mock scrape provider. Replace with Firecrawl in production.`,
       title: `Mock: ${url}`,
+      status: 200,
     };
   },
 };

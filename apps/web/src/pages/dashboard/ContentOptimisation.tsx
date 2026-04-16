@@ -16,7 +16,7 @@ import {
   type IterationEntry,
 } from "@/data/mock-content-optimisation";
 import { createJob, iterateDraft, approveDraft, getDraft } from "@/lib/api/client";
-import type { DoneEvent } from "@/lib/api/sse";
+import type { DoneEvent, SourceRef } from "@/lib/api/sse";
 
 // "success" leaves DEMO_STATE off; "empty" forces the empty-state card.
 const DEMO_STATE: "success" | "empty" = "success";
@@ -33,6 +33,7 @@ interface DraftState {
   totalScore: number;
   notes: OptimisationNote[];
   iterations: IterationEntry[];
+  sources: SourceRef[];
 }
 
 export default function ContentOptimisation() {
@@ -84,6 +85,7 @@ export default function ContentOptimisation() {
       signals: done.signals,
       totalScore: done.totalScore,
       notes: done.notes,
+      sources: done.sources ?? [],
       iterations: [
         // Synthesise the v1 entry from the done payload — for subsequent
         // iterations the backend appends to draft.iterations and we'll
@@ -123,6 +125,7 @@ export default function ContentOptimisation() {
         signals: fresh.signals,
         totalScore: fresh.totalScore,
         notes: fresh.notes,
+        sources: fresh.sources ?? [],
         iterations: fresh.iterations,
       });
       setStage("output");
@@ -251,6 +254,7 @@ export default function ContentOptimisation() {
               signals={draft.signals}
               totalScore={draft.totalScore}
               iterations={draft.iterations}
+              sources={draft.sources}
               onApprove={handleApprove}
               onRegenerate={handleRegenerate}
             />
@@ -263,6 +267,7 @@ export default function ContentOptimisation() {
               signals={draft.signals}
               totalScore={draft.totalScore}
               notes={draft.notes}
+              sources={draft.sources}
               onStartNew={resetFlow}
             />
           )}

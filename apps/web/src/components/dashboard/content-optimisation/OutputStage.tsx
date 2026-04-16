@@ -1,7 +1,9 @@
 import { useState } from "react";
 import type { AEOSignal, OptimisationNote } from "@/data/mock-content-optimisation";
+import type { SourceRef } from "@/lib/api/sse";
 import { AEOScoreCard } from "./AEOScoreCard";
 import { AIDisclaimer } from "./AIDisclaimer";
+import { SourcesCard } from "./SourcesCard";
 import { Button } from "@/components/ui/Button";
 import { Markdown } from "@/components/ui/Markdown";
 import { downloadUrl, saveToLibrary } from "@/lib/api/client";
@@ -20,6 +22,7 @@ interface OutputStageProps {
   signals: AEOSignal[];
   totalScore: number;
   notes: OptimisationNote[];
+  sources: SourceRef[];
   onStartNew: () => void;
 }
 
@@ -29,6 +32,7 @@ export function OutputStage({
   signals,
   totalScore,
   notes,
+  sources,
   onStartNew,
 }: OutputStageProps) {
   const max = signals.reduce((s, x) => s + x.maxScore, 0);
@@ -159,6 +163,8 @@ export function OutputStage({
         {/* Sidebar */}
         <div className="flex flex-col gap-5">
           <AEOScoreCard signals={signals} totalScore={totalScore} />
+
+          <SourcesCard sources={sources} />
 
           <div className="rounded-xl py-5 px-6 bg-white border border-border-light shadow-[0px_1px_4px_#0A25400F]">
             <div className="mb-2 text-navy font-semibold text-[13px]/4">Next steps</div>

@@ -7,24 +7,48 @@ import type { ScrapeProvider } from "./types.ts";
 
 export const firecrawlScrapeProvider: ScrapeProvider = {
   async fetchUrl(url, signal) {
-    const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${config.firecrawl.apiKey}`,
-      },
-      body: JSON.stringify({ url, formats: ["markdown"] }),
-      signal,
-    });
+    if (!config.firecrawl.apiKey) {
+      return { url, markdown: "", error: "Firecrawl API key not configured" };
+    }
+    let res: Response;
+    try {
+      res = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${config.firecrawl.apiKey}`,
+        },
+        body: JSON.stringify({ url, formats: ["markdown"] }),
+        signal,
+      });
+    } catch (e: any) {
+      return { url, markdown: "", error: `network error: ${e?.message ?? "unknown"}` };
+    }
+
     if (!res.ok) {
-      return { url, markdown: "", title: undefined };
+      let msg = res.statusText || `HTTP ${res.status}`;
+      try {
+        const body = await res.json();
+        if (body?.error || body?.message) msg = body.error ?? body.message;
+      } catch {}
+      return { url, markdown: "", error: msg, status: res.status };
     }
     const json = (await res.json()) as {
       data?: { markdown?: string; metadata?: { title?: string } };
     };
+    const md = json.data?.markdown ?? "";
+    if (!md.trim()) {
+      return {
+        url,
+        markdown: "",
+        title: json.data?.metadata?.title,
+        error: "Firecrawl returned no extractable content (paywall, JS-only page, or blocked)",
+        status: res.status,
+      };
+    }
     return {
       url,
-      markdown: json.data?.markdown ?? "",
+      markdown: md,
       title: json.data?.metadata?.title,
     };
   },
