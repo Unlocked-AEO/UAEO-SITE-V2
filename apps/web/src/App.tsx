@@ -39,6 +39,8 @@ import ScanOverview from "@/pages/dashboard/ScanOverview";
 import ScanAIVisibility from "@/pages/dashboard/ScanAIVisibility";
 import ScanBrandAccuracy from "@/pages/dashboard/ScanBrandAccuracy";
 import ScanContentFreshness from "@/pages/dashboard/ScanContentFreshness";
+import RiskInsights from "@/pages/dashboard/RiskInsights";
+import RiskInsightsIntake from "@/pages/dashboard/RiskInsightsIntake";
 import Signup from "@/pages/authenticated/Signup";
 import Signin from "@/pages/authenticated/Signin";
 
@@ -74,6 +76,8 @@ function App() {
         <Route path="/dashboard/scans/settings" element={<AdvancedScanSettings />} />
         <Route path="/dashboard/improvement-plan" element={<ImprovementPlan />} />
         <Route path="/dashboard/content-optimisation" element={<ContentOptimisation />} />
+        <Route path="/dashboard/risk-insights" element={<RiskInsights />} />
+        <Route path="/dashboard/risk-insights/intake" element={<RiskInsightsIntake />} />
         <Route path="/dashboard/improvement-plan/fix" element={<ImprovementPlanExpanded />} />
         <Route path="/dashboard/profile" element={<Profile />} />
         <Route path="/dashboard/security" element={<Security />} />
