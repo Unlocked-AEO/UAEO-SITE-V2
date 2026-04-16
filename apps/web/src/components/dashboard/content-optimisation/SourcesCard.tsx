@@ -51,7 +51,10 @@ export function SourcesCard({ sources }: SourcesCardProps) {
 
           const label =
             s.title?.trim() ||
-            (s.type === "url" ? prettyDomain(s.origin) ?? s.origin : s.origin);
+            (s.type === "url" || s.type === "web"
+              ? prettyDomain(s.origin) ?? s.origin
+              : s.origin);
+          const isLink = (s.type === "url" || s.type === "web") && s.loaded;
 
           return (
             <li key={s.id} className="flex items-start gap-2.5 text-[12px]/5">
@@ -60,7 +63,7 @@ export function SourcesCard({ sources }: SourcesCardProps) {
               </span>
               <span className={`mt-1.5 size-1.5 rounded-full shrink-0 ${dot}`} />
               <div className="flex-1 min-w-0">
-                {s.type === "url" && s.loaded ? (
+                {isLink ? (
                   <a
                     href={s.origin}
                     target="_blank"
@@ -69,6 +72,9 @@ export function SourcesCard({ sources }: SourcesCardProps) {
                     title={s.origin}
                   >
                     {label}
+                    {s.type === "web" && (
+                      <span className="ml-1.5 text-[9px] uppercase tracking-[0.4px] text-teal font-semibold">web</span>
+                    )}
                   </a>
                 ) : (
                   <div className="text-navy font-semibold truncate" title={s.origin}>
@@ -78,7 +84,7 @@ export function SourcesCard({ sources }: SourcesCardProps) {
                     )}
                   </div>
                 )}
-                {s.type === "url" && s.loaded && (
+                {(s.type === "url" || s.type === "web") && s.loaded && (
                   <div className="text-slate-muted text-[11px]/4 truncate">{prettyDomain(s.origin) ?? s.origin}</div>
                 )}
                 {!s.loaded && s.error && (

@@ -3,15 +3,26 @@
 // or mocks are wired in server.ts at boot time. This is what lets us
 // run the entire engine end-to-end without API keys.
 
+export interface WebCitation {
+  url: string;
+  title?: string;
+  citedText?: string;
+}
+
+export interface DraftResult {
+  markdown: string;
+  webCitations: WebCitation[];
+}
+
 export interface DraftProvider {
-  /** Stream a draft. `onDelta` is called with token chunks. Returns final markdown. */
+  /** Stream a draft. `onDelta` is called with token chunks. */
   streamDraft(input: {
     systemUncached: string;
     systemCached: string;       // wrapped in cache_control on real Claude
     user: string;
     signal: AbortSignal;
     onDelta: (text: string) => void;
-  }): Promise<string>;
+  }): Promise<DraftResult>;
 
   /** Streaming refinement pass. `onDelta` receives token chunks as they arrive. */
   refine(input: {
@@ -20,7 +31,7 @@ export interface DraftProvider {
     user: string;
     signal: AbortSignal;
     onDelta?: (text: string) => void;
-  }): Promise<string>;
+  }): Promise<DraftResult>;
 }
 
 export interface JudgeProvider {

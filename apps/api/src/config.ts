@@ -21,6 +21,8 @@ export const config = {
     apiKey: process.env.ANTHROPIC_API_KEY ?? "",
     model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6",
     modelFast: process.env.ANTHROPIC_MODEL_FAST ?? "claude-haiku-4-5-20251001",
+    // Server-side web search. 0 disables. Each search costs $10/1000.
+    webSearchMaxUses: Number(process.env.ANTHROPIC_WEB_SEARCH_MAX ?? 5),
   },
   gemini: {
     apiKey: process.env.GEMINI_API_KEY ?? "",

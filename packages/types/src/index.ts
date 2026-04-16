@@ -84,7 +84,7 @@ export interface CreateJobResponse {
  */
 export interface SourceRef {
   id: string;                       // "s1", "s2", ...
-  type: "url" | "upload";
+  type: "url" | "upload" | "web";   // "web" = surfaced by Claude's web_search tool
   origin: string;                   // URL or filename
   title?: string;
   loaded: boolean;                  // false when fetch failed

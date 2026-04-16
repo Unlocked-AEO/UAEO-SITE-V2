@@ -88,39 +88,55 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
 
     const passes = isUserIteration && input.iterateOn?.mode === "refine" ? 1 : maxAutoPasses;
 
+    const webCitationsByUrl = new Map<string, { url: string; title?: string; citedText?: string }>();
+    const collectWeb = (cites: { url: string; title?: string; citedText?: string }[]) => {
+      for (const c of cites) if (!webCitationsByUrl.has(c.url)) webCitationsByUrl.set(c.url, c);
+    };
+
     for (let pass = 0; pass < passes; pass++) {
       // Stage 2: draft (or refine if we already have one)
       stage("citation", "active");
       let markdown: string;
       const streamDelta = (text: string) => publish(jobId, "draftDelta", { text });
       if (priorDraft) {
-        markdown = await providers.draft.refine({
+        const res = await providers.draft.refine({
           systemUncached,
           systemCached,
           user: buildRefineUser(priorDraft, input.iterateOn?.feedback ?? null, hasCorpus),
           signal,
           onDelta: streamDelta,
         });
+        markdown = res.markdown;
+        collectWeb(res.webCitations);
       } else {
-        markdown = await providers.draft.streamDraft({
+        // On a user-initiated "new-base" iteration, pipe the feedback
+        // into the fresh draft prompt so the rewrite actually reflects
+        // what the user asked for (not just the original config).
+        const newBaseFeedback =
+          input.iterateOn?.mode === "new-base" ? input.iterateOn.feedback : null;
+        const res = await providers.draft.streamDraft({
           systemUncached,
           systemCached,
-          user: buildDraftUser(config),
+          user: buildDraftUser(config, newBaseFeedback),
           signal,
           onDelta: streamDelta,
         });
+        markdown = res.markdown;
+        collectWeb(res.webCitations);
       }
       stage("citation", "complete");
 
       // Stage 3: structure pass (refine for AEO)
       stage("structure", "active");
-      markdown = await providers.draft.refine({
+      const structRes = await providers.draft.refine({
         systemUncached,
         systemCached,
         user: buildRefineUser(markdown, null, hasCorpus),
         signal,
         onDelta: streamDelta,
       });
+      markdown = structRes.markdown;
+      collectWeb(structRes.webCitations);
       stage("structure", "complete");
 
       // Post-process citations: strip hallucinated [s#] markers,
@@ -162,6 +178,21 @@ export async function runJob(input: RunJobInput): Promise<DraftRecord> {
     if (!bestDraft) throw new Error("Pipeline produced no draft");
 
     const sourceRefs: SourceRef[] = sources.map(s => toSourceRef(s, bestDraft!.usedSourceIds));
+
+    // Append web_search citations (Claude-discovered). These are always
+    // `cited: true` — Anthropic only attaches citation metadata to blocks
+    // the model actually used. IDs continue the s# sequence.
+    let nextIdx = sourceRefs.length + 1;
+    for (const wc of webCitationsByUrl.values()) {
+      sourceRefs.push({
+        id: `s${nextIdx++}`,
+        type: "web",
+        origin: wc.url,
+        title: wc.title,
+        loaded: true,
+        cited: true,
+      });
+    }
 
     // ─── Persist ──────────────────────────────────────────────────
     const now = new Date().toISOString();

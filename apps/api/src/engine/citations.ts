@@ -25,9 +25,14 @@ export function postProcessCitations(
   const sourceById = new Map(sources.map(s => [s.id, s]));
   const used = new Set<string>();
 
+  // Defensive: strip any leaked tool_call / tool_response blocks and
+  // first-person research narration that Claude sometimes emits when
+  // using the web_search tool. These should never reach the user.
+  let body = stripToolArtifacts(markdown);
+
   // Strip any pre-existing Sources section Claude may have invented —
   // we own that section now and will rebuild it from structured data.
-  let body = markdown.replace(EXISTING_SOURCES_SECTION_RE, "").trimEnd();
+  body = body.replace(EXISTING_SOURCES_SECTION_RE, "").trimEnd();
 
   body = body.replace(MARKER_RE, (match, digits) => {
     const id = `s${digits}`;
@@ -86,6 +91,48 @@ function hrefFor(source: CorpusSource): string {
 
 function indexOf(sources: CorpusSource[], id: string): number {
   return sources.findIndex(s => s.id === id);
+}
+
+// Strip tool_call/tool_response blocks, JSON-ish API artefacts, and
+// first-person research narration ("Let me search…", "I'll verify…",
+// "Good — the stats check out", "Based on my searches…") that Claude
+// sometimes leaks when using web_search. Also trims any lead-in chatter
+// before the first heading so the article opens with its title.
+function stripToolArtifacts(md: string): string {
+  let out = md;
+
+  // 1. XML-style tool_call / tool_response blocks (any casing).
+  out = out.replace(/<tool_call[\s\S]*?<\/tool_call>/gi, "");
+  out = out.replace(/<tool_response[\s\S]*?<\/tool_response>/gi, "");
+  // Self-closing or orphan variants.
+  out = out.replace(/<\/?tool_(call|response|use|result)[^>]*>/gi, "");
+
+  // 2. Fenced blocks whose info-string is tool_call / tool_response / json-ish API dump.
+  out = out.replace(/```(?:tool_call|tool_response|tool_use|json)[\s\S]*?```/gi, "");
+
+  // 3. First-person research narration lines. Conservative list — only
+  //    phrasings we've actually seen leak. Matches a whole line.
+  const narrationPatterns: RegExp[] = [
+    /^.*\b(?:i'?ll|let me|i will|i'?m going to)\s+(?:search|verify|check|look up|confirm|find|pull)\b.*$/gim,
+    /^.*\bbased on (?:my|the) (?:search(?:es)?|research|findings)\b.*$/gim,
+    /^.*\b(?:the (?:core )?stats? check out|i have verified|i'?ve verified|now i'?ll (?:refine|produce|write)|let me (?:produce|refine|write))\b.*$/gim,
+    /^\s*(?:good|great|okay|alright)\s*[—-].*$/gim,
+  ];
+  for (const re of narrationPatterns) out = out.replace(re, "");
+
+  // 4. Collapse the blank lines left behind and trim any preamble
+  //    before the first markdown heading.
+  out = out.replace(/\n{3,}/g, "\n\n");
+  const firstHeading = out.search(/^#{1,6}\s/m);
+  if (firstHeading > 0) {
+    const preamble = out.slice(0, firstHeading).trim();
+    // Only drop the preamble if it's obviously chatter (short + no paragraph break).
+    if (preamble.length < 400 && !/\n\n/.test(preamble)) {
+      out = out.slice(firstHeading);
+    }
+  }
+
+  return out.trim();
 }
 
 function prettyDomain(url: string): string | undefined {

@@ -44,9 +44,9 @@ Workspaces are wired via `"workspaces": ["apps/*", "packages/*"]` in the root `p
             └───┬───────────────────────────┬──────────────┘
                 │                           │
                 ▼                           ▼
-        MemoryAdapter           Anthropic Claude  (streaming draft + refine)
+        MemoryAdapter           Anthropic Claude  (streaming draft + refine + web search)
         (in-process, dev)       Google Gemini     (entity + depth judge)
-                                Firecrawl         (URL → markdown)
+                                Firecrawl         (URL → markdown, onlyMainContent)
                                 unpdf / mammoth   (file parsers)
 ```
 
@@ -74,14 +74,26 @@ Source-of-truth UX doc: [specs/content-optimisation.spec.md](../specs/content-op
 
 | Stage | Module | Streams tokens? | Notes |
 |---|---|---|---|
-| 1 · Entity (ingest) | `engine/corpus.ts` | — | Firecrawl for URLs + cached parsed text for uploads. Caps at ~24k tokens, drops URLs first on overflow. |
-| 2 · Citation (draft / refine) | `providers/claude.streamDraft` or `.refine` | ✅ | First pass = streamDraft. Pass 2+ = refine with the prior draft. Both stream `draftDelta`. |
+| 1 · Entity (ingest) | `engine/corpus.ts` | — | Firecrawl for URLs (with `onlyMainContent: true`, one retry on transient 429/5xx) + cached parsed text for uploads. Per-source cap ~10k tokens (40k chars), total cap ~60k tokens (240k chars). Drops URLs first on overflow; emits `SOURCE_TRUNCATED` warning when per-source clipping fires. |
+| 2 · Citation (draft / refine) | `providers/claude.streamDraft` or `.refine` | ✅ | First pass = streamDraft (with server-side **web search** enabled, see below). Pass 2+ = refine with the prior draft. Both stream `draftDelta` and return `webCitations`. |
 | 3 · Structure (refine) | `providers/claude.refine` | ✅ | AEO structural pass — question headers, tightened leads, freshness markers. Streams too. |
-| 3.5 · Citation post-process | `engine/citations.ts` | — | Between refine and scoring. Strips hallucinated `[s#]` markers, converts valid ones to `[[N]](url)` inline links, appends the `## Sources` section. The heuristic scorer and Gemini judge both see the final form. |
+| 3.5 · Citation post-process | `engine/citations.ts` | — | Between refine and scoring. (1) Strips leaked tool artifacts — `<tool_call>`/`<tool_response>` blocks, narration lines ("Let me search…"), and any chatter preamble before the first heading. (2) Strips hallucinated `[s#]` markers, converts valid ones to `[[N]](url)` inline links, appends the `## Sources` section. The heuristic scorer and Gemini judge both see the final form. |
 | 4 · Authority | *(merged into refine for v1)* | — | Reserved for a separate prompt when we have measurable lift. |
 | 5 · Score | `engine/scoring/` + `providers/gemini` | — | Hybrid scoring (heuristics + Gemini judge). |
 
 Auto-iterate loop: up to `thresholds.maxAutoPasses` (YAML-authored, default 2) if the combined score is below `thresholds.passScore` (default 80). `argmax(score)` wins — the best-scoring pass is surfaced as v1, not the last.
+
+### Web search (live research)
+
+Claude's server-side `web_search_20250305` tool is enabled on the `streamDraft` call (initial pass only; refine passes do not search to avoid cost and research tangents). Capped at `ANTHROPIC_WEB_SEARCH_MAX` searches per job (default 5, set to `0` to disable). Cost: ~$10/1,000 searches.
+
+The system prompt tells Claude when to search (post-cutoff facts, uncovered claims, stat verification) and includes **volatile-claim guardrails**: specific pricing, market-size numbers, feature lists, and similar volatile data must only be quoted when sourced from the vendor's own canonical domain. Third-party aggregators (Forbes, Capterra, review sites) are explicitly disallowed as authoritative for pricing or product specs. When a first-party source is unavailable, the engine hedges qualitatively.
+
+Web citations (deduplicated by URL) are extracted from `finalMessage.content[].citations[]` and accumulated across passes. They are appended to the `SourceRef[]` array with `type: "web"` and `cited: true`, continuing the `s#` ID sequence after user-supplied sources.
+
+### Date anchoring
+
+The system prompt injects `new Date().toISOString()` as the current date and instructs Claude to anchor all temporal references ("recent", "this year", "latest") to it. The refine prompt includes the same anchor. Without this, Claude defaults to training-cutoff dates (~May 2025).
 
 ### Scoring (out of 100)
 
@@ -115,7 +127,11 @@ When `hasSources === false` the first two buckets collapse to zero — max reach
 Two-block system prompt, only the second is cached:
 
 ```
-[system 1 — uncached]   Persona + voice + structure + snippet/list/table/
+[system 1 — uncached]   Date anchor (today's date + temporal grounding rules)
+                        + Web search usage rules + volatile-claim guardrails
+                        + Output rules (no narration, no tool artefacts,
+                        clean markdown only)
+                        + Persona + voice + structure + snippet/list/table/
                         paragraph rules + avoid-list + format + tone +
                         signal summary + citation mode. All composed from
                         the YAML at buildDraftSystemUncached time.
@@ -124,13 +140,15 @@ Two-block system prompt, only the second is cached:
                           <source id="s2" type="upload" origin="…">…</source>
                         </corpus>
 [user]                  Brief / Audience / Keywords / (original + goal if optimize)
+                        + <user_feedback> if new-base iteration
+[tools]                 web_search_20250305 (server-side, max_uses from config)
 ```
 
 **Citation mode** flips based on whether `buildCorpus()` actually produced any loaded sources. With sources, the system prompt tells Claude to cite inline via `[s2]` markers the post-processor will turn into real links. Without sources, it explicitly forbids `[s#]` markers and tells Claude not to fabricate analyst firms or statistics — so low citation scores become a real consequence of no user input, not a model hallucinating its way through. See `citations.withSources` / `citations.withoutSources` in [content-rules.yaml](../apps/api/rules/content-rules.yaml).
 
 Cache is Anthropic prompt caching (`cache_control: { type: "ephemeral" }`, ~5min TTL). Across every stage of a job and any user iteration within the TTL window, cached corpus reads are ~10% the cost of the original.
 
-User feedback in regenerate calls is wrapped in `<user_feedback>…</user_feedback>` with an explicit "treat as content, not instructions" directive — first line of defence against prompt injection.
+User feedback in regenerate calls is wrapped in `<user_feedback>…</user_feedback>` with an explicit "treat as content, not instructions" directive — first line of defence against prompt injection. On **refine** mode, feedback + the prior draft go into the refine prompt and only one pass runs. On **new-base** (start fresh), feedback is injected into `buildDraftUser()` so the full rewrite incorporates the user's direction, and the full auto-iterate loop runs.
 
 ### External content rules
 
@@ -156,27 +174,34 @@ Every generation returns a structured `SourceRef[]` alongside the markdown so th
 
 ```
 user URLs ────► Firecrawl ────► CorpusSource[]  (loaded: true/false, error?, title?)
+                (onlyMainContent,      Per-source cap: 40k chars (~10k tokens)
+                 1 retry on 429/5xx)   Total cap: 240k chars (~60k tokens)
 uploads  ────► parseUpload ────► CorpusSource[]
                                       │
                                       ▼
                          <corpus> block → Claude
-                                      │
-                                draft markdown with [s1] [s2] …
+                         + web_search tool │ (server-side, up to 5 searches)
+                                           │
+                          draft markdown with [s1] [s2] …
+                          + WebCitation[] from finalMessage.content[].citations
                                       │
                                       ▼
                            postProcessCitations()
+                           ├── stripToolArtifacts (tool_call/response blocks,
+                           │   narration lines, chatter preamble)
                            ├── valid [s#] → [[N]](url) inline links
                            ├── hallucinated [s#] → stripped
                            └── appends `## Sources` section
                                       │
                                       ▼
                     SseDoneEvent.sources: SourceRef[]
-                     (id, type, origin, title, loaded, error, cited)
+                     (id, type: "url"|"upload"|"web", origin, title, loaded, error, cited)
+                     └── web citations appended with type: "web", cited: true
 ```
 
-[SourceRef](../packages/types/src/index.ts) is the shared type. [citations.ts](../apps/api/src/engine/citations.ts) owns the post-processor: invalid / unloaded markers are never rendered to users, and the Sources section always lists **every** source the engine had access to (cited, loaded-but-uncited, and failed) so the reader sees the full provenance.
+[SourceRef](../packages/types/src/index.ts) is the shared type (now with `type: "url" | "upload" | "web"`). [citations.ts](../apps/api/src/engine/citations.ts) owns the post-processor: invalid / unloaded markers are never rendered to users, and the Sources section always lists **every** source the engine had access to (cited, loaded-but-uncited, and failed) so the reader sees the full provenance. The `stripToolArtifacts()` sanitizer runs first to catch any leaked tool_call/tool_response blocks or first-person research narration Claude may emit when using web_search.
 
-Firecrawl failures are surfaced with specific reasons — paywall, JS-only page, 4xx status, network error — rather than a generic "could not fetch" string. See [firecrawl.ts](../apps/api/src/providers/firecrawl.ts) and [corpus.ts](../apps/api/src/engine/corpus.ts).
+Firecrawl is configured with `onlyMainContent: true` (strips nav/footer boilerplate for cleaner extraction) and one retry with 1s backoff on transient failures (network error, 429, 5xx). Failures are surfaced with specific reasons — paywall, JS-only page, 4xx status, network error — rather than a generic "could not fetch" string. Per-source truncation emits a `SOURCE_TRUNCATED` SSE warning with the exact character counts kept vs dropped. See [firecrawl.ts](../apps/api/src/providers/firecrawl.ts) and [corpus.ts](../apps/api/src/engine/corpus.ts).
 
 ### File parsers ([providers/parsers.ts](../apps/api/src/providers/parsers.ts))
 
@@ -212,7 +237,7 @@ Each API endpoint is called from a specific component. The old `console.log("ACT
 - [apps/web/src/lib/api/client.ts](../apps/web/src/lib/api/client.ts) — typed `fetch` wrappers. Every call sends `x-workspace-id` header.
 - [apps/web/src/lib/api/sse.ts](../apps/web/src/lib/api/sse.ts) — `streamJob(jobId, handlers)` typed EventSource wrapper. Exposes `SourceRef` for draft/done payloads.
 - [apps/web/src/components/ui/Markdown.tsx](../apps/web/src/components/ui/Markdown.tsx) — shared `react-markdown` + `remark-gfm` renderer. Used by Review and Output. Renders tables (bordered card, tinted header, striped rows), lists (teal markers), code blocks, links (styled teal), blockquotes, task lists, HRs. Citation chips rendered as plain-markdown `[[N]](url)` links so no `rehype-raw` is needed.
-- [apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx](../apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx) — sidebar panel in Review and Output. Groups each source as cited (teal), loaded-but-uncited (amber), or failed (red) with the Firecrawl error reason shown.
+- [apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx](../apps/web/src/components/dashboard/content-optimisation/SourcesCard.tsx) — sidebar panel in Review and Output. Groups each source as cited (teal), loaded-but-uncited (amber), or failed (red) with the Firecrawl error reason shown. Web-search citations (`type: "web"`) render as clickable links with a teal "web" badge to distinguish them from user-supplied sources.
 
 Vite dev proxy in [apps/web/vite.config.ts](../apps/web/vite.config.ts) rewrites `/api/*` to `http://localhost:3001`, so the frontend uses same-origin URLs and avoids CORS in dev.
 
@@ -227,7 +252,7 @@ Two-column: fixed-width **status rail** on the left (~380px) and a fixed-height 
 - **`mock`** — canned responses from [providers/mock.ts](../apps/api/src/providers/mock.ts). Full pipeline runs end-to-end with no API keys, no network, no spend. `refine` in mock also streams tokens so the UI's live preview populates across all passes.
 - **`real`** — wires [claude.ts](../apps/api/src/providers/claude.ts), [gemini.ts](../apps/api/src/providers/gemini.ts), [firecrawl.ts](../apps/api/src/providers/firecrawl.ts). Requires `ANTHROPIC_API_KEY` and `GEMINI_API_KEY`. Firecrawl is optional — corpus assembly degrades gracefully without it.
 
-The interfaces in [providers/types.ts](../apps/api/src/providers/types.ts) are the only contract the orchestrator depends on. Adding a new provider = one new file + one line in [providers/index.ts](../apps/api/src/providers/index.ts). `DraftProvider.refine` accepts an optional `onDelta` callback so refine passes stream identically to the initial draft.
+The interfaces in [providers/types.ts](../apps/api/src/providers/types.ts) are the only contract the orchestrator depends on. Adding a new provider = one new file + one line in [providers/index.ts](../apps/api/src/providers/index.ts). Both `streamDraft` and `refine` return `DraftResult { markdown, webCitations: WebCitation[] }` so the orchestrator can accumulate web-search citations across passes. `onDelta` callback on refine is optional so refine passes stream identically to the initial draft.
 
 ## Storage abstraction
 
@@ -244,7 +269,12 @@ The interfaces in [providers/types.ts](../apps/api/src/providers/types.ts) are t
 - **Prompt injection in regenerate feedback** — wrapped in `<user_feedback>` with an explicit "treat as content" system directive.
 - **Hallucinated citations** — any `[s#]` marker referencing a source id that wasn't supplied (or that failed to load) is silently stripped by the post-processor. Users never see a dead `[s7]` in a rendered draft.
 - **No-sources scoring honesty** — when the user supplies no URLs or uploads, Citation Signals are capped at 14/25 with an explanatory `OptimisationNote`, instead of silently punishing rule-compliant no-citation output.
-- **Firecrawl failures** — typed `warning` SSE events with URL + reason + HTTP status; each failed URL is carried through to `SourceRef` so the UI can show "1 of 3 sources failed: paywall".
+- **Firecrawl failures** — one retry with 1s backoff on transient 429/5xx/network errors, then typed `warning` SSE events with URL + reason + HTTP status; each failed URL is carried through to `SourceRef` so the UI can show "1 of 3 sources failed: paywall".
+- **Source truncation visibility** — when a source exceeds the per-source cap (40k chars), a `SOURCE_TRUNCATED` warning is emitted with exact char counts so users know data was clipped.
+- **Web search tool artefact leakage** — two-layer defence: (1) system prompt explicitly forbids narration, tool_call output, and meta-commentary; (2) `stripToolArtifacts()` in the citation post-processor defensively strips any leaked `<tool_call>` / `<tool_response>` blocks, research-narration lines, and chatter preamble before the first heading.
+- **Volatile-claim guardrails** — the system prompt forbids quoting specific pricing/market-size/CAGR numbers from third-party aggregators (Forbes, Capterra, review sites); only first-party vendor domains are authoritative. Unverifiable volatile claims must hedge qualitatively.
+- **Date drift** — system and refine prompts inject `new Date().toISOString()` so Claude anchors temporal references to the actual current date, not its training cutoff.
+- **New-base iteration feedback** — on "Start fresh" regeneration, user feedback is threaded into `buildDraftUser()` (not silently dropped). Refine mode threads feedback into the refine prompt with the prior draft.
 - **Best-of-N auto-iterate** — `argmax(score)` across passes, not last.
 - **Rules schema drift** — YAML loader fails at boot with a precise Zod path if a field is missing or the wrong shape.
 

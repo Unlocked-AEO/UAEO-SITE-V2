@@ -7,8 +7,8 @@
 import type { ContentRepository } from "../repository/ContentRepository.ts";
 import type { ScrapeProvider } from "../providers/types.ts";
 
-const PER_SOURCE_CHAR_CAP = 12_000; // ~3k tokens
-const TOTAL_CHAR_CAP = 96_000;      // ~24k tokens
+const PER_SOURCE_CHAR_CAP = 40_000; // ~10k tokens
+const TOTAL_CHAR_CAP = 240_000;     // ~60k tokens — leaves headroom for prompt + output within Claude's context window
 
 export interface CorpusSource {
   id: string;
@@ -51,14 +51,23 @@ export async function buildCorpus(input: BuildCorpusInput): Promise<BuildCorpusO
     const url = urls[i];
     const id = `s${sources.length + 1}`;
     if (r.status === "fulfilled" && r.value.markdown) {
+      const full = r.value.markdown;
+      const kept = full.slice(0, PER_SOURCE_CHAR_CAP);
       sources.push({
         id,
         type: "url",
         origin: r.value.url,
         title: r.value.title,
-        text: r.value.markdown.slice(0, PER_SOURCE_CHAR_CAP),
+        text: kept,
         loaded: true,
       });
+      if (full.length > PER_SOURCE_CHAR_CAP) {
+        input.onWarning(
+          "SOURCE_TRUNCATED",
+          `Clipped ${r.value.url} to fit per-source budget`,
+          { id, kept: kept.length, dropped: full.length - kept.length },
+        );
+      }
     } else {
       // Either the promise rejected outright, or Firecrawl returned
       // no usable content. Record it so the UI can show which URLs
@@ -91,13 +100,22 @@ export async function buildCorpus(input: BuildCorpusInput): Promise<BuildCorpusO
       input.onWarning("UPLOAD_MISSING", `Upload ${uploadId} not found`);
       continue;
     }
+    const uId = `s${sources.length + 1}`;
+    const kept = u.parsedText.slice(0, PER_SOURCE_CHAR_CAP);
     sources.push({
-      id: `s${sources.length + 1}`,
+      id: uId,
       type: "upload",
       origin: u.filename,
-      text: u.parsedText.slice(0, PER_SOURCE_CHAR_CAP),
+      text: kept,
       loaded: true,
     });
+    if (u.parsedText.length > PER_SOURCE_CHAR_CAP) {
+      input.onWarning(
+        "SOURCE_TRUNCATED",
+        `Clipped ${u.filename} to fit per-source budget`,
+        { id: uId, kept: kept.length, dropped: u.parsedText.length - kept.length },
+      );
+    }
   }
 
   // 3. Total cap — drop URLs first if over (failed URLs cost 0 chars

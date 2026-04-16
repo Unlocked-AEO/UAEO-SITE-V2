@@ -45,7 +45,7 @@ export const mockDraftProvider: DraftProvider = {
       onDelta(c);
       await sleep(20, signal);
     }
-    return SAMPLE_DRAFT;
+    return { markdown: SAMPLE_DRAFT, webCitations: [] };
   },
   async refine({ signal, onDelta }) {
     // Stream the sample draft chunk by chunk so the UI tail previews
@@ -56,7 +56,7 @@ export const mockDraftProvider: DraftProvider = {
       onDelta?.(c);
       await sleep(15, signal);
     }
-    return SAMPLE_DRAFT;
+    return { markdown: SAMPLE_DRAFT, webCitations: [] };
   },
 };
 

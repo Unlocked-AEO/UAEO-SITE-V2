@@ -57,61 +57,117 @@ export function ReviewStage({
           <AIDisclaimer />
         </div>
 
-        <div className="px-6 py-4 border-t border-border-light bg-[#FAFBFC]">
-          <label className="block mb-2 text-navy font-semibold text-[13px]/4">
-            Feedback for the next iteration
-          </label>
-          <div className="flex items-start gap-3">
+        <div className="px-5 py-4 border-t border-border-light bg-gradient-to-b from-[#FAFBFC] to-white">
+          {/* Section heading */}
+          <div className="flex items-baseline justify-between mb-2.5">
+            <div>
+              <h3 className="text-navy font-semibold text-[14px]/5 m-0">Iterate on this draft</h3>
+              <p className="mt-0.5 text-slate-muted text-[11px]/4">
+                Pick a mode, then tell the engine what to change.
+              </p>
+            </div>
+            <span className="text-slate-muted text-[10px]/4 uppercase tracking-[0.4px] font-semibold">
+              v{iterations.length || 1} → v{(iterations.length || 1) + 1}
+            </span>
+          </div>
+          {/* Prominent mode switch — Refine vs Start fresh */}
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button
+              onClick={() => setMode("refine")}
+              className={`flex items-start gap-2.5 rounded-xl px-3.5 py-2.5 border text-left cursor-pointer transition-all ${
+                mode === "refine"
+                  ? "border-teal bg-teal/5 shadow-[0_0_0_3px_rgba(22,184,185,0.1)]"
+                  : "border-border-light bg-white hover:border-slate-muted/40"
+              }`}
+            >
+              <span
+                className={`mt-0.5 inline-flex items-center justify-center size-4 rounded-full border-2 shrink-0 ${
+                  mode === "refine" ? "border-teal bg-teal" : "border-border-input bg-white"
+                }`}
+              >
+                {mode === "refine" && <span className="size-1.5 rounded-full bg-white" />}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-navy font-semibold text-[13px]/4">Refine</span>
+                <span className="mt-0.5 block text-slate-muted text-[11px]/4">
+                  Keep this draft, apply your notes
+                </span>
+              </span>
+            </button>
+            <button
+              onClick={() => setMode("new-base")}
+              className={`flex items-start gap-2.5 rounded-xl px-3.5 py-2.5 border text-left cursor-pointer transition-all ${
+                mode === "new-base"
+                  ? "border-teal bg-teal/5 shadow-[0_0_0_3px_rgba(22,184,185,0.1)]"
+                  : "border-border-light bg-white hover:border-slate-muted/40"
+              }`}
+            >
+              <span
+                className={`mt-0.5 inline-flex items-center justify-center size-4 rounded-full border-2 shrink-0 ${
+                  mode === "new-base" ? "border-teal bg-teal" : "border-border-input bg-white"
+                }`}
+              >
+                {mode === "new-base" && <span className="size-1.5 rounded-full bg-white" />}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-navy font-semibold text-[13px]/4">Start fresh</span>
+                <span className="mt-0.5 block text-slate-muted text-[11px]/4">
+                  Rewrite from scratch with your notes
+                </span>
+              </span>
+            </button>
+          </div>
+
+          {/* Composer shell — textarea with action bar */}
+          <div className="rounded-xl border border-border-light bg-white shadow-[0_1px_2px_rgba(10,37,64,0.04)] focus-within:border-teal focus-within:shadow-[0_0_0_3px_rgba(22,184,185,0.12)] transition-all">
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
-              placeholder="e.g. make it more technical, add a section on pricing, the tone is too casual..."
-              className="flex-1 rounded-lg border border-border-input bg-white px-3.5 py-2.5 text-[13px]/5 text-slate-text placeholder:text-slate-muted focus:outline-none focus:border-teal min-h-20 resize-y"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  handleRegenerate();
+                }
+              }}
+              placeholder="What should change? e.g. Tighten the intro, add a pricing comparison, swap the tone…"
+              className="block w-full bg-transparent px-3.5 py-2.5 text-[13px]/5 text-slate-text placeholder:text-slate-muted focus:outline-none min-h-[64px] resize-none"
             />
-            <div className="flex flex-col gap-2">
-              <Button variant="dark" size="sm" onClick={handleRegenerate}>
-                Regenerate
-              </Button>
-              <Button variant="primary" size="sm" onClick={onApprove}>
-                Approve →
-              </Button>
+
+            <div className="flex items-center justify-between gap-2 px-2.5 pb-2 pt-0.5">
+              <div className="flex flex-wrap gap-1 min-w-0">
+                {[
+                  { label: "More technical", icon: "⚙" },
+                  { label: "Shorten 30%", icon: "✂" },
+                  { label: "Add pricing", icon: "$" },
+                  { label: "More citations", icon: "❝" },
+                ].map((s) => (
+                  <button
+                    key={s.label}
+                    onClick={() => setFeedback((f) => (f ? f + " · " : "") + s.label)}
+                    className="group inline-flex items-center gap-1 rounded-full px-2 py-0.5 bg-[#F3F5F8] text-slate-body text-[10px]/3 hover:bg-teal/10 hover:text-teal cursor-pointer transition-colors"
+                  >
+                    <span className="text-slate-muted group-hover:text-teal">{s.icon}</span>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="hidden md:block text-slate-muted text-[10px]/3 tabular-nums">⌘+↵</span>
+                <Button variant="dark" size="sm" onClick={handleRegenerate}>
+                  Regenerate
+                </Button>
+              </div>
             </div>
           </div>
-          <div className="mt-2 flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1 rounded-md bg-white border border-border-light p-0.5">
-              <button
-                onClick={() => setMode("refine")}
-                className={`rounded-sm px-2 py-1 text-[11px]/3 font-semibold cursor-pointer ${
-                  mode === "refine" ? "bg-teal text-white" : "bg-transparent text-slate-muted"
-                }`}
-              >
-                Refine
-              </button>
-              <button
-                onClick={() => setMode("new-base")}
-                className={`rounded-sm px-2 py-1 text-[11px]/3 font-semibold cursor-pointer ${
-                  mode === "new-base" ? "bg-teal text-white" : "bg-transparent text-slate-muted"
-                }`}
-              >
-                New base
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                "Make it more technical",
-                "Shorten by 30%",
-                "Add a pricing section",
-                "More citations",
-              ].map((suggestion) => (
-                <button
-                  key={suggestion}
-                  onClick={() => setFeedback((f) => (f ? f + " · " : "") + suggestion)}
-                  className="rounded-md px-2 py-1 bg-white border border-border-light text-slate-body text-[11px]/3 hover:border-teal hover:text-teal cursor-pointer transition-colors"
-                >
-                  + {suggestion}
-                </button>
-              ))}
-            </div>
+
+          {/* Approve CTA */}
+          <div className="mt-2.5 flex items-center justify-between">
+            <p className="text-slate-muted text-[11px]/4">
+              Happy with this draft? Approve it to move to Output.
+            </p>
+            <Button variant="primary" size="sm" onClick={onApprove}>
+              Approve draft →
+            </Button>
           </div>
         </div>
       </div>

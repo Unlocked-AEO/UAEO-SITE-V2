@@ -14,7 +14,7 @@ export type StageStatus = "active" | "complete" | "failed";
  *  type import until we promote the mock-content-optimisation file to the shared package. */
 export interface SourceRef {
   id: string;
-  type: "url" | "upload";
+  type: "url" | "upload" | "web";
   origin: string;
   title?: string;
   loaded: boolean;
